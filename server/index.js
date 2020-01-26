@@ -1,39 +1,15 @@
 const express = require('express');
 const path = require('path');
 const fs = require('fs');
-
-const Api = require('./utils/Api');
+const api = require('./api');
 
 const app = express();
 const port = process.env.PORT || 3001;
 
 const filePath = path.resolve(__dirname, '../client/build', 'index.html');
 
-app.get('/api/getUser', async function(req, res) {
-	const userId = req.query.userId;
-
-	const response = await Api.getUser(userId);
-
-	const { data } = response;
-
-	res.send(data);
-});
-
-app.get('/api/getPopularFeed', async function(req, res) {
-	const response = await Api.getPopularFeed();
-
-	const { data } = response;
-
-	res.send(data);
-});
-
-app.get('/api/getExploreCategories', async function(req, res) {
-	const response = await Api.getExploreCategories();
-
-	const { data } = response;
-
-	res.send(data);
-});
+// Include internal API routes
+app.use(api);
 
 app.get('/', function(req, res) {
 	handleDefaultRoute(res);

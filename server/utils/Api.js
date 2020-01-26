@@ -1,6 +1,12 @@
 const axios = require('axios');
 
-const { ACCOUNT_API, EXPLORE_API, FEED_API, POST_API } = require('./Constants');
+const {
+	ACCOUNT_API,
+	CATEGORY_API,
+	EXPLORE_API,
+	FEED_API,
+	POST_API
+} = require('./Constants');
 
 axios.defaults.headers.common['Authorization'] = ''; // TODO: add your own authorization token
 
@@ -10,7 +16,13 @@ async function getUser(userId) {
 	return data;
 }
 
-async function getPosts(userId) {
+async function searchUser(query) {
+	const response = await axios.get(`${ACCOUNT_API}prefix/${query}`);
+	const { data } = response;
+	return data;
+}
+
+async function getUserPosts(userId) {
 	const response = await axios.get(`${ACCOUNT_API}id/${userId}/posts`);
 	const { data } = response;
 	return data;
@@ -28,6 +40,18 @@ async function getPopularFeed() {
 	return data;
 }
 
+async function getLatestFeed() {
+	const response = await axios.get(`${FEED_API}global`);
+	const { data } = response;
+	return data;
+}
+
+async function getCategoryFeed(categoryName, sort) {
+	const response = await axios.get(`${CATEGORY_API}${categoryName}/${sort}`);
+	const { data } = response;
+	return data;
+}
+
 async function getExploreCategories() {
 	const response = await axios.get(`${EXPLORE_API}`);
 	const { data } = response;
@@ -36,9 +60,12 @@ async function getExploreCategories() {
 
 const Api = {
 	getUser,
-	getPosts,
+	searchUser,
+	getUserPosts,
 	getPost,
 	getPopularFeed,
+	getLatestFeed,
+	getCategoryFeed,
 	getExploreCategories
 };
 
