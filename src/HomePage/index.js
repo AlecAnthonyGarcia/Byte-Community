@@ -12,13 +12,13 @@ import Slider from "react-slick";
 class HomePage extends React.Component {
   state = {
     posts: [],
-    accounts: {}
+    accounts: {},
     currentIndex: 0
   };
 
   beforeSlideChange = (currentSlide, nextSlide) => {
     const video = document.getElementById(`byte-video-${currentSlide}`);
-    this.setState({currentIndex: nextSlide});
+    this.setState({ currentIndex: nextSlide });
     video.pause();
   };
 
