@@ -1,7 +1,11 @@
 import React from 'react';
 import './style.scss';
 
+import { Link } from 'react-router-dom';
+import { Icon } from 'antd';
 import moment from 'moment';
+
+import UserAvatar from '../UserAvatar';
 
 class ByteVideo extends React.Component {
 	constructor(props) {
@@ -55,16 +59,35 @@ class ByteVideo extends React.Component {
 		} = post;
 		const { avatarURL, username } = author;
 
+		const CommentCount = () => {
+			return (
+				<div className="video-stat-icon-container">
+					<Icon type="message" theme="filled" style={{ fontSize: '24px' }} />
+					<span>{commentCount}</span>
+				</div>
+			);
+		};
+
+		const LikeCount = () => {
+			return (
+				<div className="video-stat-icon-container">
+					<Icon type="heart" theme="filled" style={{ fontSize: '24px' }} />
+					<span>{likeCount}</span>
+				</div>
+			);
+		};
+
+		const ShareButton = () => {
+			return (
+				<div className="video-stat-icon-container">
+					<Icon type="share-alt" style={{ fontSize: '24px' }} />
+					<span>Share</span>
+				</div>
+			);
+		};
+
 		return (
 			<div className="video-container">
-				<div className="video-info-container">
-					<div className="video-caption">{caption}</div>
-					<span className="user-info-container">
-						<img className="user-avatar" src={avatarURL} alt="" />
-						<span className="user-username">{username}</span>
-						<span className="timestamp">{moment.unix(date).fromNow()}</span>
-					</span>
-				</div>
 				<video
 					ref={this.videoRef}
 					id={`byte-video-${index}`}
@@ -74,6 +97,23 @@ class ByteVideo extends React.Component {
 					onPause={this.onPause}
 					loop
 				/>
+				<div className="video-info-container">
+					<div className="video-caption">{caption}</div>
+					<span className="user-info-container">
+						<Link to={`/user/${username}`}>
+							<UserAvatar className="user-avatar" src={avatarURL} />
+						</Link>
+						<Link to={`/user/${username}`} className="user-username">
+							{username}
+						</Link>
+						<span className="timestamp">{moment.unix(date).fromNow()}</span>
+						<div className="video-stat-container">
+							<ShareButton />
+							<CommentCount />
+							<LikeCount />
+						</div>
+					</span>
+				</div>
 			</div>
 		);
 	}

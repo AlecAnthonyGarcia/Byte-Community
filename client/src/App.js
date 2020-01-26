@@ -13,6 +13,15 @@ function App() {
 		<BrowserRouter>
 			<Switch>
 				<Route exact path="/" component={HomePage} />
+				<Route exact path="/popular" component={HomePage} />
+				<Route exact path="/latest" component={HomePage} />
+				<Route
+					exact
+					path="/categories/:categoryName/:sort"
+					component={HomePage}
+				/>
+				<Route exact path="/user/:username" component={HomePage} />
+				<Route exact path="/post/:postId" component={HomePage} />
 			</Switch>
 		</BrowserRouter>
 	);

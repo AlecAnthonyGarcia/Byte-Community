@@ -29,15 +29,30 @@
 			width: 48px;
 			border-radius: 50%;
 		}
+
 		.user-username {
 			font-size: 20px;
 			align-self: center;
 			margin-left: 10px;
+			color: white;
 		}
+
 		.timestamp {
 			font-size: 13px;
 			align-self: center;
 			margin-left: 10px;
+			width: 100%;
+		}
+
+		.video-stat-container {
+			display: flex;
+			margin-right: 20px;
+
+			.video-stat-icon-container {
+				display: flex;
+				flex-direction: column;
+				margin: 0px 7px;
+			}
 		}
 	}
 }

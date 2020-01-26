@@ -1,48 +1,181 @@
 import React from 'react';
 import './style.scss';
 
-import { Row, Col } from 'antd';
+import { withRouter } from 'react-router-dom';
+
+import { Row, Col, Spin } from 'antd';
 
 import LandingLogo from '../LandingLogo';
 import ByteVideo from '../ByteVideo';
 import Explore from '../Explore';
+import User from '../User';
 
 import Slider from 'react-slick';
 
 import Api from '../utils/Api';
 
 class HomePage extends React.Component {
-	state = {
-		posts: [],
-		accounts: {},
-		currentIndex: 0
-	};
+	constructor(props) {
+		super(props);
+		this.sliderRef = React.createRef();
+		this.state = {
+			loading: true,
+			posts: [],
+			user: {},
+			accounts: {},
+			currentIndex: 0
+		};
+	}
 
 	componentDidMount() {
-		this.getPopularFeed();
+		this.handleRoutes();
 	}
+
+	componentDidUpdate(prevProps) {
+		const {
+			match: { url }
+		} = this.props;
+		const prevUrl = prevProps.match.url;
+
+		if (prevUrl !== url) {
+			this.handleRoutes();
+		}
+	}
+
+	handleRoutes = () => {
+		const {
+			match: { url, params }
+		} = this.props;
+		const { current: slider } = this.sliderRef;
+
+		this.setState({ loading: true, user: {}, currentIndex: 0 });
+
+		slider.slickGoTo(0);
+
+		if (url === '/' || url.startsWith('/popular')) {
+			this.getPopularFeed();
+		}
+		if (url.startsWith('/latest')) {
+			this.getLatestFeed();
+		}
+		if (url.startsWith('/categories/')) {
+			const { categoryName, sort } = params;
+			this.getCategoryFeed(categoryName, sort);
+		}
+		if (url.startsWith('/user/')) {
+			const { username } = params;
+			this.getUserPosts(username);
+		}
+		if (url.startsWith('/post/')) {
+			const { postId } = params;
+			this.getPost(postId);
+		}
+	};
 
 	async getPopularFeed() {
 		const response = await Api.getPopularFeed();
 
 		const { posts, accounts } = response;
 
-		this.setState({ posts, accounts });
+		this.setState({ loading: false, posts, accounts });
+	}
+
+	async getLatestFeed() {
+		const response = await Api.getLatestFeed();
+
+		const { posts, accounts } = response;
+
+		this.setState({ loading: false, posts, accounts });
+	}
+
+	async getCategoryFeed(categoryName, sort) {
+		const response = await Api.getCategoryFeed(categoryName, sort);
+
+		const { posts, accounts } = response;
+
+		this.setState({ loading: false, posts, accounts });
+	}
+
+	async getUserPosts(username) {
+		const {
+			accounts: [user]
+		} = await Api.searchUser(username);
+		const { id: userId } = user;
+
+		const response = await Api.getUserPosts(userId);
+
+		const { posts, accounts } = response;
+
+		const userObj = accounts[userId];
+
+		this.setState({ loading: false, posts, accounts, user: userObj });
+	}
+
+	async getPost(postId) {
+		const response = await Api.getPost(postId);
+
+		const { accounts } = response;
+		const [posts] = response;
+		const [firstPost] = posts;
+		const { authorID } = firstPost || {};
+
+		const userObj = accounts[authorID];
+
+		this.setState({
+			loading: false,
+			posts: [response],
+			accounts,
+			user: userObj
+		});
 	}
 
 	beforeSlideChange = (currentSlide, nextSlide) => {
 		const video = document.getElementById(`byte-video-${currentSlide}`);
 		this.setState({ currentIndex: nextSlide });
-		video.pause();
+		if (video) {
+			video.pause();
+		}
 	};
 
 	afterSlideChange = currentSlide => {
 		const video = document.getElementById(`byte-video-${currentSlide}`);
-		video.play();
+		if (video) {
+			video.play();
+		}
+	};
+
+	getRightComponent = () => {
+		const {
+			match: { url }
+		} = this.props;
+		const { user } = this.state;
+
+		if (url.startsWith('/user/') || url.startsWith('/post/')) {
+			return <User user={user} />;
+		} else {
+			return <Explore />;
+		}
+	};
+
+	getFeedData = () => {
+		const { posts, accounts, currentIndex } = this.state;
+
+		return posts.map((post, index) => {
+			const { authorID } = post;
+			return (
+				<ByteVideo
+					key={authorID}
+					index={index}
+					currentIndex={currentIndex}
+					post={post}
+					author={accounts[authorID]}
+				/>
+			);
+		});
 	};
 
 	render() {
-		const { posts, accounts, currentIndex } = this.state;
+		const { loading } = this.state;
 
 		const sliderSettings = {
 			dots: false,
@@ -63,27 +196,17 @@ class HomePage extends React.Component {
 						<LandingLogo />
 					</Col>
 					<Col span={8}>
-						<Slider {...sliderSettings}>
-							{posts.map((post, index) => {
-								const { authorID } = post;
-								return (
-									<ByteVideo
-										index={index}
-										currentIndex={currentIndex}
-										post={post}
-										author={accounts[authorID]}
-									/>
-								);
-							})}
-						</Slider>
+						<Spin spinning={loading}>
+							<Slider ref={this.sliderRef} {...sliderSettings}>
+								{this.getFeedData()}
+							</Slider>
+						</Spin>
 					</Col>
-					<Col span={8}>
-						<Explore />
-					</Col>
+					<Col span={8}>{this.getRightComponent()}</Col>
 				</Row>
 			</div>
 		);
 	}
 }
 
-export default HomePage;
+export default withRouter(HomePage);

@@ -1,6 +1,11 @@
 import React from 'react';
 import './style.scss';
 
+import UserAvatar from '../UserAvatar';
+import BetaBadge from '../BetaBadge';
+
+import moment from 'moment';
+
 const User = props => {
 	const { user } = props;
 	const {
@@ -9,7 +14,8 @@ const User = props => {
 		username,
 		displayName,
 		backgroundColor,
-		foregroundColor
+		foregroundColor,
+		registrationDate
 	} = user;
 
 	return (
@@ -18,12 +24,20 @@ const User = props => {
 			style={{ background: backgroundColor, color: foregroundColor }}
 		>
 			<div className="user-info-container">
-				<img className="user-avatar" src={avatarURL} alt="" />
+				<UserAvatar className="user-avatar" src={avatarURL} />
 				<h1 style={{ color: foregroundColor }} className="user-display-name">
 					{displayName}
 				</h1>
-				<span className="user-username">{username}</span>
+				<span className="user-username">
+					{username}
+					<BetaBadge
+						registrationDate={registrationDate}
+						color={foregroundColor}
+					/>
+				</span>
+
 				<p className="user-bio">{bio}</p>
+				<span>joined {moment.unix(registrationDate).fromNow()}</span>
 			</div>
 		</div>
 	);

@@ -3,6 +3,14 @@
 	padding: 10px;
 	overflow-y: auto;
 }
+.explore-search {
+	padding: 10px;
+
+	.ant-input-search input {
+		height: 50px;
+		border-radius: 50px;
+	}
+}
 
 .explore-category-main {
 	width: 100%;
