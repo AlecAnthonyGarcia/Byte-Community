@@ -1,0 +1,34 @@
+.user-container {
+  display: flex;
+  height: 100vh;
+
+  .user-info-container {
+    margin: auto;
+
+    .user-avatar {
+      width: 192px;
+      margin-bottom: 30px;
+      border-radius: 50%;
+      border-color: white;
+      border-style: solid;
+      align-self: center;
+    }
+
+    .user-display-name {
+      font-weight: bold;
+      font-size: 35px;
+      margin-bottom: 0px;
+    }
+
+    .user-username {
+      font-size: 22px;
+      margin-top: 0px;
+    }
+
+    .user-bio {
+      white-space: pre;
+      margin-top: 20px;
+      font-size: 18px;
+    }
+  }
+}
