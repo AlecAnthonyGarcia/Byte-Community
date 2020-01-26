@@ -33,6 +33,16 @@ api.get('/api/getUserPosts', async function(req, res) {
 	res.send(data);
 });
 
+api.get('/api/getUserRebytes', async function(req, res) {
+	const { username } = req.query;
+
+	const response = await ByteApi.getUserRebytes(username);
+
+	const { data } = response;
+
+	res.send(data);
+});
+
 api.get('/api/getPost', async function(req, res) {
 	const { id } = req.query;
 

@@ -28,6 +28,12 @@ async function getUserPosts(userId) {
 	return data;
 }
 
+async function getUserRebytes(userId) {
+	const response = await axios.get(`${ACCOUNT_API}id/${userId}/rebytes`);
+	const { data } = response;
+	return data;
+}
+
 async function getPost(postId) {
 	const response = await axios.get(`${POST_API}id/${postId}`);
 	const { data } = response;
@@ -62,6 +68,7 @@ const Api = {
 	getUser,
 	searchUser,
 	getUserPosts,
+	getUserRebytes,
 	getPost,
 	getPopularFeed,
 	getLatestFeed,

@@ -41,6 +41,14 @@ async function getUserPosts(username) {
 	return data;
 }
 
+async function getUserRebytes(username) {
+	const response = await fetch(`/api/getUserRebytes?username=${username}`, {
+		method: 'get'
+	});
+	const data = await response.json();
+	return data;
+}
+
 async function getPost(postId) {
 	const response = await fetch(`/api/getPost?id=${postId}`, {
 		method: 'get'
@@ -63,6 +71,7 @@ const Api = {
 	getExploreCategories,
 	getCategoryFeed,
 	getUserPosts,
+	getUserRebytes,
 	getPost,
 	searchUser
 };

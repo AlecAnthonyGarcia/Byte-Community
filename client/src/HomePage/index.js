@@ -44,7 +44,7 @@ class HomePage extends React.Component {
 
 	handleRoutes = () => {
 		const {
-			match: { url, params }
+			match: { params, path }
 		} = this.props;
 		const { current: slider } = this.sliderRef;
 
@@ -52,21 +52,25 @@ class HomePage extends React.Component {
 
 		slider.slickGoTo(0);
 
-		if (url === '/' || url.startsWith('/popular')) {
+		if (path === '/' || path.startsWith('/popular')) {
 			this.getPopularFeed();
 		}
-		if (url.startsWith('/latest')) {
+		if (path.startsWith('/latest')) {
 			this.getLatestFeed();
 		}
-		if (url.startsWith('/categories/')) {
+		if (path.startsWith('/categories/')) {
 			const { categoryName, sort } = params;
 			this.getCategoryFeed(categoryName, sort);
 		}
-		if (url.startsWith('/user/')) {
+		if (path.startsWith('/user/')) {
 			const { username } = params;
-			this.getUserPosts(username);
+			if (path.endsWith('/rebytes')) {
+				this.getUserRebytes(username);
+			} else {
+				this.getUserPosts(username);
+			}
 		}
-		if (url.startsWith('/post/')) {
+		if (path.startsWith('/post/')) {
 			const { postId } = params;
 			this.getPost(postId);
 		}
@@ -111,11 +115,31 @@ class HomePage extends React.Component {
 		this.setState({ loading: false, posts, accounts, user: userObj });
 	}
 
+	async getUserRebytes(username) {
+		const {
+			accounts: [user]
+		} = await Api.searchUser(username);
+		const { id: userId } = user;
+
+		const response = await Api.getUserRebytes(userId);
+
+		const { rebytes, accounts } = response;
+
+		const posts = rebytes.map(rebyte => {
+			const { post } = rebyte;
+			return post;
+		});
+
+		const userObj = accounts[userId];
+
+		this.setState({ loading: false, posts, accounts, user: userObj });
+	}
+
 	async getPost(postId) {
 		const response = await Api.getPost(postId);
 
 		const { accounts } = response;
-		const [posts] = response;
+		const posts = [response];
 		const [firstPost] = posts;
 		const { authorID } = firstPost || {};
 
@@ -123,7 +147,7 @@ class HomePage extends React.Component {
 
 		this.setState({
 			loading: false,
-			posts: [response],
+			posts,
 			accounts,
 			user: userObj
 		});

@@ -1,13 +1,21 @@
 import React from 'react';
 import './style.scss';
 
+import { Link, withRouter } from 'react-router-dom';
+import { Button, Icon } from 'antd';
+
 import UserAvatar from '../UserAvatar';
 import BetaBadge from '../BetaBadge';
 
 import moment from 'moment';
+import RebyteIcon from '../RebyteIcon';
+import LoopsIcon from '../LoopsIcon';
 
 const User = props => {
-	const { user } = props;
+	const {
+		user,
+		match: { path }
+	} = props;
 	const {
 		avatarURL,
 		bio,
@@ -17,6 +25,57 @@ const User = props => {
 		foregroundColor,
 		registrationDate
 	} = user;
+
+	const ViewBytesButton = () => {
+		if (path.startsWith('/post/') || path.endsWith('/rebytes')) {
+			return (
+				<Link to={`/user/${username}`}>
+					<Button
+						className="view-bytes-button"
+						style={{ backgroundColor: foregroundColor, color: backgroundColor }}
+					>
+						<Icon
+							component={LoopsIcon}
+							style={{
+								fontSize: '24px',
+								textAlign: 'left',
+								color: backgroundColor
+							}}
+						/>
+						View Bytes
+					</Button>
+				</Link>
+			);
+		}
+		return null;
+	};
+
+	const ViewRebytesButton = () => {
+		if (
+			path.startsWith('/post/') ||
+			(path.startsWith('/user/') && !path.endsWith('/rebytes'))
+		) {
+			return (
+				<Link to={`/user/${username}/rebytes`}>
+					<Button
+						className="view-bytes-button"
+						style={{ backgroundColor: foregroundColor, color: backgroundColor }}
+					>
+						<Icon
+							component={RebyteIcon}
+							style={{
+								fontSize: '24px',
+								textAlign: 'left',
+								color: backgroundColor
+							}}
+						/>
+						View Rebytes
+					</Button>
+				</Link>
+			);
+		}
+		return null;
+	};
 
 	return (
 		<div
@@ -38,9 +97,12 @@ const User = props => {
 
 				<p className="user-bio">{bio}</p>
 				<span>joined {moment.unix(registrationDate).fromNow()}</span>
+
+				<ViewBytesButton />
+				<ViewRebytesButton />
 			</div>
 		</div>
 	);
 };
 
-export default User;
+export default withRouter(User);

@@ -47,6 +47,7 @@ class ByteVideo extends React.Component {
 	render() {
 		const { index, post, author } = this.props;
 		const {
+			id: postId,
 			authorID,
 			videoSrc,
 			thumbSrc,
@@ -79,10 +80,12 @@ class ByteVideo extends React.Component {
 
 		const ShareButton = () => {
 			return (
-				<div className="video-stat-icon-container">
-					<Icon type="share-alt" style={{ fontSize: '24px' }} />
-					<span>Share</span>
-				</div>
+				<Link to={`/post/${postId}`}>
+					<div className="video-stat-icon-container">
+						<Icon type="share-alt" style={{ fontSize: '24px' }} />
+						<span>Share</span>
+					</div>
+				</Link>
 			);
 		};
 
