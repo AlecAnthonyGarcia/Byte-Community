@@ -14,16 +14,19 @@ class ByteVideo extends React.Component {
 
   onVideoClick = e => {
     e.preventDefault();
+    const { index, currentIndex } = this.props;
     const { isVideoPlaying } = this.state;
 
     const { current: video } = this.videoRef;
 
-    if (video.paused && !isVideoPlaying) {
-      video.play();
-      this.setState({ isVideoPlaying: true });
-    } else {
-      video.pause();
-      this.setState({ isVideoPlaying: false });
+    if (index === currentIndex) {
+      if (video.paused && !isVideoPlaying) {
+        video.play();
+        this.setState({ isVideoPlaying: true });
+      } else {
+        video.pause();
+        this.setState({ isVideoPlaying: false });
+      }
     }
   };
 
@@ -69,6 +72,7 @@ class ByteVideo extends React.Component {
           src={videoSrc}
           onClick={this.onVideoClick}
           onPause={this.onPause}
+          loop
         />
       </div>
     );

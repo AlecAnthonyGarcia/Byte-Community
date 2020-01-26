@@ -13,10 +13,12 @@ class HomePage extends React.Component {
   state = {
     posts: [],
     accounts: {}
+    currentIndex: 0
   };
 
   beforeSlideChange = (currentSlide, nextSlide) => {
     const video = document.getElementById(`byte-video-${currentSlide}`);
+    this.setState({currentIndex: nextSlide});
     video.pause();
   };
 
@@ -26,7 +28,7 @@ class HomePage extends React.Component {
   };
 
   render() {
-    const { posts, accounts } = this.state;
+    const { posts, accounts, currentIndex } = this.state;
 
     const sliderSettings = {
       dots: false,
@@ -53,6 +55,7 @@ class HomePage extends React.Component {
                 return (
                   <ByteVideo
                     index={index}
+                    currentIndex={currentIndex}
                     post={post}
                     author={accounts[authorID]}
                   />
