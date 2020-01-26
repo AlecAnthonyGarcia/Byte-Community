@@ -3,10 +3,24 @@ import './style.scss';
 
 import { Row, Col } from 'antd';
 
+import Api from '../utils/Api';
+
 class Explore extends React.Component {
 	state = {
 		categories: []
 	};
+
+	componentDidMount() {
+		this.getExploreCategories();
+	}
+
+	async getExploreCategories() {
+		const response = await Api.getExploreCategories();
+
+		const { layout: categories } = response;
+
+		this.setState({ categories });
+	}
 
 	render() {
 		const { categories } = this.state;

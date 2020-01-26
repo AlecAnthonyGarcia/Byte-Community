@@ -9,12 +9,26 @@ import Explore from '../Explore';
 
 import Slider from 'react-slick';
 
+import Api from '../utils/Api';
+
 class HomePage extends React.Component {
 	state = {
 		posts: [],
 		accounts: {},
 		currentIndex: 0
 	};
+
+	componentDidMount() {
+		this.getPopularFeed();
+	}
+
+	async getPopularFeed() {
+		const response = await Api.getPopularFeed();
+
+		const { posts, accounts } = response;
+
+		this.setState({ posts, accounts });
+	}
 
 	beforeSlideChange = (currentSlide, nextSlide) => {
 		const video = document.getElementById(`byte-video-${currentSlide}`);
