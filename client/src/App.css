@@ -1,20 +1,20 @@
 .slick-list {
-  height: 100vh !important;
+	height: 100vh !important;
 }
 
 .slick-prev:before,
 .slick-next:before {
-  font-size: 40px !important;
+	font-size: 40px !important;
 }
 
 .slick-prev,
 .slick-next {
-  z-index: 1;
+	z-index: 1;
 }
 .slick-prev {
-  left: 10px !important;
+	left: 10px !important;
 }
 
 .slick-next {
-  right: 30px !important;
+	right: 30px !important;
 }

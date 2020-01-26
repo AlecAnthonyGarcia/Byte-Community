@@ -1,16 +1,16 @@
 .landing-logo-container {
-  position: relative;
-  display: flex;
-  justify-content: center;
+	position: relative;
+	display: flex;
+	justify-content: center;
 
-  .landing-logo {
-    position: absolute;
-    align-self: center;
-  }
+	.landing-logo {
+		position: absolute;
+		align-self: center;
+	}
 
-  .landing-video {
-    width: 100%;
-    height: 100vh;
-    object-fit: cover;
-  }
+	.landing-video {
+		width: 100%;
+		height: 100vh;
+		object-fit: cover;
+	}
 }

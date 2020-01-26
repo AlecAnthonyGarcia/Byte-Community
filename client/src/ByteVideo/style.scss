@@ -1,43 +1,43 @@
 .video-container {
-  position: relative;
-  cursor: pointer;
+	position: relative;
+	cursor: pointer;
 
-  .byte-video {
-    width: 100%;
-    height: 100vh;
-    object-fit: cover;
-  }
+	.byte-video {
+		width: 100%;
+		height: 100vh;
+		object-fit: cover;
+	}
 }
 
 .video-info-container {
-  position: absolute;
-  width: 100%;
-  bottom: 15px;
-  left: 15px;
-  color: white;
-  text-shadow: 2px 2px 20px black;
+	position: absolute;
+	width: 100%;
+	bottom: 15px;
+	left: 15px;
+	color: white;
+	text-shadow: 2px 2px 20px black;
 
-  .video-caption {
-    font-size: 25px;
-    padding-bottom: 10px;
-  }
+	.video-caption {
+		font-size: 25px;
+		padding-bottom: 10px;
+	}
 
-  .user-info-container {
-    display: flex;
+	.user-info-container {
+		display: flex;
 
-    .user-avatar {
-      width: 48px;
-      border-radius: 50%;
-    }
-    .user-username {
-      font-size: 20px;
-      align-self: center;
-      margin-left: 10px;
-    }
-    .timestamp {
-      font-size: 13px;
-      align-self: center;
-      margin-left: 10px;
-    }
-  }
+		.user-avatar {
+			width: 48px;
+			border-radius: 50%;
+		}
+		.user-username {
+			font-size: 20px;
+			align-self: center;
+			margin-left: 10px;
+		}
+		.timestamp {
+			font-size: 13px;
+			align-self: center;
+			margin-left: 10px;
+		}
+	}
 }
