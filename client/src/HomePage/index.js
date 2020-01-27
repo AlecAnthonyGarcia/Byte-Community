@@ -25,12 +25,14 @@ class HomePage extends React.Component {
 			user: {},
 			accounts: {},
 			currentIndex: 0,
+			cursor: null,
+			hasMore: true,
 			showSliderArrows: true
 		};
 	}
 
 	componentDidMount() {
-		this.handleRoutes();
+		this.loadFeedData();
 	}
 
 	componentDidUpdate(prevProps) {
@@ -40,21 +42,14 @@ class HomePage extends React.Component {
 		const prevUrl = prevProps.match.url;
 
 		if (prevUrl !== url) {
-			this.handleRoutes();
+			this.onFeedTypeChange();
 		}
 	}
 
-	handleRoutes = () => {
+	loadFeedData = () => {
 		const {
 			match: { params, path }
 		} = this.props;
-		const { current: slider } = this.sliderRef;
-
-		this.setState({ loading: true, user: {}, currentIndex: 0 });
-
-		if (slider) {
-			slider.slickGoTo(0);
-		}
 
 		if (path === '/' || path.startsWith('/popular')) {
 			this.getPopularFeed();
@@ -80,75 +75,90 @@ class HomePage extends React.Component {
 		}
 	};
 
+	loadMoreFeedData = () => {
+		const { hasMore } = this.state;
+		if (hasMore) {
+			this.loadFeedData();
+		}
+	};
+
+	onFeedTypeChange = () => {
+		const { current: slider } = this.sliderRef;
+
+		if (slider) {
+			slider.slickGoTo(0);
+		}
+
+		this.setState(
+			{ loading: true, posts: [], currentIndex: 0, cursor: null, user: {} },
+			() => {
+				this.loadFeedData();
+			}
+		);
+	};
+
 	async getPopularFeed() {
-		const response = await Api.getPopularFeed();
-
-		const { posts, accounts } = response;
-
-		this.setState({ loading: false, posts, accounts });
+		this.getFeed(Api.getPopularFeed);
 	}
 
 	async getLatestFeed() {
-		const response = await Api.getLatestFeed();
-
-		const { posts, accounts } = response;
-
-		this.setState({ loading: false, posts, accounts });
+		this.getFeed(Api.getLatestFeed);
 	}
 
 	async getCategoryFeed(categoryName, sort) {
-		const response = await Api.getCategoryFeed(categoryName, sort);
-
-		const { posts, accounts } = response;
-
-		this.setState({ loading: false, posts, accounts });
+		this.getFeed(Api.getCategoryFeed, categoryName, sort);
 	}
 
 	async getUserPosts(username) {
-		const {
-			accounts: [user]
-		} = await Api.searchUser(username);
-		const { id: userId } = user;
-
-		const response = await Api.getUserPosts(userId);
-
-		const { posts, accounts } = response;
-
-		let userObj;
-
-		if (posts.length === 0) {
-			userObj = await Api.getUser(userId);
-		} else {
-			userObj = accounts[userId];
-		}
-
-		this.setState({ loading: false, posts, accounts, user: userObj });
+		this.getUserFeed(Api.getUserPosts, username);
 	}
 
 	async getUserRebytes(username) {
+		this.getUserFeed(Api.getUserRebytes, username);
+	}
+
+	async getUserId(username) {
 		const {
 			accounts: [user]
 		} = await Api.searchUser(username);
-		const { id: userId } = user;
+		const { id } = user;
+		return id;
+	}
 
-		const response = await Api.getUserRebytes(userId);
+	async getFeed(apiMethod, ...args) {
+		const { cursor: currentCursor } = this.state;
 
-		const { rebytes, accounts } = response;
+		const response = await apiMethod(...args, currentCursor);
 
-		const posts = rebytes.map(rebyte => {
-			const { post } = rebyte;
-			return post;
-		});
+		const { posts, accounts, cursor } = response;
 
-		let userObj;
+		this.updateFeedData({ posts, accounts, cursor });
+	}
 
-		if (posts.length === 0) {
-			userObj = await Api.getUser(userId);
-		} else {
-			userObj = accounts[userId];
+	async getUserFeed(apiMethod, username) {
+		const { cursor: currentCursor, user } = this.state;
+		let { id: userId } = user;
+
+		if (!userId) {
+			userId = await this.getUserId(username);
 		}
 
-		this.setState({ loading: false, posts, accounts, user: userObj });
+		const response = await apiMethod(userId, currentCursor);
+
+		let { posts, rebytes, accounts, cursor } = response;
+
+		if (rebytes) {
+			posts = rebytes.map(rebyte => {
+				const { post } = rebyte;
+				return post;
+			});
+		}
+
+		const hasPosts = posts.length > 0;
+
+		const userObj = hasPosts ? accounts[userId] : await Api.getUser(userId);
+
+		this.updateFeedData({ posts, accounts, cursor, user: userObj });
 	}
 
 	async getPost(postId) {
@@ -161,13 +171,26 @@ class HomePage extends React.Component {
 
 		const userObj = accounts[authorID];
 
+		this.updateFeedData(posts, accounts, userObj);
+	}
+
+	updateFeedData = ({
+		posts: newPosts,
+		accounts: newAccounts,
+		user,
+		cursor
+	}) => {
+		const { posts, accounts } = this.state;
+
 		this.setState({
 			loading: false,
-			posts,
-			accounts,
-			user: userObj
+			posts: posts.concat(newPosts),
+			accounts: { ...accounts, ...newAccounts },
+			user,
+			cursor,
+			hasMore: cursor ? true : false
 		});
-	}
+	};
 
 	beforeSlideChange = (currentSlide, nextSlide) => {
 		const video = document.getElementById(`byte-video-${currentSlide}`);
@@ -178,9 +201,20 @@ class HomePage extends React.Component {
 	};
 
 	afterSlideChange = currentSlide => {
+		const { posts } = this.state;
 		const video = document.getElementById(`byte-video-${currentSlide}`);
 		if (video) {
 			video.play();
+		}
+
+		if (currentSlide === 0) {
+			document.body.style.overflowY = 'auto';
+		} else {
+			document.body.style.overflowY = 'hidden';
+		}
+
+		if (posts.length - (currentSlide + 1) === 3) {
+			this.loadMoreFeedData();
 		}
 	};
 
@@ -212,12 +246,8 @@ class HomePage extends React.Component {
 	};
 
 	getRightComponent = () => {
-		const {
-			match: { url }
-		} = this.props;
-		const { user } = this.state;
-
-		if (url.startsWith('/user/') || url.startsWith('/post/')) {
+		if (this.shouldShowUserComponent()) {
+			const { user } = this.state;
 			return <User user={user} />;
 		} else {
 			return <Explore />;
@@ -244,6 +274,13 @@ class HomePage extends React.Component {
 
 	onCommentsOverlayChange = isVisible => {
 		this.setState({ showSliderArrows: isVisible ? false : true });
+	};
+
+	shouldShowUserComponent = () => {
+		const {
+			match: { url }
+		} = this.props;
+		return url.startsWith('/user/') || url.startsWith('/post/');
 	};
 
 	render() {

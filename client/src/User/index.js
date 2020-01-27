@@ -24,7 +24,7 @@ const User = props => {
 		backgroundColor,
 		foregroundColor,
 		registrationDate
-	} = user;
+	} = user || {};
 
 	const ViewBytesButton = () => {
 		if (path.startsWith('/post/') || path.endsWith('/rebytes')) {

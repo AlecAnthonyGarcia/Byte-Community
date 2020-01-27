@@ -24,9 +24,9 @@ api.get('/api/searchUser', async function(req, res) {
 });
 
 api.get('/api/getUserPosts', async function(req, res) {
-	const { username } = req.query;
+	const { username, cursor } = req.query;
 
-	const response = await ByteApi.getUserPosts(username);
+	const response = await ByteApi.getUserPosts(username, cursor);
 
 	const { data } = response;
 
@@ -34,9 +34,9 @@ api.get('/api/getUserPosts', async function(req, res) {
 });
 
 api.get('/api/getUserRebytes', async function(req, res) {
-	const { username } = req.query;
+	const { username, cursor } = req.query;
 
-	const response = await ByteApi.getUserRebytes(username);
+	const response = await ByteApi.getUserRebytes(username, cursor);
 
 	const { data } = response;
 
@@ -74,7 +74,9 @@ api.get('/api/getPostLikes', async function(req, res) {
 });
 
 api.get('/api/getPopularFeed', async function(req, res) {
-	const response = await ByteApi.getPopularFeed();
+	const { cursor } = req.query;
+
+	const response = await ByteApi.getPopularFeed(cursor);
 
 	const { data } = response;
 
@@ -82,7 +84,9 @@ api.get('/api/getPopularFeed', async function(req, res) {
 });
 
 api.get('/api/getLatestFeed', async function(req, res) {
-	const response = await ByteApi.getLatestFeed();
+	const { cursor } = req.query;
+
+	const response = await ByteApi.getLatestFeed(cursor);
 
 	const { data } = response;
 
@@ -90,9 +94,9 @@ api.get('/api/getLatestFeed', async function(req, res) {
 });
 
 api.get('/api/getCategoryFeed', async function(req, res) {
-	const { categoryName, sort } = req.query;
+	const { categoryName, sort, cursor } = req.query;
 
-	const response = await ByteApi.getCategoryFeed(categoryName, sort);
+	const response = await ByteApi.getCategoryFeed(categoryName, sort, cursor);
 
 	const { data } = response;
 

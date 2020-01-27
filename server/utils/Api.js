@@ -22,14 +22,22 @@ async function searchUser(query) {
 	return data;
 }
 
-async function getUserPosts(userId) {
-	const response = await axios.get(`${ACCOUNT_API}id/${userId}/posts`);
+async function getUserPosts(userId, cursor) {
+	let url = `${ACCOUNT_API}id/${userId}/posts`;
+	if (cursor) {
+		url = `${url}?cursor=${cursor}`;
+	}
+	const response = await axios.get(url);
 	const { data } = response;
 	return data;
 }
 
-async function getUserRebytes(userId) {
-	const response = await axios.get(`${ACCOUNT_API}id/${userId}/rebytes`);
+async function getUserRebytes(userId, cursor) {
+	let url = `${ACCOUNT_API}id/${userId}/rebytes`;
+	if (cursor) {
+		url = `${url}?cursor=${cursor}`;
+	}
+	const response = await axios.get(url);
 	const { data } = response;
 	return data;
 }
@@ -60,20 +68,32 @@ async function getPostLikes(postId, cursor) {
 	return data;
 }
 
-async function getPopularFeed() {
-	const response = await axios.get(`${FEED_API}popular/v2`);
+async function getPopularFeed(cursor) {
+	let url = `${FEED_API}popular/v2`;
+	if (cursor) {
+		url = `${url}?cursor=${cursor}`;
+	}
+	const response = await axios.get(url);
 	const { data } = response;
 	return data;
 }
 
-async function getLatestFeed() {
-	const response = await axios.get(`${FEED_API}global`);
+async function getLatestFeed(cursor) {
+	let url = `${FEED_API}global`;
+	if (cursor) {
+		url = `${url}?cursor=${cursor}`;
+	}
+	const response = await axios.get(url);
 	const { data } = response;
 	return data;
 }
 
-async function getCategoryFeed(categoryName, sort) {
-	const response = await axios.get(`${CATEGORY_API}${categoryName}/${sort}`);
+async function getCategoryFeed(categoryName, sort, cursor) {
+	let url = `${CATEGORY_API}${categoryName}/${sort}`;
+	if (cursor) {
+		url = `${url}?cursor=${cursor}`;
+	}
+	const response = await axios.get(url);
 	const { data } = response;
 	return data;
 }

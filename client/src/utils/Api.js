@@ -1,13 +1,13 @@
-async function getPopularFeed() {
-	const response = await fetch('/api/getPopularFeed', {
+async function getPopularFeed(cursor) {
+	const response = await fetch(`/api/getPopularFeed?cursor=${cursor}`, {
 		method: 'get'
 	});
 	const data = await response.json();
 	return data;
 }
 
-async function getLatestFeed() {
-	const response = await fetch('/api/getLatestFeed', {
+async function getLatestFeed(cursor) {
+	const response = await fetch(`/api/getLatestFeed?cursor=${cursor}`, {
 		method: 'get'
 	});
 	const data = await response.json();
@@ -22,9 +22,9 @@ async function getExploreCategories() {
 	return data;
 }
 
-async function getCategoryFeed(categoryName, sort) {
+async function getCategoryFeed(categoryName, sort, cursor) {
 	const response = await fetch(
-		`/api/getCategoryFeed?categoryName=${categoryName}&sort=${sort}`,
+		`/api/getCategoryFeed?categoryName=${categoryName}&sort=${sort}&cursor=${cursor}`,
 		{
 			method: 'get'
 		}
@@ -41,18 +41,24 @@ async function getUser(userId) {
 	return data;
 }
 
-async function getUserPosts(username) {
-	const response = await fetch(`/api/getUserPosts?username=${username}`, {
-		method: 'get'
-	});
+async function getUserPosts(username, cursor) {
+	const response = await fetch(
+		`/api/getUserPosts?username=${username}&cursor=${cursor}`,
+		{
+			method: 'get'
+		}
+	);
 	const data = await response.json();
 	return data;
 }
 
-async function getUserRebytes(username) {
-	const response = await fetch(`/api/getUserRebytes?username=${username}`, {
-		method: 'get'
-	});
+async function getUserRebytes(username, cursor) {
+	const response = await fetch(
+		`/api/getUserRebytes?username=${username}&cursor=${cursor}`,
+		{
+			method: 'get'
+		}
+	);
 	const data = await response.json();
 	return data;
 }
