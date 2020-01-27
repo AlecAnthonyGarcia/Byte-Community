@@ -98,8 +98,10 @@ const User = props => {
 				<p className="user-bio">{bio}</p>
 				<span>joined {moment.unix(registrationDate).fromNow()}</span>
 
-				<ViewBytesButton />
-				<ViewRebytesButton />
+				<div className="action-buttons-container">
+					<ViewBytesButton />
+					<ViewRebytesButton />
+				</div>
 			</div>
 		</div>
 	);

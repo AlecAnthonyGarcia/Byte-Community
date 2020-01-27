@@ -16,23 +16,16 @@ const BetaBadgeIcon = () => (
 			id="path"
 			d="M 0 4.595 L 0 9.19 L 3.943 6.892 L 0 4.595 Z"
 			fill="currentColor"
-			fill-rule="evenodd"
 		/>
 		<path
 			id="path_1"
 			d="M 0 9.19 L 0 13.785 L 7.886 9.19 L 3.943 6.892 L 0 9.19 Z"
 			fill="currentColor"
-			fill-opacity="0.5"
-			stroke-opacity="0.5"
-			fill-rule="evenodd"
 		/>
 		<path
 			id="path_2"
 			d="M 3.943 6.892 L 7.886 4.595 L 0 0 L 0 4.595 L 3.943 6.892 Z"
 			fill="currentColor"
-			fill-opacity="0.5"
-			stroke-opacity="0.5"
-			fill-rule="evenodd"
 		/>
 	</svg>
 );

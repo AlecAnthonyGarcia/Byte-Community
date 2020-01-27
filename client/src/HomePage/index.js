@@ -12,6 +12,7 @@ import User from '../User';
 import EmptyState from '../EmptyState';
 
 import Slider from 'react-slick';
+import MediaQuery from 'react-responsive';
 
 import Api from '../utils/Api';
 
@@ -227,6 +228,7 @@ class HomePage extends React.Component {
 			infinite: false,
 			slidesToShow: 1,
 			slidesToScroll: 1,
+			touchThreshold: 20,
 			vertical: true,
 			verticalSwiping: true,
 			swipeToSlide: true,
@@ -239,9 +241,16 @@ class HomePage extends React.Component {
 		}
 
 		return (
-			<Slider ref={this.sliderRef} {...sliderSettings}>
-				{this.getFeedData()}
-			</Slider>
+			<>
+				{this.shouldShowUserComponent() && (
+					<MediaQuery maxWidth={768}>
+						<User user={this.state.user} />
+					</MediaQuery>
+				)}
+				<Slider ref={this.sliderRef} {...sliderSettings}>
+					{this.getFeedData()}
+				</Slider>
+			</>
 		);
 	};
 

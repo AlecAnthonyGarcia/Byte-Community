@@ -33,15 +33,47 @@
 			font-size: 18px;
 		}
 	}
+
+	.action-buttons-container {
+		margin-top: 20px;
+
+		.view-bytes-button {
+			width: 100%;
+			margin-top: 10px;
+			padding: 7px 20px;
+			height: auto;
+			display: flex;
+			font-size: 15px;
+			font-weight: bold;
+			justify-content: center;
+		}
+	}
 }
 
-.view-bytes-button {
-	width: 100%;
-	margin-top: 10px;
-	padding: 7px 20px;
-	height: auto;
-	display: flex;
-	font-size: 15px;
-	font-weight: bold;
-	justify-content: center;
+@media screen and (max-width: 768px) {
+	.user-container {
+		height: 70vh;
+
+		.user-info-container {
+			.user-avatar {
+				width: 128px;
+				height: 128px;
+			}
+			.user-display-name {
+				font-size: 27px;
+			}
+
+			.user-username {
+				font-size: 20px;
+			}
+
+			.user-bio {
+				font-size: 15px;
+			}
+
+			.action-buttons-container {
+				margin-top: 20px;
+			}
+		}
+	}
 }
