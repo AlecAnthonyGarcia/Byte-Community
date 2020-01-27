@@ -9,6 +9,7 @@ import LandingLogo from '../LandingLogo';
 import ByteVideo from '../ByteVideo';
 import Explore from '../Explore';
 import User from '../User';
+import EmptyState from '../EmptyState';
 
 import Slider from 'react-slick';
 
@@ -50,7 +51,9 @@ class HomePage extends React.Component {
 
 		this.setState({ loading: true, user: {}, currentIndex: 0 });
 
-		slider.slickGoTo(0);
+		if (slider) {
+			slider.slickGoTo(0);
+		}
 
 		if (path === '/' || path.startsWith('/popular')) {
 			this.getPopularFeed();
@@ -110,7 +113,13 @@ class HomePage extends React.Component {
 
 		const { posts, accounts } = response;
 
-		const userObj = accounts[userId];
+		let userObj;
+
+		if (posts.length === 0) {
+			userObj = await Api.getUser(userId);
+		} else {
+			userObj = accounts[userId];
+		}
 
 		this.setState({ loading: false, posts, accounts, user: userObj });
 	}
@@ -130,7 +139,13 @@ class HomePage extends React.Component {
 			return post;
 		});
 
-		const userObj = accounts[userId];
+		let userObj;
+
+		if (posts.length === 0) {
+			userObj = await Api.getUser(userId);
+		} else {
+			userObj = accounts[userId];
+		}
 
 		this.setState({ loading: false, posts, accounts, user: userObj });
 	}
@@ -168,6 +183,32 @@ class HomePage extends React.Component {
 		}
 	};
 
+	getMiddleComponent = () => {
+		const { posts } = this.state;
+
+		const sliderSettings = {
+			dots: false,
+			infinite: false,
+			slidesToShow: 1,
+			slidesToScroll: 1,
+			vertical: true,
+			verticalSwiping: true,
+			swipeToSlide: true,
+			beforeChange: this.beforeSlideChange,
+			afterChange: this.afterSlideChange
+		};
+
+		if (posts.length === 0) {
+			return <EmptyState message="Nothing to see here yet..." />;
+		}
+
+		return (
+			<Slider ref={this.sliderRef} {...sliderSettings}>
+				{this.getFeedData()}
+			</Slider>
+		);
+	};
+
 	getRightComponent = () => {
 		const {
 			match: { url }
@@ -201,32 +242,18 @@ class HomePage extends React.Component {
 	render() {
 		const { loading } = this.state;
 
-		const sliderSettings = {
-			dots: false,
-			infinite: false,
-			slidesToShow: 1,
-			slidesToScroll: 1,
-			vertical: true,
-			verticalSwiping: true,
-			swipeToSlide: true,
-			beforeChange: this.beforeSlideChange,
-			afterChange: this.afterSlideChange
-		};
-
 		return (
 			<div>
 				<Row>
-					<Col span={8}>
+					<Col xs={0} sm={0} md={0} lg={8}>
 						<LandingLogo />
 					</Col>
-					<Col span={8}>
-						<Spin spinning={loading}>
-							<Slider ref={this.sliderRef} {...sliderSettings}>
-								{this.getFeedData()}
-							</Slider>
-						</Spin>
+					<Col md={12} lg={8}>
+						<Spin spinning={loading}>{this.getMiddleComponent()}</Spin>
 					</Col>
-					<Col span={8}>{this.getRightComponent()}</Col>
+					<Col xs={0} md={12} lg={8}>
+						{this.getRightComponent()}
+					</Col>
 				</Row>
 			</div>
 		);

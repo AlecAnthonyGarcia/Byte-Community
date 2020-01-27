@@ -33,6 +33,14 @@ async function getCategoryFeed(categoryName, sort) {
 	return data;
 }
 
+async function getUser(userId) {
+	const response = await fetch(`/api/getUser?userId=${userId}`, {
+		method: 'get'
+	});
+	const data = await response.json();
+	return data;
+}
+
 async function getUserPosts(username) {
 	const response = await fetch(`/api/getUserPosts?username=${username}`, {
 		method: 'get'
@@ -70,6 +78,7 @@ const Api = {
 	getLatestFeed,
 	getExploreCategories,
 	getCategoryFeed,
+	getUser,
 	getUserPosts,
 	getUserRebytes,
 	getPost,

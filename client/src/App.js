@@ -7,6 +7,7 @@ import 'slick-carousel/slick/slick-theme.css';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
 
 import HomePage from './HomePage/index.js';
+import NoMatchPage from './NoMatchPage.js';
 
 function App() {
 	return (
@@ -23,6 +24,7 @@ function App() {
 				<Route exact path="/user/:username" component={HomePage} />
 				<Route exact path="/user/:username/rebytes" component={HomePage} />
 				<Route exact path="/post/:postId" component={HomePage} />
+				<Route component={NoMatchPage} />
 			</Switch>
 		</BrowserRouter>
 	);
