@@ -1,16 +1,12 @@
 import React from 'react';
 import './style.scss';
 
-import logo from '../static/img/logo.png';
-import topOverlay from '../static/img/top_shadow_overlay.png';
-
 import { Link } from 'react-router-dom';
 import { Icon } from 'antd';
 import moment from 'moment';
 
 import UserAvatar from '../UserAvatar';
 import CommentsOverlay from '../CommentsOverlay';
-import SearchIcon from '../SearchIcon';
 
 class ByteVideo extends React.Component {
 	constructor(props) {
@@ -143,21 +139,6 @@ class ByteVideo extends React.Component {
 						</div>
 					</span>
 				</div>
-
-				<img className="video-overlay-top-shadow" src={topOverlay} />
-
-				<Link to="/">
-					<img className="video-overlay-logo" src={logo} alt="byte logo" />
-				</Link>
-
-				<Icon
-					className="video-overlay-search-button"
-					component={SearchIcon}
-					style={{
-						fontSize: '48px',
-						color: 'white'
-					}}
-				/>
 
 				{isCommentOverlayOpen && (
 					<CommentsOverlay post={post} onClose={this.onCloseCommentsOverlay} />

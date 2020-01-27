@@ -4,7 +4,16 @@
 	overflow-y: auto;
 }
 .explore-search {
+	display: flex;
 	padding: 10px;
+
+	.back-button {
+		align-self: center;
+		margin-right: 10px;
+		background-color: transparent;
+		border: none;
+		color: white;
+	}
 
 	.ant-input-search input {
 		height: 50px;

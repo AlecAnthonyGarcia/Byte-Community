@@ -1,11 +1,15 @@
 import React from 'react';
 import './style.scss';
 
-import { withRouter } from 'react-router-dom';
+import logo from '../static/img/logo.png';
+import topOverlay from '../static/img/top_shadow_overlay.png';
 
-import { Row, Col, Spin } from 'antd';
+import { Link, withRouter } from 'react-router-dom';
+
+import { Icon, Row, Col, Spin } from 'antd';
 
 import LandingLogo from '../LandingLogo';
+import SearchIcon from '../SearchIcon';
 import ByteVideo from '../ByteVideo';
 import Explore from '../Explore';
 import User from '../User';
@@ -28,7 +32,8 @@ class HomePage extends React.Component {
 			currentIndex: 0,
 			cursor: null,
 			hasMore: true,
-			showSliderArrows: true
+			showSliderArrows: true,
+			isExploreOverlayOpen: false
 		};
 	}
 
@@ -81,21 +86,6 @@ class HomePage extends React.Component {
 		if (hasMore) {
 			this.loadFeedData();
 		}
-	};
-
-	onFeedTypeChange = () => {
-		const { current: slider } = this.sliderRef;
-
-		if (slider) {
-			slider.slickGoTo(0);
-		}
-
-		this.setState(
-			{ loading: true, posts: [], currentIndex: 0, cursor: null, user: {} },
-			() => {
-				this.loadFeedData();
-			}
-		);
 	};
 
 	async getPopularFeed() {
@@ -175,6 +165,21 @@ class HomePage extends React.Component {
 		this.updateFeedData(posts, accounts, userObj);
 	}
 
+	onFeedTypeChange = () => {
+		const { current: slider } = this.sliderRef;
+
+		if (slider) {
+			slider.slickGoTo(0);
+		}
+
+		this.setState(
+			{ loading: true, posts: [], currentIndex: 0, cursor: null, user: {} },
+			() => {
+				this.loadFeedData();
+			}
+		);
+	};
+
 	updateFeedData = ({
 		posts: newPosts,
 		accounts: newAccounts,
@@ -220,7 +225,7 @@ class HomePage extends React.Component {
 	};
 
 	getMiddleComponent = () => {
-		const { posts, showSliderArrows } = this.state;
+		const { posts, showSliderArrows, isExploreOverlayOpen } = this.state;
 
 		const sliderSettings = {
 			dots: false,
@@ -247,9 +252,36 @@ class HomePage extends React.Component {
 						<User user={this.state.user} />
 					</MediaQuery>
 				)}
-				<Slider ref={this.sliderRef} {...sliderSettings}>
-					{this.getFeedData()}
-				</Slider>
+
+				<div style={{ position: 'relative' }}>
+					<Slider ref={this.sliderRef} {...sliderSettings}>
+						{this.getFeedData()}
+					</Slider>
+					<img className="video-overlay-top-shadow" src={topOverlay} />
+
+					<Link to="/">
+						<img className="video-overlay-logo" src={logo} alt="byte logo" />
+					</Link>
+
+					<MediaQuery maxWidth={768}>
+						<Icon
+							className="video-overlay-search-button"
+							component={SearchIcon}
+							style={{
+								fontSize: '48px',
+								color: 'white'
+							}}
+							onClick={this.showExploreOverlay}
+						/>
+					</MediaQuery>
+				</div>
+				{isExploreOverlayOpen && (
+					<MediaQuery maxWidth={768}>
+						<div className="explore-overlay-container">
+							<Explore showBackButton onClose={this.onCloseExploreOverlay} />
+						</div>
+					</MediaQuery>
+				)}
 			</>
 		);
 	};
@@ -290,6 +322,14 @@ class HomePage extends React.Component {
 			match: { url }
 		} = this.props;
 		return url.startsWith('/user/') || url.startsWith('/post/');
+	};
+
+	showExploreOverlay = () => {
+		this.setState({ isExploreOverlayOpen: true });
+	};
+
+	onCloseExploreOverlay = () => {
+		this.setState({ isExploreOverlayOpen: false });
 	};
 
 	render() {

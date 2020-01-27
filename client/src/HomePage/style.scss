@@ -1,0 +1,27 @@
+.explore-overlay-container {
+	width: 100%;
+	height: 100vh;
+	background: black;
+	color: white;
+	bottom: 0px;
+	position: absolute;
+}
+
+.video-overlay-top-shadow {
+	width: 100%;
+	position: absolute;
+	top: 0px;
+}
+
+.video-overlay-logo {
+	position: absolute;
+	width: 48px;
+	left: 10px;
+	top: 10px;
+}
+
+.video-overlay-search-button {
+	position: absolute;
+	right: 10px;
+	top: 0px;
+}

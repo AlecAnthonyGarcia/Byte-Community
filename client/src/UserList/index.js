@@ -6,13 +6,19 @@ import { Link } from 'react-router-dom';
 import UserAvatar from '../UserAvatar';
 
 const UserList = props => {
-	const { users } = props;
+	const { users, onUserClick } = props;
+
+	const onListItemClick = () => {
+		if (onUserClick) {
+			onUserClick();
+		}
+	};
 
 	return users.map(user => {
 		const { avatarURL, username, displayName } = user;
 
 		return (
-			<Link to={`/user/${username}`}>
+			<Link to={`/user/${username}`} onClick={onListItemClick}>
 				<div className="user-info-container">
 					<UserAvatar src={avatarURL} className="user-avatar" />
 					<div className="user-name-container">

@@ -2,7 +2,7 @@ import React from 'react';
 import './style.scss';
 
 import { Link } from 'react-router-dom';
-import { Input, Row, Col } from 'antd';
+import { Button, Input, Row, Col } from 'antd';
 
 import UserList from '../UserList';
 
@@ -56,7 +56,20 @@ class Explore extends React.Component {
 		}
 	};
 
+	onCategoryClick = () => {
+		this.onClose();
+	};
+
+	onClose = () => {
+		const { onClose } = this.props;
+		if (onClose) {
+			onClose();
+		}
+	};
+
 	render() {
+		const { showBackButton } = this.props;
+
 		const CategoryList = () => {
 			const { categories } = this.state;
 
@@ -68,7 +81,10 @@ class Explore extends React.Component {
 				if (icon) {
 					return (
 						<Col span={12} key={titleName}>
-							<Link to={this.getCategoryLink(uri)}>
+							<Link
+								to={this.getCategoryLink(uri)}
+								onClick={this.onCategoryClick}
+							>
 								<div
 									className="explore-category-container"
 									style={{ background: color }}
@@ -88,7 +104,10 @@ class Explore extends React.Component {
 				} else {
 					return (
 						<Col span={24} key={titleName}>
-							<Link to={this.getCategoryLink(uri)}>
+							<Link
+								to={this.getCategoryLink(uri)}
+								onClick={this.onCategoryClick}
+							>
 								<div className="explore-category-main-container">
 									<img
 										className="explore-category-main"
@@ -133,6 +152,14 @@ class Explore extends React.Component {
 
 			return (
 				<div className="explore-search">
+					{showBackButton && (
+						<Button
+							primary
+							icon="arrow-left"
+							className="back-button"
+							onClick={this.onClose}
+						/>
+					)}
 					<Input
 						placeholder="username"
 						onPressEnter={onPressEnter}
@@ -151,7 +178,7 @@ class Explore extends React.Component {
 			if (searchQuery === '') {
 				return <CategoryList />;
 			} else {
-				return <UserList users={users} />;
+				return <UserList users={users} onUserClick={this.onClose} />;
 			}
 		};
 
