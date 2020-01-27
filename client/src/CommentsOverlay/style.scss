@@ -1,0 +1,63 @@
+.comments-overlay-container {
+	width: 100%;
+	height: 80vh;
+	background: black;
+	color: white;
+	bottom: 0px;
+	position: absolute;
+
+	.ant-tabs-nav,
+	.ant-tabs-nav .ant-tabs-tab-active {
+		color: white;
+		font-weight: bold;
+		font-size: 17px;
+	}
+
+	.ant-tabs-ink-bar {
+		background-color: white;
+	}
+}
+
+.comments-overlay-header {
+	padding: 10px;
+
+	.action-buttons-container {
+		display: flex;
+		justify-content: flex-end;
+
+		button {
+			margin-left: 10px;
+		}
+	}
+}
+
+.comments-overlay-tab-list {
+	overflow-y: auto;
+	height: 65vh;
+}
+
+.comment-username {
+	font-weight: bold;
+}
+
+.comment-timestamp {
+	font-size: 12px;
+	font-weight: normal;
+	margin-left: 10px;
+}
+
+.loops-count {
+	background: transparent;
+	color: gray;
+	border: none;
+	display: flex;
+	font-size: 15px;
+	font-weight: bold;
+	cursor: initial;
+}
+
+.loops-count.ant-btn:hover,
+.ant-btn:focus {
+	background-color: transparent;
+	color: gray;
+}

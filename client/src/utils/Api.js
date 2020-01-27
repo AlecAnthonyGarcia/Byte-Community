@@ -65,6 +65,28 @@ async function getPost(postId) {
 	return data;
 }
 
+async function getPostComments(postId, cursor) {
+	const response = await fetch(
+		`/api/getPostComments?id=${postId}&cursor=${cursor}`,
+		{
+			method: 'get'
+		}
+	);
+	const data = await response.json();
+	return data;
+}
+
+async function getPostLikes(postId, cursor) {
+	const response = await fetch(
+		`/api/getPostLikes?id=${postId}&cursor=${cursor}`,
+		{
+			method: 'get'
+		}
+	);
+	const data = await response.json();
+	return data;
+}
+
 async function searchUser(query) {
 	const response = await fetch(`/api/searchUser?query=${query}`, {
 		method: 'get'
@@ -82,6 +104,8 @@ const Api = {
 	getUserPosts,
 	getUserRebytes,
 	getPost,
+	getPostComments,
+	getPostLikes,
 	searchUser
 };
 

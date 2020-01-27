@@ -53,6 +53,26 @@ api.get('/api/getPost', async function(req, res) {
 	res.send(data);
 });
 
+api.get('/api/getPostComments', async function(req, res) {
+	const { id, cursor } = req.query;
+
+	const response = await ByteApi.getPostComments(id, cursor);
+
+	const { data } = response;
+
+	res.send(data);
+});
+
+api.get('/api/getPostLikes', async function(req, res) {
+	const { id, cursor } = req.query;
+
+	const response = await ByteApi.getPostLikes(id, cursor);
+
+	const { data } = response;
+
+	res.send(data);
+});
+
 api.get('/api/getPopularFeed', async function(req, res) {
 	const response = await ByteApi.getPopularFeed();
 

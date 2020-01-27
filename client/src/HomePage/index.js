@@ -24,7 +24,8 @@ class HomePage extends React.Component {
 			posts: [],
 			user: {},
 			accounts: {},
-			currentIndex: 0
+			currentIndex: 0,
+			showSliderArrows: true
 		};
 	}
 
@@ -184,10 +185,11 @@ class HomePage extends React.Component {
 	};
 
 	getMiddleComponent = () => {
-		const { posts } = this.state;
+		const { posts, showSliderArrows } = this.state;
 
 		const sliderSettings = {
 			dots: false,
+			arrows: showSliderArrows,
 			infinite: false,
 			slidesToShow: 1,
 			slidesToScroll: 1,
@@ -234,9 +236,14 @@ class HomePage extends React.Component {
 					currentIndex={currentIndex}
 					post={post}
 					author={accounts[authorID]}
+					onCommentsOverlayChange={this.onCommentsOverlayChange}
 				/>
 			);
 		});
+	};
+
+	onCommentsOverlayChange = isVisible => {
+		this.setState({ showSliderArrows: isVisible ? false : true });
 	};
 
 	render() {

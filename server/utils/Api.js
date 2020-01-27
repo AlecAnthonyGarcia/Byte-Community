@@ -40,6 +40,26 @@ async function getPost(postId) {
 	return data;
 }
 
+async function getPostComments(postId, cursor) {
+	let url = `${POST_API}id/${postId}/feedback/comment`;
+	if (cursor) {
+		url = `${url}?cursor=${cursor}`;
+	}
+	const response = await axios.get(url);
+	const { data } = response;
+	return data;
+}
+
+async function getPostLikes(postId, cursor) {
+	let url = `${POST_API}id/${postId}/feedback/like`;
+	if (cursor) {
+		url = `${url}?cursor=${cursor}`;
+	}
+	const response = await axios.get(url);
+	const { data } = response;
+	return data;
+}
+
 async function getPopularFeed() {
 	const response = await axios.get(`${FEED_API}popular/v2`);
 	const { data } = response;
@@ -70,6 +90,8 @@ const Api = {
 	getUserPosts,
 	getUserRebytes,
 	getPost,
+	getPostComments,
+	getPostLikes,
 	getPopularFeed,
 	getLatestFeed,
 	getCategoryFeed,

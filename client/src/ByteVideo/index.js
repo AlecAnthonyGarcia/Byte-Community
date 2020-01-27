@@ -6,13 +6,15 @@ import { Icon } from 'antd';
 import moment from 'moment';
 
 import UserAvatar from '../UserAvatar';
+import CommentsOverlay from '../CommentsOverlay';
 
 class ByteVideo extends React.Component {
 	constructor(props) {
 		super(props);
 		this.videoRef = React.createRef();
 		this.state = {
-			isVideoPlaying: false
+			isVideoPlaying: false,
+			isCommentOverlayOpen: false
 		};
 	}
 
@@ -34,6 +36,18 @@ class ByteVideo extends React.Component {
 		}
 	};
 
+	showCommentsOverlay = () => {
+		const { onCommentsOverlayChange } = this.props;
+		this.setState({ isCommentOverlayOpen: true });
+		onCommentsOverlayChange(true);
+	};
+
+	onCloseCommentsOverlay = () => {
+		const { onCommentsOverlayChange } = this.props;
+		this.setState({ isCommentOverlayOpen: false });
+		onCommentsOverlayChange(false);
+	};
+
 	onPause = () => {
 		const { current: video } = this.videoRef;
 
@@ -45,6 +59,7 @@ class ByteVideo extends React.Component {
 	};
 
 	render() {
+		const { isCommentOverlayOpen } = this.state;
 		const { index, post, author } = this.props;
 		const {
 			id: postId,
@@ -62,7 +77,10 @@ class ByteVideo extends React.Component {
 
 		const CommentCount = () => {
 			return (
-				<div className="video-stat-icon-container">
+				<div
+					className="video-stat-icon-container"
+					onClick={this.showCommentsOverlay}
+				>
 					<Icon type="message" theme="filled" style={{ fontSize: '24px' }} />
 					<span>{commentCount}</span>
 				</div>
@@ -71,7 +89,10 @@ class ByteVideo extends React.Component {
 
 		const LikeCount = () => {
 			return (
-				<div className="video-stat-icon-container">
+				<div
+					className="video-stat-icon-container"
+					onClick={this.showCommentsOverlay}
+				>
 					<Icon type="heart" theme="filled" style={{ fontSize: '24px' }} />
 					<span>{likeCount}</span>
 				</div>
@@ -100,6 +121,7 @@ class ByteVideo extends React.Component {
 					onPause={this.onPause}
 					loop
 				/>
+
 				<div className="video-info-container">
 					<div className="video-caption">{caption}</div>
 					<span className="user-info-container">
@@ -117,6 +139,10 @@ class ByteVideo extends React.Component {
 						</div>
 					</span>
 				</div>
+
+				{isCommentOverlayOpen && (
+					<CommentsOverlay post={post} onClose={this.onCloseCommentsOverlay} />
+				)}
 			</div>
 		);
 	}
