@@ -2,7 +2,7 @@ import React from 'react';
 import './style.scss';
 
 import { Link } from 'react-router-dom';
-import { Button, Input, Row, Col } from 'antd';
+import { Button, Icon, Input, Row, Col } from 'antd';
 
 import UserList from '../UserList';
 
@@ -162,6 +162,7 @@ class Explore extends React.Component {
 					)}
 					<Input
 						placeholder="username"
+						prefix={<Icon type="search" style={{ color: 'rgba(0,0,0,.25)' }} />}
 						onPressEnter={onPressEnter}
 						onChange={onChange}
 						size="large"
