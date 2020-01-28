@@ -109,6 +109,7 @@ class ByteVideo extends React.Component {
 					onClick={this.onVideoClick}
 					onPause={this.onPause}
 					loop
+					playsInline
 					muted={muted}
 					autoPlay={index === 0}
 				/>
@@ -116,7 +117,7 @@ class ByteVideo extends React.Component {
 				<div className="video-info-container">
 					<div className="video-caption">{caption}</div>
 					<span className="user-info-container">
-						<Link to={`/user/${username}`}>
+						<Link to={`/user/${username}`} className="user-avatar-container">
 							<UserAvatar className="user-avatar" src={avatarURL} />
 						</Link>
 						<Link to={`/user/${username}`} className="user-username">

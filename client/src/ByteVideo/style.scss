@@ -20,15 +20,20 @@
 	.video-caption {
 		font-size: 25px;
 		padding-bottom: 10px;
+		margin-right: 15px;
 	}
 
 	.user-info-container {
 		display: flex;
 
-		.user-avatar {
-			width: 48px;
-			height: 48px;
-			border-radius: 50%;
+		.user-avatar-container {
+			align-self: center;
+
+			.user-avatar {
+				width: 48px;
+				height: 48px;
+				border-radius: 50%;
+			}
 		}
 
 		.user-username {
@@ -56,6 +61,44 @@
 				margin: 0px 7px;
 				text-align: center;
 				cursor: pointer;
+			}
+		}
+	}
+}
+
+@media screen and (max-width: 768px) {
+	.video-info-container {
+		left: 10px;
+
+		.video-caption {
+			font-size: 20px;
+		}
+
+		.user-info-container {
+			padding: 0px;
+
+			.user-avatar-container {
+				.user-avatar {
+					width: 32px;
+					height: 32px;
+				}
+			}
+
+			.user-username {
+				font-size: 15px;
+				margin-left: 10px;
+			}
+
+			.timestamp {
+				font-size: 10px;
+			}
+
+			.video-stat-container {
+				margin-right: 20px;
+
+				.video-stat-icon-container {
+					margin: 0px 5px;
+				}
 			}
 		}
 	}
