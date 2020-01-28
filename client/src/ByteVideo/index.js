@@ -62,7 +62,7 @@ class ByteVideo extends React.Component {
 
 	render() {
 		const { isCommentOverlayOpen, defaultCommentsOverlayTabKey } = this.state;
-		const { index, post, author } = this.props;
+		const { index, post, author, muted } = this.props;
 		const {
 			id: postId,
 			videoSrc,
@@ -109,6 +109,8 @@ class ByteVideo extends React.Component {
 					onClick={this.onVideoClick}
 					onPause={this.onPause}
 					loop
+					muted={muted}
+					autoPlay={index === 0}
 				/>
 
 				<div className="video-info-container">

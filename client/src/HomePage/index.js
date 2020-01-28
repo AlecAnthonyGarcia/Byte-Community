@@ -20,6 +20,7 @@ import MediaQuery from 'react-responsive';
 
 import { FEED_TYPES, SORT_TYPES } from '../utils/Constants';
 import Api from '../utils/Api';
+import MuteButton from '../MuteButton';
 
 class HomePage extends React.Component {
 	constructor(props) {
@@ -35,6 +36,7 @@ class HomePage extends React.Component {
 			hasMore: true,
 			showSliderArrows: true,
 			isExploreOverlayOpen: false,
+			isMuted: true,
 			currentSortType: SORT_TYPES.POPULAR
 		};
 	}
@@ -285,7 +287,8 @@ class HomePage extends React.Component {
 			posts,
 			showSliderArrows,
 			isExploreOverlayOpen,
-			currentSortType
+			currentSortType,
+			currentIndex
 		} = this.state;
 
 		const sliderSettings = {
@@ -339,6 +342,12 @@ class HomePage extends React.Component {
 
 					<div className="video-overlay-container">
 						<img className="top-shadow" src={topOverlay} alt="" />
+
+						<MuteButton
+							className="mute-button"
+							index={currentIndex}
+							onMuteChange={this.onMuteChange}
+						/>
 
 						<div className="video-overlay-header">
 							<div className="logo-container">
@@ -401,7 +410,7 @@ class HomePage extends React.Component {
 	};
 
 	getFeedData = () => {
-		const { posts, accounts, currentIndex } = this.state;
+		const { posts, accounts, currentIndex, isMuted } = this.state;
 
 		return posts.map((post, index) => {
 			const { authorID } = post;
@@ -409,6 +418,7 @@ class HomePage extends React.Component {
 				<ByteVideo
 					key={authorID}
 					index={index}
+					muted={isMuted}
 					currentIndex={currentIndex}
 					post={post}
 					author={accounts[authorID]}
@@ -442,6 +452,10 @@ class HomePage extends React.Component {
 
 	onCloseExploreOverlay = () => {
 		this.setState({ isExploreOverlayOpen: false });
+	};
+
+	onMuteChange = isMuted => {
+		this.setState({ isMuted });
 	};
 
 	render() {
