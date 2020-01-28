@@ -2,7 +2,7 @@ import React from 'react';
 
 import { Link } from 'react-router-dom';
 
-import { List, Spin } from 'antd';
+import { ConfigProvider, List, Spin } from 'antd';
 
 import InfiniteScroll from 'react-infinite-scroller';
 
@@ -38,7 +38,7 @@ class LikeList extends React.Component {
 		this.setState({
 			loading: false,
 			isFirstLoad: false,
-			likes: likes.concat(newLikes),
+			likes: likes.concat(newLikes || []),
 			cursor: newCursor
 		});
 	};
@@ -59,6 +59,12 @@ class LikeList extends React.Component {
 	render() {
 		const { isFirstLoad, loading, hasMore, likes } = this.state;
 
+		const ListEmptyState = () => (
+			<div className="empty-state-container">
+				<p>Nobody here...</p>
+			</div>
+		);
+
 		return (
 			<div className="comments-overlay-tab-list">
 				<InfiniteScroll
@@ -68,31 +74,33 @@ class LikeList extends React.Component {
 					hasMore={!loading && hasMore}
 					useWindow={false}
 				>
-					<List
-						dataSource={likes}
-						loading={loading}
-						renderItem={item => {
-							const { avatarURL, username, displayName } = item;
+					<ConfigProvider renderEmpty={ListEmptyState}>
+						<List
+							dataSource={likes}
+							loading={loading}
+							renderItem={item => {
+								const { avatarURL, username, displayName } = item;
 
-							return (
-								<Link to={`/user/${username}`} onClick={this.onListItemClick}>
-									<div className="user-info-container">
-										<UserAvatar src={avatarURL} className="user-avatar" />
-										<div className="user-name-container">
-											<div className="user-name">{displayName}</div>
-											<div className="user-username">{`@${username}`}</div>
+								return (
+									<Link to={`/user/${username}`} onClick={this.onListItemClick}>
+										<div className="user-info-container">
+											<UserAvatar src={avatarURL} className="user-avatar" />
+											<div className="user-name-container">
+												<div className="user-name">{displayName}</div>
+												<div className="user-username">{`@${username}`}</div>
+											</div>
 										</div>
-									</div>
-								</Link>
-							);
-						}}
-					>
-						{loading && !isFirstLoad && hasMore && (
-							<div className="loading-container">
-								<Spin />
-							</div>
-						)}
-					</List>
+									</Link>
+								);
+							}}
+						>
+							{loading && !isFirstLoad && hasMore && (
+								<div className="loading-container">
+									<Spin />
+								</div>
+							)}
+						</List>
+					</ConfigProvider>
 				</InfiniteScroll>
 			</div>
 		);

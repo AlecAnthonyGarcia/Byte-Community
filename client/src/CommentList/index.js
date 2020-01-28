@@ -2,7 +2,7 @@ import React from 'react';
 
 import { Link } from 'react-router-dom';
 
-import { List, Spin } from 'antd';
+import { ConfigProvider, List, Spin } from 'antd';
 
 import InfiniteScroll from 'react-infinite-scroller';
 
@@ -44,7 +44,7 @@ class CommentList extends React.Component {
 		this.setState({
 			loading: false,
 			isFirstLoad: false,
-			comments: comments.concat(newComments),
+			comments: comments.concat(newComments || []),
 			accounts: { ...accounts, ...newAccounts },
 			cursor: newCursor
 		});
@@ -66,6 +66,12 @@ class CommentList extends React.Component {
 	render() {
 		const { isFirstLoad, loading, hasMore, comments, accounts } = this.state;
 
+		const ListEmptyState = () => (
+			<div className="empty-state-container">
+				<p>No comments here yet...</p>
+			</div>
+		);
+
 		return (
 			<div className="comments-overlay-tab-list">
 				<InfiniteScroll
@@ -75,38 +81,40 @@ class CommentList extends React.Component {
 					hasMore={!loading && hasMore}
 					useWindow={false}
 				>
-					<List
-						dataSource={comments}
-						loading={loading}
-						renderItem={item => {
-							const { authorID, body, date } = item;
-							const user = accounts[authorID];
-							const { avatarURL, username } = user;
+					<ConfigProvider renderEmpty={ListEmptyState}>
+						<List
+							dataSource={comments}
+							loading={loading}
+							renderItem={item => {
+								const { authorID, body, date } = item;
+								const user = accounts[authorID];
+								const { avatarURL, username } = user;
 
-							return (
-								<Link to={`/user/${username}`} onClick={this.onListItemClick}>
-									<div className="user-info-container">
-										<UserAvatar src={avatarURL} className="user-avatar" />
-										<div className="user-name-container">
-											<div className="comment-username">
-												{`@${username}`}
-												<span className="comment-timestamp">
-													{moment.unix(date).fromNow()}
-												</span>
+								return (
+									<Link to={`/user/${username}`} onClick={this.onListItemClick}>
+										<div className="user-info-container">
+											<UserAvatar src={avatarURL} className="user-avatar" />
+											<div className="user-name-container">
+												<div className="comment-username">
+													{`@${username}`}
+													<span className="comment-timestamp">
+														{moment.unix(date).fromNow()}
+													</span>
+												</div>
+												<div>{body}</div>
 											</div>
-											<div>{body}</div>
 										</div>
-									</div>
-								</Link>
-							);
-						}}
-					>
-						{loading && !isFirstLoad && hasMore && (
-							<div className="loading-container">
-								<Spin />
-							</div>
-						)}
-					</List>
+									</Link>
+								);
+							}}
+						>
+							{loading && !isFirstLoad && hasMore && (
+								<div className="loading-container">
+									<Spin />
+								</div>
+							)}
+						</List>
+					</ConfigProvider>
 				</InfiniteScroll>
 			</div>
 		);

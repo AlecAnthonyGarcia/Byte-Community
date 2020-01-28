@@ -34,6 +34,10 @@
 .comments-overlay-tab-list {
 	overflow-y: auto;
 	height: 65vh;
+
+	.empty-state-container {
+		color: white;
+	}
 }
 
 .comment-username {
