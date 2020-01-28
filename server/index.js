@@ -1,7 +1,9 @@
 const express = require('express');
 const path = require('path');
 const fs = require('fs');
+const moment = require('moment');
 const api = require('./api');
+const ByteApi = require('./utils/Api');
 
 const app = express();
 const port = process.env.PORT || 3001;
@@ -10,6 +12,74 @@ const filePath = path.resolve(__dirname, '../client/build', 'index.html');
 
 // Include internal API routes
 app.use(api);
+
+app.get('/user/:username', function(req, res) {
+	fs.readFile(filePath, 'utf8', async function(err, fileData) {
+		if (err) {
+			return console.log(err);
+		}
+
+		const { username } = req.params;
+
+		const response = await ByteApi.searchUser(username);
+
+		const {
+			data: { accounts }
+		} = response;
+		const [user] = accounts;
+
+		if (!user) {
+			fileData = replaceWithDefaultMetaTags(fileData);
+			res.send(fileData);
+			return;
+		}
+
+		let { avatarURL, username: userName, displayName } = user;
+
+		if (!displayName) {
+			displayName = `@${username}`;
+		}
+
+		fileData = fileData.replace(/\$OG_TITLE/g, `${displayName} on byte`);
+		fileData = fileData.replace(
+			/\$OG_DESCRIPTION/g,
+			`@${userName} • Watch 6-second looping videos created by ${displayName}`
+		);
+		fileData = fileData.replace(/\$OG_IMAGE/g, avatarURL);
+		res.send(fileData);
+	});
+});
+
+app.get('/post/:postId', function(req, res) {
+	fs.readFile(filePath, 'utf8', async function(err, fileData) {
+		if (err) {
+			return console.log(err);
+		}
+
+		const { postId } = req.params;
+
+		const response = await ByteApi.getPost(postId);
+
+		const { data } = response;
+
+		if (!data) {
+			fileData = replaceWithDefaultMetaTags(fileData);
+			res.send(fileData);
+			return;
+		}
+
+		const { authorID, accounts, date, caption: description, thumbSrc } = data;
+		const user = accounts[authorID];
+		const { username } = user;
+
+		const timestampString = moment.unix(date).format('MMMM Do YYYY, h:mm A');
+		const title = `byte post by @${username} • ${timestampString}`;
+
+		fileData = replaceMetaTags(fileData, title, description, thumbSrc);
+
+		res.send(fileData);
+	});
+});
 
 app.get('/', function(req, res) {
 	handleDefaultRoute(res);
