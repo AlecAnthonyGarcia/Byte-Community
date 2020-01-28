@@ -453,11 +453,11 @@ class HomePage extends React.Component {
 	};
 
 	showExploreOverlay = () => {
-		this.setState({ isExploreOverlayOpen: true });
+		this.setState({ isExploreOverlayOpen: true, showSliderArrows: false });
 	};
 
 	onCloseExploreOverlay = () => {
-		this.setState({ isExploreOverlayOpen: false });
+		this.setState({ isExploreOverlayOpen: false, showSliderArrows: true });
 	};
 
 	onMuteChange = isMuted => {
