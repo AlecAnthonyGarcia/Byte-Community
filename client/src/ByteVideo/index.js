@@ -2,12 +2,12 @@ import React from 'react';
 import './style.scss';
 
 import { Link } from 'react-router-dom';
-import { CopyToClipboard } from 'react-copy-to-clipboard';
-import { Dropdown, Icon, Menu, message } from 'antd';
+import { Icon } from 'antd';
 import moment from 'moment';
 
 import UserAvatar from '../UserAvatar';
 import CommentsOverlay from '../CommentsOverlay';
+import ShareButton from '../ShareButton';
 
 class ByteVideo extends React.Component {
 	constructor(props) {
@@ -99,81 +99,6 @@ class ByteVideo extends React.Component {
 			);
 		};
 
-		const ShareButton = () => {
-			const baseUrl = window.location.origin;
-			const postUrl = `${baseUrl}/post/${postId}`;
-			const socialShareWindowOptions =
-				'toolbar=0,status=0,resizable=1,width=626,height=436';
-
-			const handleMenuClick = ({ key }) => {
-				switch (key) {
-					case 'open':
-						window.open(postUrl, '_blank');
-						break;
-					case 'download':
-						window.open(videoSrc, '_blank');
-						break;
-					case 'facebook':
-						shareToFacebook();
-						break;
-					case 'twitter':
-						shareToTwitter();
-						break;
-					default:
-				}
-			};
-
-			const shareToFacebook = () => {
-				const url = `https://facebook.com/sharer.php?display=popup&u=${postUrl}`;
-				window.open(url, 'sharer', socialShareWindowOptions);
-			};
-
-			const shareToTwitter = () => {
-				const shareText = `Check out this byte by ${username} on the byte community:`;
-
-				const url = `http://twitter.com/intent/tweet?text=${shareText}&url=${postUrl}`;
-
-				window.open(url, 'sharer', socialShareWindowOptions);
-			};
-
-			const onLinkCopied = () => {
-				message.success('Post link has been copied.');
-			};
-
-			const shareMenu = (
-				<Menu onClick={handleMenuClick}>
-					<Menu.Item key="open">
-						<Icon type="link" /> Open link
-					</Menu.Item>
-					<Menu.Item key="copy">
-						<CopyToClipboard text={postUrl} onCopy={onLinkCopied}>
-							<span>
-								<Icon type="copy" /> Copy link
-							</span>
-						</CopyToClipboard>
-					</Menu.Item>
-					<Menu.Item key="download">
-						<Icon type="download" /> Download Video
-					</Menu.Item>
-					<Menu.Item key="facebook">
-						<Icon type="facebook" /> Share to Facebook
-					</Menu.Item>
-					<Menu.Item key="twitter">
-						<Icon type="twitter" /> Share to Twitter
-					</Menu.Item>
-				</Menu>
-			);
-
-			return (
-				<Dropdown overlay={shareMenu} trigger={['click']}>
-					<div className="video-stat-icon-container">
-						<Icon type="share-alt" style={{ fontSize: '24px' }} />
-						<span>Share</span>
-					</div>
-				</Dropdown>
-			);
-		};
-
 		return (
 			<div className="video-container">
 				<video
@@ -197,7 +122,12 @@ class ByteVideo extends React.Component {
 						</Link>
 						<span className="timestamp">{moment.unix(date).fromNow()}</span>
 						<div className="video-stat-container">
-							<ShareButton />
+							<ShareButton post={post} author={author}>
+								<div className="video-stat-icon-container">
+									<Icon type="share-alt" style={{ fontSize: '24px' }} />
+									<span>Share</span>
+								</div>
+							</ShareButton>
 							<CommentCount />
 							<LikeCount />
 						</div>
@@ -208,6 +138,7 @@ class ByteVideo extends React.Component {
 					<CommentsOverlay
 						defaultTabKey={defaultCommentsOverlayTabKey}
 						post={post}
+						author={author}
 						onClose={this.onCloseCommentsOverlay}
 					/>
 				)}

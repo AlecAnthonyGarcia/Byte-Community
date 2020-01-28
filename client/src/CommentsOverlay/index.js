@@ -9,11 +9,12 @@ import CommentList from '../CommentList';
 import LikeList from '../LikeList';
 
 import { kFormatter } from '../utils/Utils';
+import ShareButton from '../ShareButton';
 
 const { TabPane } = Tabs;
 
 const CommentsOverlay = props => {
-	const { defaultTabKey, post, onClose } = props;
+	const { defaultTabKey, post, author, onClose } = props;
 	const { commentCount, likeCount, loopCount } = post;
 
 	const onCloseOverlay = () => {
@@ -38,9 +39,11 @@ const CommentsOverlay = props => {
 					</Button>
 				</Col>
 				<Col span={12} className="action-buttons-container">
-					<Button icon="share-alt" ghost>
-						Share
-					</Button>
+					<ShareButton post={post} author={author}>
+						<Button icon="share-alt" ghost>
+							Share
+						</Button>
+					</ShareButton>
 					<Button shape="circle" icon="close" onClick={onCloseOverlay} />
 				</Col>
 			</Row>
