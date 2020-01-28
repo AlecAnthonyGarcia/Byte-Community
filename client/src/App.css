@@ -10,11 +10,13 @@
 .slick-prev,
 .slick-next {
 	z-index: 1;
+	width: 40px !important;
+	height: 40px !important;
 }
 .slick-prev {
 	left: 10px !important;
 }
 
 .slick-next {
-	right: 30px !important;
+	right: 10px !important;
 }
