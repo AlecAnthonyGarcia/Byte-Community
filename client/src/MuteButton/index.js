@@ -33,7 +33,7 @@ const UnmuteIcon = () => (
 );
 
 const MuteButton = props => {
-	const { index, onMuteChange } = props;
+	const { index, onMuteChange, style } = props;
 
 	const [muted, setMuted] = useState(true);
 
@@ -57,6 +57,7 @@ const MuteButton = props => {
 			onClick={toggleMute}
 			component={muted ? MuteIcon : UnmuteIcon}
 			style={{
+				...style,
 				fontSize: '32px',
 				color: 'white'
 			}}

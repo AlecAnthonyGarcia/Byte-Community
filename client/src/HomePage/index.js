@@ -352,13 +352,11 @@ class HomePage extends React.Component {
 					<div className="video-overlay-container">
 						<img className="top-shadow" src={topOverlay} alt="" />
 
-						{!loading && (
-							<MuteButton
-								className="mute-button"
-								index={currentIndex}
-								onMuteChange={this.onMuteChange}
-							/>
-						)}
+						<MuteButton
+							style={{ display: loading ? 'none' : 'initial' }}
+							index={currentIndex}
+							onMuteChange={this.onMuteChange}
+						/>
 
 						<div className="video-overlay-header">
 							{!loading && (
