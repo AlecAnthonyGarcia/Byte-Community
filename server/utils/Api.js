@@ -93,9 +93,16 @@ async function getCategoryFeed(categoryName, sort, cursor) {
 	if (cursor) {
 		url = `${url}?cursor=${cursor}`;
 	}
-	const response = await axios.get(url);
-	const { data } = response;
-	return data;
+	try {
+		const { data } = await axios.get(url);
+		return data;
+	} catch (err) {
+		return {
+			data: {
+				posts: []
+			}
+		};
+	}
 }
 
 async function getExploreCategories() {

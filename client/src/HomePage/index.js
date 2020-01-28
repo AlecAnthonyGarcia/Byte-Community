@@ -13,14 +13,15 @@ import SearchIcon from '../SearchIcon';
 import ByteVideo from '../ByteVideo';
 import Explore from '../Explore';
 import User from '../User';
+import MuteButton from '../MuteButton';
 import EmptyState from '../EmptyState';
+import NoMatchPage from '../NoMatchPage';
 
 import Slider from 'react-slick';
 import MediaQuery from 'react-responsive';
 
 import { FEED_TYPES, SORT_TYPES } from '../utils/Constants';
 import Api from '../utils/Api';
-import MuteButton from '../MuteButton';
 
 class HomePage extends React.Component {
 	constructor(props) {
@@ -126,7 +127,7 @@ class HomePage extends React.Component {
 		const {
 			accounts: [user]
 		} = await Api.searchUser(username);
-		const { id } = user;
+		const { id } = user || {};
 		return id;
 	}
 
@@ -146,6 +147,10 @@ class HomePage extends React.Component {
 
 		if (!userId) {
 			userId = await this.getUserId(username);
+			if (!userId) {
+				this.setState({ loading: false, user: null });
+				return;
+			}
 		}
 
 		const response = await apiMethod(userId, currentCursor);
@@ -174,7 +179,7 @@ class HomePage extends React.Component {
 		const [firstPost] = posts;
 		const { authorID } = firstPost || {};
 
-		const userObj = accounts[authorID];
+		const userObj = accounts && accounts[authorID];
 
 		this.updateFeedData({ posts, accounts, user: userObj });
 	}
@@ -472,7 +477,17 @@ class HomePage extends React.Component {
 	};
 
 	render() {
-		const { loading } = this.state;
+		const { loading, user } = this.state;
+
+		const currentFeedType = this.getCurrentFeedType();
+		switch (currentFeedType) {
+			case FEED_TYPES.USER:
+			case FEED_TYPES.REBYTES:
+			case FEED_TYPES.POST:
+				if (!user && !loading) {
+					return <NoMatchPage />;
+				}
+		}
 
 		return (
 			<div>

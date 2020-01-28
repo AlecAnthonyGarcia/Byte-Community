@@ -48,9 +48,9 @@ api.get('/api/getPost', async function(req, res) {
 
 	const response = await ByteApi.getPost(id);
 
-	const { data } = response;
+	const { data, error } = response;
 
-	res.send(data);
+	res.send(error ? response : data);
 });
 
 api.get('/api/getPostComments', async function(req, res) {
