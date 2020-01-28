@@ -390,15 +390,17 @@ class HomePage extends React.Component {
 							</div>
 
 							<MediaQuery maxWidth={768}>
-								<Icon
-									className="search-button"
-									component={SearchIcon}
-									style={{
-										fontSize: '48px',
-										color: 'white'
-									}}
-									onClick={this.showExploreOverlay}
-								/>
+								{!loading && (
+									<Icon
+										className="search-button"
+										component={SearchIcon}
+										style={{
+											fontSize: '48px',
+											color: 'white'
+										}}
+										onClick={this.showExploreOverlay}
+									/>
+								)}
 							</MediaQuery>
 						</div>
 					</div>
