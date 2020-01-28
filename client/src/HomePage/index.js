@@ -285,6 +285,7 @@ class HomePage extends React.Component {
 
 	getMiddleComponent = () => {
 		const {
+			loading,
 			posts,
 			showSliderArrows,
 			allowSwipe,
@@ -308,7 +309,7 @@ class HomePage extends React.Component {
 			afterChange: this.afterSlideChange
 		};
 
-		if (posts.length === 0) {
+		if (posts.length === 0 && !loading) {
 			return <EmptyState message="Nothing to see here yet..." />;
 		}
 
@@ -334,7 +335,7 @@ class HomePage extends React.Component {
 			<>
 				{this.shouldShowUserComponent() && (
 					<MediaQuery maxWidth={768}>
-						<User user={this.state.user} />
+						<User user={this.state.user} loading={loading} />
 					</MediaQuery>
 				)}
 
@@ -346,23 +347,29 @@ class HomePage extends React.Component {
 					<div className="video-overlay-container">
 						<img className="top-shadow" src={topOverlay} alt="" />
 
-						<MuteButton
-							className="mute-button"
-							index={currentIndex}
-							onMuteChange={this.onMuteChange}
-						/>
+						{!loading && (
+							<MuteButton
+								className="mute-button"
+								index={currentIndex}
+								onMuteChange={this.onMuteChange}
+							/>
+						)}
 
 						<div className="video-overlay-header">
-							<div className="logo-container">
-								<Link to="/">
-									<img className="logo" src={logo} alt="byte logo" />
-								</Link>
-							</div>
+							{!loading && (
+								<div className="logo-container">
+									<Link to="/">
+										<img className="logo" src={logo} alt="byte logo" />
+									</Link>
+								</div>
+							)}
 
 							<div className="video-overlay-header-title-container ">
-								<div className="category-name">{this.getCategoryName()}</div>
+								{!loading && (
+									<div className="category-name">{this.getCategoryName()}</div>
+								)}
 
-								{currentFeedType === FEED_TYPES.CATEGORY && (
+								{!loading && currentFeedType === FEED_TYPES.CATEGORY && (
 									<Dropdown
 										className="sort-dropdown"
 										overlay={sortMenu}
@@ -405,8 +412,8 @@ class HomePage extends React.Component {
 
 	getRightComponent = () => {
 		if (this.shouldShowUserComponent()) {
-			const { user } = this.state;
-			return <User user={user} />;
+			const { loading, user } = this.state;
+			return <User user={user} loading={loading} />;
 		} else {
 			return <Explore />;
 		}

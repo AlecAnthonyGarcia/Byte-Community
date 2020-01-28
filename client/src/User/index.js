@@ -2,7 +2,7 @@ import React from 'react';
 import './style.scss';
 
 import { Link, withRouter } from 'react-router-dom';
-import { Button, Icon } from 'antd';
+import { Button, Icon, Spin } from 'antd';
 
 import UserAvatar from '../UserAvatar';
 import BetaBadge from '../BetaBadge';
@@ -13,6 +13,7 @@ import LoopsIcon from '../LoopsIcon';
 
 const User = props => {
 	const {
+		loading,
 		user,
 		match: { path }
 	} = props;
@@ -83,7 +84,8 @@ const User = props => {
 			style={{ background: backgroundColor, color: foregroundColor }}
 		>
 			<div className="user-info-container">
-				<UserAvatar className="user-avatar" src={avatarURL} />
+				<Spin spinning={loading}></Spin>
+				{!loading && <UserAvatar className="user-avatar" src={avatarURL} />}
 				<h1 style={{ color: foregroundColor }} className="user-display-name">
 					{displayName}
 				</h1>
@@ -98,10 +100,12 @@ const User = props => {
 				<p className="user-bio">{bio}</p>
 				<span>joined {moment.unix(registrationDate).fromNow()}</span>
 
-				<div className="action-buttons-container">
-					<ViewBytesButton />
-					<ViewRebytesButton />
-				</div>
+				{!loading && (
+					<div className="action-buttons-container">
+						<ViewBytesButton />
+						<ViewRebytesButton />
+					</div>
+				)}
 			</div>
 		</div>
 	);
