@@ -23,7 +23,7 @@ const EmptyState = props => {
 
 	return (
 		<div className="empty-state-videos">
-			<img className="empty-tv-icon" src={emptyTvIcon} />
+			<img className="empty-tv-icon" src={emptyTvIcon} alt="" />
 			<div>{message}</div>
 			<ExploreBytesButton />
 		</div>

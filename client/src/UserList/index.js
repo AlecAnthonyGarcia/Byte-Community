@@ -18,7 +18,7 @@ const UserList = props => {
 		const { avatarURL, username, displayName } = user;
 
 		return (
-			<Link to={`/user/${username}`} onClick={onListItemClick}>
+			<Link to={`/user/${username}`} onClick={onListItemClick} key={username}>
 				<div className="user-info-container">
 					<UserAvatar src={avatarURL} className="user-avatar" />
 					<div className="user-name-container">

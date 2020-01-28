@@ -64,15 +64,11 @@ class ByteVideo extends React.Component {
 		const { index, post, author } = this.props;
 		const {
 			id: postId,
-			authorID,
 			videoSrc,
-			thumbSrc,
 			date,
 			caption,
-			comments,
 			commentCount,
-			likeCount,
-			loopCount
+			likeCount
 		} = post;
 		const { avatarURL, username } = author;
 

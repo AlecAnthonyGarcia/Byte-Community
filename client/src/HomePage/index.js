@@ -81,6 +81,7 @@ class HomePage extends React.Component {
 				const { postId } = params;
 				this.getPost(postId);
 				break;
+			default:
 		}
 	};
 
@@ -274,6 +275,8 @@ class HomePage extends React.Component {
 				return categoryName;
 			case FEED_TYPES.REBYTES:
 				return 'Rebytes';
+			default:
+				return '';
 		}
 	};
 
@@ -335,7 +338,7 @@ class HomePage extends React.Component {
 					</Slider>
 
 					<div className="video-overlay-container">
-						<img className="top-shadow" src={topOverlay} />
+						<img className="top-shadow" src={topOverlay} alt="" />
 
 						<div className="video-overlay-header">
 							<div className="logo-container">
@@ -353,11 +356,11 @@ class HomePage extends React.Component {
 										overlay={sortMenu}
 										trigger={['click']}
 									>
-										<a className="ant-dropdown-link" href="#">
+										<div className="sort-dropdown-button">
 											<span className="current-sort-type">
 												{currentSortType}
 											</span>
-										</a>
+										</div>
 									</Dropdown>
 								)}
 							</div>
