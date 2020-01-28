@@ -7,6 +7,14 @@
 	color: white;
 	font-size: 20px;
 
+	.logo {
+		width: 48px;
+		height: 48px;
+		position: absolute;
+		top: 20px;
+		left: 20px;
+	}
+
 	.empty-tv-icon {
 		width: 60px;
 		height: 75px;
@@ -15,5 +23,12 @@
 
 	.empty-state-videos-button {
 		margin-top: 20px;
+	}
+}
+
+@media screen and (max-width: 992px) {
+	.empty-state-videos {
+		height: auto;
+		margin-top: 50px;
 	}
 }

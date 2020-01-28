@@ -335,7 +335,16 @@ class HomePage extends React.Component {
 		};
 
 		if (posts.length === 0 && !loading) {
-			return <EmptyState message="Nothing to see here yet..." />;
+			return (
+				<>
+					{this.shouldShowUserComponent() && (
+						<MediaQuery maxWidth={992}>
+							<User user={this.state.user} loading={loading} />
+						</MediaQuery>
+					)}
+					<EmptyState message="Nothing to see here yet..." />
+				</>
+			);
 		}
 
 		const {
