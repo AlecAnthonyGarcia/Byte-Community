@@ -35,6 +35,7 @@ class HomePage extends React.Component {
 			cursor: null,
 			hasMore: true,
 			showSliderArrows: true,
+			allowSwipe: true,
 			isExploreOverlayOpen: false,
 			isMuted: true,
 			currentSortType: SORT_TYPES.POPULAR
@@ -286,6 +287,7 @@ class HomePage extends React.Component {
 		const {
 			posts,
 			showSliderArrows,
+			allowSwipe,
 			isExploreOverlayOpen,
 			currentSortType,
 			currentIndex
@@ -301,6 +303,7 @@ class HomePage extends React.Component {
 			vertical: true,
 			verticalSwiping: true,
 			swipeToSlide: true,
+			swipe: allowSwipe,
 			beforeChange: this.beforeSlideChange,
 			afterChange: this.afterSlideChange
 		};
@@ -429,7 +432,10 @@ class HomePage extends React.Component {
 	};
 
 	onCommentsOverlayChange = isVisible => {
-		this.setState({ showSliderArrows: isVisible ? false : true });
+		this.setState({
+			showSliderArrows: isVisible ? false : true,
+			allowSwipe: isVisible ? false : true
+		});
 	};
 
 	onSortChange = e => {
