@@ -39,7 +39,8 @@ class LikeList extends React.Component {
 			loading: false,
 			isFirstLoad: false,
 			likes: likes.concat(newLikes || []),
-			cursor: newCursor
+			cursor: newCursor,
+			hasMore: cursor ? true : false
 		});
 	};
 

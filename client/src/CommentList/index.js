@@ -46,7 +46,8 @@ class CommentList extends React.Component {
 			isFirstLoad: false,
 			comments: comments.concat(newComments || []),
 			accounts: { ...accounts, ...newAccounts },
-			cursor: newCursor
+			cursor: newCursor,
+			hasMore: cursor ? true : false
 		});
 	};
 
