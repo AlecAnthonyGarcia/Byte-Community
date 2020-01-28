@@ -52,12 +52,15 @@
 
 @media screen and (max-width: 768px) {
 	.user-container {
-		height: 70vh;
+		height: auto;
 
 		.user-info-container {
+			margin: 10px auto;
+
 			.user-avatar {
 				width: 128px;
 				height: 128px;
+				margin-bottom: 10px;
 			}
 			.user-display-name {
 				font-size: 27px;
@@ -72,7 +75,7 @@
 			}
 
 			.action-buttons-container {
-				margin-top: 20px;
+				margin-top: 10px;
 			}
 		}
 	}
