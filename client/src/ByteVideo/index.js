@@ -15,7 +15,8 @@ class ByteVideo extends React.Component {
 		this.videoRef = React.createRef();
 		this.state = {
 			isVideoPlaying: false,
-			isCommentOverlayOpen: false
+			isCommentOverlayOpen: false,
+			defaultCommentsOverlayTabKey: 'comments'
 		};
 	}
 
@@ -37,9 +38,9 @@ class ByteVideo extends React.Component {
 		}
 	};
 
-	showCommentsOverlay = () => {
+	showCommentsOverlay = defaultCommentsOverlayTabKey => {
 		const { onCommentsOverlayChange } = this.props;
-		this.setState({ isCommentOverlayOpen: true });
+		this.setState({ isCommentOverlayOpen: true, defaultCommentsOverlayTabKey });
 		onCommentsOverlayChange(true);
 	};
 
@@ -60,7 +61,7 @@ class ByteVideo extends React.Component {
 	};
 
 	render() {
-		const { isCommentOverlayOpen } = this.state;
+		const { isCommentOverlayOpen, defaultCommentsOverlayTabKey } = this.state;
 		const { index, post, author } = this.props;
 		const {
 			id: postId,
@@ -76,7 +77,7 @@ class ByteVideo extends React.Component {
 			return (
 				<div
 					className="video-stat-icon-container"
-					onClick={this.showCommentsOverlay}
+					onClick={() => this.showCommentsOverlay('comments')}
 				>
 					<Icon type="message" theme="filled" style={{ fontSize: '24px' }} />
 					<span>{commentCount}</span>
@@ -88,7 +89,9 @@ class ByteVideo extends React.Component {
 			return (
 				<div
 					className="video-stat-icon-container"
-					onClick={this.showCommentsOverlay}
+					onClick={() => {
+						this.showCommentsOverlay('likes');
+					}}
 				>
 					<Icon type="heart" theme="filled" style={{ fontSize: '24px' }} />
 					<span>{likeCount}</span>
@@ -202,7 +205,11 @@ class ByteVideo extends React.Component {
 				</div>
 
 				{isCommentOverlayOpen && (
-					<CommentsOverlay post={post} onClose={this.onCloseCommentsOverlay} />
+					<CommentsOverlay
+						defaultTabKey={defaultCommentsOverlayTabKey}
+						post={post}
+						onClose={this.onCloseCommentsOverlay}
+					/>
 				)}
 			</div>
 		);

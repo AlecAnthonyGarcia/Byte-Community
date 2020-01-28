@@ -13,7 +13,7 @@ import { kFormatter } from '../utils/Utils';
 const { TabPane } = Tabs;
 
 const CommentsOverlay = props => {
-	const { post, onClose } = props;
+	const { defaultTabKey, post, onClose } = props;
 	const { commentCount, likeCount, loopCount } = post;
 
 	const onCloseOverlay = () => {
@@ -44,7 +44,7 @@ const CommentsOverlay = props => {
 					<Button shape="circle" icon="close" onClick={onCloseOverlay} />
 				</Col>
 			</Row>
-			<Tabs defaultActiveKey="1">
+			<Tabs defaultActiveKey={defaultTabKey}>
 				<TabPane tab={`${kFormatter(commentCount)} Comments`} key="comments">
 					<CommentList post={post} onListItemClick={onCloseOverlay} />
 				</TabPane>
