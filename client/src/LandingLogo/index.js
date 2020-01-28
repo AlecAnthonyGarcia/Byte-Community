@@ -14,6 +14,7 @@ const LandingLogo = () => {
 				autoPlay
 				muted
 				loop
+				playsInline
 			/>
 		</div>
 	);
