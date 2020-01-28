@@ -2,7 +2,15 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
+import LogRocket from 'logrocket';
+import * as Sentry from '@sentry/browser';
 import * as serviceWorker from './serviceWorker';
+
+// LogRocket Analytics
+// LogRocket.init('');
+
+// Sentry Analytics
+// Sentry.init({ dsn: '' });
 
 ReactDOM.render(<App />, document.getElementById('root'));
 

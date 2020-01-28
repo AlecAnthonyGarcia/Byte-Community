@@ -3,10 +3,12 @@
 	"version": "0.1.0",
 	"private": true,
 	"dependencies": {
+		"@sentry/browser": "^5.11.1",
 		"@testing-library/jest-dom": "^4.2.4",
 		"@testing-library/react": "^9.3.2",
 		"@testing-library/user-event": "^7.1.2",
 		"antd": "^3.26.7",
+		"logrocket": "^1.0.6",
 		"moment": "^2.24.0",
 		"node-sass": "^4.13.1",
 		"react": "^16.12.0",

@@ -2,6 +2,7 @@ const express = require('express');
 const path = require('path');
 const fs = require('fs');
 const moment = require('moment');
+const Sentry = require('@sentry/node');
 const api = require('./api');
 const ByteApi = require('./utils/Api');
 
@@ -9,6 +10,9 @@ const app = express();
 const port = process.env.PORT || 3001;
 
 const filePath = path.resolve(__dirname, '../client/build', 'index.html');
+
+// Sentry Analytics
+// +Sentry.init({ dsn: '' });
 
 // Include internal API routes
 app.use(api);
