@@ -6,7 +6,7 @@ import topOverlay from '../static/img/top_shadow_overlay.png';
 
 import { Link, withRouter } from 'react-router-dom';
 
-import { Icon, Row, Col, Spin } from 'antd';
+import { Dropdown, Icon, Menu, Row, Col, Spin } from 'antd';
 
 import LandingLogo from '../LandingLogo';
 import SearchIcon from '../SearchIcon';
@@ -18,6 +18,7 @@ import EmptyState from '../EmptyState';
 import Slider from 'react-slick';
 import MediaQuery from 'react-responsive';
 
+import { FEED_TYPES, SORT_TYPES } from '../utils/Constants';
 import Api from '../utils/Api';
 
 class HomePage extends React.Component {
@@ -33,7 +34,8 @@ class HomePage extends React.Component {
 			cursor: null,
 			hasMore: true,
 			showSliderArrows: true,
-			isExploreOverlayOpen: false
+			isExploreOverlayOpen: false,
+			currentSortType: SORT_TYPES.POPULAR
 		};
 	}
 
@@ -54,30 +56,31 @@ class HomePage extends React.Component {
 
 	loadFeedData = () => {
 		const {
-			match: { params, path }
+			match: { params }
 		} = this.props;
+		const { username } = params;
 
-		if (path === '/' || path.startsWith('/popular')) {
-			this.getPopularFeed();
-		}
-		if (path.startsWith('/latest')) {
-			this.getLatestFeed();
-		}
-		if (path.startsWith('/categories/')) {
-			const { categoryName, sort } = params;
-			this.getCategoryFeed(categoryName, sort);
-		}
-		if (path.startsWith('/user/')) {
-			const { username } = params;
-			if (path.endsWith('/rebytes')) {
-				this.getUserRebytes(username);
-			} else {
+		switch (this.getCurrentFeedType()) {
+			case FEED_TYPES.POPULAR:
+				this.getPopularFeed();
+				break;
+			case FEED_TYPES.LATEST:
+				this.getLatestFeed();
+				break;
+			case FEED_TYPES.CATEGORY:
+				let { categoryName, sort } = params;
+				this.getCategoryFeed(categoryName, sort);
+				break;
+			case FEED_TYPES.USER:
 				this.getUserPosts(username);
-			}
-		}
-		if (path.startsWith('/post/')) {
-			const { postId } = params;
-			this.getPost(postId);
+				break;
+			case FEED_TYPES.REBYTES:
+				this.getUserRebytes(username);
+				break;
+			case FEED_TYPES.POST:
+				const { postId } = params;
+				this.getPost(postId);
+				break;
 		}
 	};
 
@@ -97,6 +100,13 @@ class HomePage extends React.Component {
 	}
 
 	async getCategoryFeed(categoryName, sort) {
+		if (sort) {
+			sort = sort.toLowerCase();
+		}
+		if (!Object.values(SORT_TYPES).includes(sort)) {
+			sort = SORT_TYPES.POPULAR;
+		}
+		this.setState({ currentSortType: sort });
 		this.getFeed(Api.getCategoryFeed, categoryName, sort);
 	}
 
@@ -162,7 +172,7 @@ class HomePage extends React.Component {
 
 		const userObj = accounts[authorID];
 
-		this.updateFeedData(posts, accounts, userObj);
+		this.updateFeedData({ posts, accounts, user: userObj });
 	}
 
 	onFeedTypeChange = () => {
@@ -224,8 +234,56 @@ class HomePage extends React.Component {
 		}
 	};
 
+	getCurrentFeedType = () => {
+		const {
+			match: { path }
+		} = this.props;
+
+		if (path === '/' || path.startsWith('/popular')) {
+			return FEED_TYPES.POPULAR;
+		}
+		if (path.startsWith('/latest')) {
+			return FEED_TYPES.LATEST;
+		}
+		if (path.startsWith('/categories/')) {
+			return FEED_TYPES.CATEGORY;
+		}
+		if (path.startsWith('/post/')) {
+			return FEED_TYPES.POST;
+		}
+		if (path.startsWith('/user/')) {
+			if (path.endsWith('/rebytes')) {
+				return FEED_TYPES.REBYTES;
+			} else {
+				return FEED_TYPES.USER;
+			}
+		}
+	};
+
+	getCategoryName = () => {
+		switch (this.getCurrentFeedType()) {
+			case FEED_TYPES.POPULAR:
+				return 'Popular Now';
+			case FEED_TYPES.LATEST:
+				return 'Latest';
+			case FEED_TYPES.CATEGORY:
+				const {
+					match: { params }
+				} = this.props;
+				const { categoryName } = params;
+				return categoryName;
+			case FEED_TYPES.REBYTES:
+				return 'Rebytes';
+		}
+	};
+
 	getMiddleComponent = () => {
-		const { posts, showSliderArrows, isExploreOverlayOpen } = this.state;
+		const {
+			posts,
+			showSliderArrows,
+			isExploreOverlayOpen,
+			currentSortType
+		} = this.state;
 
 		const sliderSettings = {
 			dots: false,
@@ -245,6 +303,24 @@ class HomePage extends React.Component {
 			return <EmptyState message="Nothing to see here yet..." />;
 		}
 
+		const {
+			match: { params }
+		} = this.props;
+		const { categoryName } = params;
+
+		const sortMenu = (
+			<Menu onClick={this.onSortChange}>
+				<Menu.Item key="popular">
+					<Link to={`/categories/${categoryName}/popular`}>Popular</Link>
+				</Menu.Item>
+				<Menu.Item key="recent">
+					<Link to={`/categories/${categoryName}/recent`}>Recent</Link>
+				</Menu.Item>
+			</Menu>
+		);
+
+		const currentFeedType = this.getCurrentFeedType();
+
 		return (
 			<>
 				{this.shouldShowUserComponent() && (
@@ -257,24 +333,50 @@ class HomePage extends React.Component {
 					<Slider ref={this.sliderRef} {...sliderSettings}>
 						{this.getFeedData()}
 					</Slider>
-					<img className="video-overlay-top-shadow" src={topOverlay} />
 
-					<Link to="/">
-						<img className="video-overlay-logo" src={logo} alt="byte logo" />
-					</Link>
+					<div className="video-overlay-container">
+						<img className="top-shadow" src={topOverlay} />
 
-					<MediaQuery maxWidth={768}>
-						<Icon
-							className="video-overlay-search-button"
-							component={SearchIcon}
-							style={{
-								fontSize: '48px',
-								color: 'white'
-							}}
-							onClick={this.showExploreOverlay}
-						/>
-					</MediaQuery>
+						<div className="video-overlay-header">
+							<div className="logo-container">
+								<Link to="/">
+									<img className="logo" src={logo} alt="byte logo" />
+								</Link>
+							</div>
+
+							<div className="video-overlay-header-title-container ">
+								<div className="category-name">{this.getCategoryName()}</div>
+
+								{currentFeedType === FEED_TYPES.CATEGORY && (
+									<Dropdown
+										className="sort-dropdown"
+										overlay={sortMenu}
+										trigger={['click']}
+									>
+										<a className="ant-dropdown-link" href="#">
+											<span className="current-sort-type">
+												{currentSortType}
+											</span>
+										</a>
+									</Dropdown>
+								)}
+							</div>
+
+							<MediaQuery maxWidth={768}>
+								<Icon
+									className="search-button"
+									component={SearchIcon}
+									style={{
+										fontSize: '48px',
+										color: 'white'
+									}}
+									onClick={this.showExploreOverlay}
+								/>
+							</MediaQuery>
+						</div>
+					</div>
 				</div>
+
 				{isExploreOverlayOpen && (
 					<MediaQuery maxWidth={768}>
 						<div className="explore-overlay-container">
@@ -317,11 +419,18 @@ class HomePage extends React.Component {
 		this.setState({ showSliderArrows: isVisible ? false : true });
 	};
 
+	onSortChange = e => {
+		const { key: currentSortType } = e;
+		this.setState({ currentSortType });
+	};
+
 	shouldShowUserComponent = () => {
-		const {
-			match: { url }
-		} = this.props;
-		return url.startsWith('/user/') || url.startsWith('/post/');
+		const getCurrentFeedType = this.getCurrentFeedType();
+		return (
+			getCurrentFeedType === FEED_TYPES.USER ||
+			getCurrentFeedType === FEED_TYPES.REBYTES ||
+			getCurrentFeedType === FEED_TYPES.POST
+		);
 	};
 
 	showExploreOverlay = () => {

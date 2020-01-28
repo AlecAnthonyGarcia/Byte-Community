@@ -18,7 +18,7 @@ function App() {
 				<Route exact path="/latest" component={HomePage} />
 				<Route
 					exact
-					path="/categories/:categoryName/:sort"
+					path="/categories/:categoryName/:sort?"
 					component={HomePage}
 				/>
 				<Route exact path="/user/:username" component={HomePage} />
