@@ -21,6 +21,7 @@ import Slider from 'react-slick';
 import MediaQuery from 'react-responsive';
 
 import { FEED_TYPES, SORT_TYPES } from '../utils/Constants';
+import { shouldMuteAutoPlayVideo } from '../utils/Utils';
 import Api from '../utils/Api';
 
 class HomePage extends React.Component {
@@ -185,6 +186,7 @@ class HomePage extends React.Component {
 	}
 
 	onFeedTypeChange = () => {
+		const { isMuted } = this.state;
 		const { current: slider } = this.sliderRef;
 
 		if (slider) {
@@ -194,7 +196,14 @@ class HomePage extends React.Component {
 		this.unlockPageScroll();
 
 		this.setState(
-			{ loading: true, posts: [], currentIndex: 0, cursor: null, user: {} },
+			{
+				loading: true,
+				posts: [],
+				currentIndex: 0,
+				cursor: null,
+				user: {},
+				isMuted: shouldMuteAutoPlayVideo() ? true : isMuted
+			},
 			() => {
 				this.loadFeedData();
 			}
@@ -305,6 +314,7 @@ class HomePage extends React.Component {
 			showSliderArrows,
 			allowSwipe,
 			isExploreOverlayOpen,
+			isMuted,
 			currentSortType,
 			currentIndex
 		} = this.state;
@@ -365,6 +375,7 @@ class HomePage extends React.Component {
 						<MuteButton
 							style={{ display: loading ? 'none' : 'initial' }}
 							index={currentIndex}
+							isMuted={isMuted}
 							onMuteChange={this.onMuteChange}
 						/>
 

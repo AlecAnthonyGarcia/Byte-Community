@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 
 import { Icon } from 'antd';
 
@@ -33,20 +33,16 @@ const UnmuteIcon = () => (
 );
 
 const MuteButton = props => {
-	const { index, onMuteChange, style } = props;
-
-	const [muted, setMuted] = useState(true);
+	const { index, onMuteChange, isMuted, style } = props;
 
 	const toggleMute = () => {
 		const video = document.getElementById(`byte-video-${index}`);
 
 		if (video.muted) {
 			video.muted = false;
-			setMuted(false);
 			onMuteChange(false);
 		} else {
 			video.muted = true;
-			setMuted(true);
 			onMuteChange(true);
 		}
 	};
@@ -55,7 +51,7 @@ const MuteButton = props => {
 		<Icon
 			className="mute-button"
 			onClick={toggleMute}
-			component={muted ? MuteIcon : UnmuteIcon}
+			component={isMuted ? MuteIcon : UnmuteIcon}
 			style={{
 				...style,
 				fontSize: '32px',
