@@ -191,6 +191,8 @@ class HomePage extends React.Component {
 			slider.slickGoTo(0);
 		}
 
+		this.unlockPageScroll();
+
 		this.setState(
 			{ loading: true, posts: [], currentIndex: 0, cursor: null, user: {} },
 			() => {
@@ -217,6 +219,14 @@ class HomePage extends React.Component {
 		});
 	};
 
+	lockPageScroll = () => {
+		document.body.style.overflowY = 'hidden';
+	};
+
+	unlockPageScroll = () => {
+		document.body.style.overflowY = 'auto';
+	};
+
 	beforeSlideChange = (currentSlide, nextSlide) => {
 		const video = document.getElementById(`byte-video-${currentSlide}`);
 		this.setState({ currentIndex: nextSlide });
@@ -233,9 +243,9 @@ class HomePage extends React.Component {
 		}
 
 		if (currentSlide === 0) {
-			document.body.style.overflowY = 'auto';
+			this.unlockPageScroll();
 		} else {
-			document.body.style.overflowY = 'hidden';
+			this.lockPageScroll();
 		}
 
 		if (posts.length - (currentSlide + 1) === 3) {
