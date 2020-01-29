@@ -115,7 +115,7 @@ function handleDefaultRoute(response) {
 function replaceWithDefaultMetaTags(data) {
 	const title = 'byte community';
 	const description = 'a new looping video app by the creator of vine';
-	const image = '/logo.png';
+	const image = 'https://www.byte.community/logo.png';
 
 	data = replaceMetaTags(data, title, description, image);
 
