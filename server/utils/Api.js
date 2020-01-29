@@ -8,8 +8,6 @@ const {
 	POST_API
 } = require('./Constants');
 
-axios.defaults.headers.common['Authorization'] = ''; // TODO: add your own authorization token
-
 async function getUser(userId) {
 	try {
 		const { data } = await axios.get(`${ACCOUNT_API}id/${userId}`);

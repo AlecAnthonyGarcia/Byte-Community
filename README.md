@@ -35,10 +35,12 @@ In order for the application to work correctly you need to add your own authoriz
 
 The authorization token is used to authenticate each request to the byte API and without it the requests will fail. You'll need to find out how to get your own authorization token by yourself.
 
-- In server/utils/Api.js:
+The server uses round-robin iteration to cycle through different authorization tokens to balance the load on the byte API requests. You can supply as many authorization tokens as you want, but there must be at least one.
+
+- In server/api/index.js:
 
 ```
-axios.defaults.headers.common['Authorization'] = ''; // TODO: add your own authorization token
+const authorizationTokens = ['']; // TODO: add your own authorization tokens
 
 ```
 

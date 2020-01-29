@@ -1,8 +1,13 @@
 const express = require('express');
 const api = express.Router();
+const axios = require('axios');
 const rateLimit = require('express-rate-limit');
 
 const ByteApi = require('../utils/Api');
+
+const authorizationTokens = ['']; // TODO: add your own authorization tokens
+
+const getAuthorizationToken = getNextAuthorizationToken(authorizationTokens);
 
 const limiter = rateLimit({
 	windowMs: 2 * 1000, // 2 seconds
@@ -10,6 +15,11 @@ const limiter = rateLimit({
 });
 
 api.use(limiter);
+
+api.all('/api/*', function(req, res, next) {
+	setAuthorizationToken();
+	next();
+});
 
 api.get('/api/getUser', async function(req, res) {
 	const userId = req.query.userId;
@@ -120,5 +130,17 @@ api.get('/api/getExploreCategories', async function(req, res) {
 
 	res.send(data);
 });
+
+function setAuthorizationToken() {
+	axios.defaults.headers.common['Authorization'] = getAuthorizationToken();
+}
+
+function getNextAuthorizationToken(authorizationTokens) {
+	let currentTokenIndex = 0;
+	return function() {
+		if (currentTokenIndex >= authorizationTokens.length) currentTokenIndex = 0;
+		return authorizationTokens[currentTokenIndex++];
+	};
+}
 
 module.exports = api;
