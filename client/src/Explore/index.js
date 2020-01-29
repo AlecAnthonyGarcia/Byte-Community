@@ -13,7 +13,11 @@ class Explore extends React.Component {
 		searchQuery: '',
 		users: [],
 		categories: [],
-		excludedCategories: ['byte://feed/mix']
+		whitelistedCategories: [
+			'byte://feed/popular/v2',
+			'byte://feed/popular/v3',
+			'byte://feed/global'
+		]
 	};
 
 	componentDidMount() {
@@ -21,14 +25,18 @@ class Explore extends React.Component {
 	}
 
 	async getExploreCategories() {
-		const { excludedCategories } = this.state;
+		const { whitelistedCategories } = this.state;
 
 		const response = await Api.getExploreCategories();
 
 		const { layout: explore } = response;
 
 		const categories = explore.filter(category => {
-			return !excludedCategories.includes(category.uri);
+			const { uri } = category;
+			return (
+				whitelistedCategories.includes(category.uri) ||
+				uri.startsWith('byte://feed/categories/')
+			);
 		});
 
 		this.setState({ categories });
