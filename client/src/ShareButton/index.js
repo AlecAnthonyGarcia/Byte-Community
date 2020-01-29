@@ -56,7 +56,7 @@ const ShareButton = props => {
 			</Menu.Item>
 			<Menu.Item key="copy">
 				<CopyToClipboard text={postUrl} onCopy={onLinkCopied}>
-					<span>
+					<span style={{ display: 'block' }}>
 						<Icon type="copy" /> Copy link
 					</span>
 				</CopyToClipboard>
