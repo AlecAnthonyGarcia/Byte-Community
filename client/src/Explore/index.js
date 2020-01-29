@@ -46,7 +46,15 @@ class Explore extends React.Component {
 		const [, feedType] = uri.split('feed/');
 
 		if (feedType.startsWith('popular')) {
-			return '/popular/';
+			const [, popularFeedType] = feedType.split('popular/');
+			switch (popularFeedType) {
+				case 'v2':
+					return '/popular/';
+				case 'v3':
+					return '/popular2/';
+				default:
+					return '/popular/';
+			}
 		}
 		if (feedType === 'global') {
 			return '/latest/';

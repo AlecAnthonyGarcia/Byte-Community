@@ -6,6 +6,14 @@ async function getPopularFeed(cursor) {
 	return data;
 }
 
+async function getPopular2Feed(cursor) {
+	const response = await fetch(`/api/getPopular2Feed?cursor=${cursor}`, {
+		method: 'get'
+	});
+	const data = await response.json();
+	return data;
+}
+
 async function getLatestFeed(cursor) {
 	const response = await fetch(`/api/getLatestFeed?cursor=${cursor}`, {
 		method: 'get'
@@ -103,6 +111,7 @@ async function searchUser(query) {
 
 const Api = {
 	getPopularFeed,
+	getPopular2Feed,
 	getLatestFeed,
 	getExploreCategories,
 	getCategoryFeed,

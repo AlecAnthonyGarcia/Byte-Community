@@ -69,17 +69,18 @@ async function getPostLikes(postId, cursor) {
 }
 
 async function getPopularFeed(cursor) {
-	let url = `${FEED_API}popular/v2`;
-	if (cursor) {
-		url = `${url}?cursor=${cursor}`;
-	}
-	const response = await axios.get(url);
-	const { data } = response;
-	return data;
+	return await getFeed(`${FEED_API}popular/v2`, cursor);
+}
+
+async function getPopular2Feed(cursor) {
+	return await getFeed(`${FEED_API}popular/v3`, cursor);
 }
 
 async function getLatestFeed(cursor) {
-	let url = `${FEED_API}global`;
+	return await getFeed(`${FEED_API}global`, cursor);
+}
+
+async function getFeed(url, cursor) {
 	if (cursor) {
 		url = `${url}?cursor=${cursor}`;
 	}
@@ -120,6 +121,7 @@ const Api = {
 	getPostComments,
 	getPostLikes,
 	getPopularFeed,
+	getPopular2Feed,
 	getLatestFeed,
 	getCategoryFeed,
 	getExploreCategories

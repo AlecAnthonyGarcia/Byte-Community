@@ -74,24 +74,26 @@ api.get('/api/getPostLikes', async function(req, res) {
 });
 
 api.get('/api/getPopularFeed', async function(req, res) {
-	const { cursor } = req.query;
+	return await getFeed(req, res, ByteApi.getPopularFeed);
+});
 
-	const response = await ByteApi.getPopularFeed(cursor);
-
-	const { data } = response;
-
-	res.send(data);
+api.get('/api/getPopular2Feed', async function(req, res) {
+	return await getFeed(req, res, ByteApi.getPopular2Feed);
 });
 
 api.get('/api/getLatestFeed', async function(req, res) {
+	return await getFeed(req, res, ByteApi.getLatestFeed);
+});
+
+async function getFeed(req, res, apiMethod) {
 	const { cursor } = req.query;
 
-	const response = await ByteApi.getLatestFeed(cursor);
+	const response = await apiMethod(cursor);
 
 	const { data } = response;
 
 	res.send(data);
-});
+}
 
 api.get('/api/getCategoryFeed', async function(req, res) {
 	const { categoryName, sort, cursor } = req.query;

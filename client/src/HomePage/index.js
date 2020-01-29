@@ -69,6 +69,9 @@ class HomePage extends React.Component {
 			case FEED_TYPES.POPULAR:
 				this.getPopularFeed();
 				break;
+			case FEED_TYPES.POPULAR2:
+				this.getPopular2Feed();
+				break;
 			case FEED_TYPES.LATEST:
 				this.getLatestFeed();
 				break;
@@ -99,6 +102,10 @@ class HomePage extends React.Component {
 
 	async getPopularFeed() {
 		this.getFeed(Api.getPopularFeed);
+	}
+
+	async getPopular2Feed() {
+		this.getFeed(Api.getPopular2Feed);
 	}
 
 	async getLatestFeed() {
@@ -268,6 +275,9 @@ class HomePage extends React.Component {
 		} = this.props;
 
 		if (path === '/' || path.startsWith('/popular')) {
+			if (path.startsWith('/popular2')) {
+				return FEED_TYPES.POPULAR2;
+			}
 			return FEED_TYPES.POPULAR;
 		}
 		if (path.startsWith('/latest')) {
