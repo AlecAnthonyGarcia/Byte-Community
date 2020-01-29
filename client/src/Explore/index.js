@@ -155,14 +155,14 @@ class Explore extends React.Component {
 			const onPressEnter = e => {
 				e.preventDefault();
 
+				const { searchQuery } = this.state;
 				const {
-					target: { value: searchQuery }
+					target: { value }
 				} = e;
 
-				this.setState({ searchQuery: searchQuery });
-
-				if (searchQuery.trim() !== '') {
-					this.searchUser(searchQuery);
+				if (value.trim() !== '' && searchQuery !== value) {
+					this.setState({ searchQuery: value });
+					this.searchUser(value);
 				}
 			};
 
