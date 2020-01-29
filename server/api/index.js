@@ -1,7 +1,15 @@
 const express = require('express');
 const api = express.Router();
+const rateLimit = require('express-rate-limit');
 
 const ByteApi = require('../utils/Api');
+
+const limiter = rateLimit({
+	windowMs: 2 * 1000, // 2 seconds
+	max: 21 // limit each IP to 21 requests per windowMs
+});
+
+api.use(limiter);
 
 api.get('/api/getUser', async function(req, res) {
 	const userId = req.query.userId;

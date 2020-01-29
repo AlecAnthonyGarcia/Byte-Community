@@ -14,6 +14,9 @@ const filePath = path.resolve(__dirname, '../client/build', 'index.html');
 // Sentry Analytics
 // +Sentry.init({ dsn: '' });
 
+// for rate limiting
+app.set('trust proxy', 1);
+
 // Include internal API routes
 app.use(api);
 
