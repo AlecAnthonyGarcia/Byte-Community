@@ -63,14 +63,7 @@ class ByteVideo extends React.Component {
 	render() {
 		const { isCommentOverlayOpen, defaultCommentsOverlayTabKey } = this.state;
 		const { index, post, author, muted } = this.props;
-		const {
-			id: postId,
-			videoSrc,
-			date,
-			caption,
-			commentCount,
-			likeCount
-		} = post;
+		const { videoSrc, date, caption, commentCount, likeCount } = post;
 		const { avatarURL, username } = author;
 
 		const CommentCount = () => {

@@ -535,6 +535,8 @@ class HomePage extends React.Component {
 				if (!user && !loading) {
 					return <NoMatchPage />;
 				}
+				break;
+			default:
 		}
 
 		return (
