@@ -15,7 +15,8 @@ const User = props => {
 	const {
 		loading,
 		user,
-		match: { path }
+		match: { path },
+		isPageScrollLocked
 	} = props;
 	const {
 		avatarURL,
@@ -81,7 +82,11 @@ const User = props => {
 	return (
 		<div
 			className="user-container"
-			style={{ background: backgroundColor, color: foregroundColor }}
+			style={{
+				display: isPageScrollLocked ? 'none' : 'flex',
+				background: backgroundColor,
+				color: foregroundColor
+			}}
 		>
 			<div className="user-info-container">
 				<Spin spinning={loading}></Spin>

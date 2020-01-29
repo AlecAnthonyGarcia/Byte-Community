@@ -40,6 +40,7 @@ class HomePage extends React.Component {
 			allowSwipe: true,
 			isExploreOverlayOpen: false,
 			isMuted: true,
+			isPageScrollLocked: false,
 			currentSortType: SORT_TYPES.POPULAR
 		};
 	}
@@ -237,10 +238,12 @@ class HomePage extends React.Component {
 
 	lockPageScroll = () => {
 		document.body.style.overflowY = 'hidden';
+		this.setState({ isPageScrollLocked: true });
 	};
 
 	unlockPageScroll = () => {
 		document.body.style.overflowY = 'auto';
+		this.setState({ isPageScrollLocked: false });
 	};
 
 	beforeSlideChange = (currentSlide, nextSlide) => {
@@ -326,7 +329,8 @@ class HomePage extends React.Component {
 			isExploreOverlayOpen,
 			isMuted,
 			currentSortType,
-			currentIndex
+			currentIndex,
+			isPageScrollLocked
 		} = this.state;
 
 		const sliderSettings = {
@@ -379,7 +383,11 @@ class HomePage extends React.Component {
 			<>
 				{this.shouldShowUserComponent() && (
 					<MediaQuery maxWidth={768}>
-						<User user={this.state.user} loading={loading} />
+						<User
+							user={this.state.user}
+							loading={loading}
+							isPageScrollLocked={isPageScrollLocked}
+						/>
 					</MediaQuery>
 				)}
 
