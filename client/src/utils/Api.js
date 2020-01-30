@@ -1,111 +1,72 @@
+import axios from 'axios';
+
 async function getPopularFeed(cursor) {
-	const response = await fetch(`/api/getPopularFeed?cursor=${cursor}`, {
-		method: 'get'
-	});
-	const data = await response.json();
+	const { data } = await axios.get(`/api/getPopularFeed?cursor=${cursor}`);
 	return data;
 }
 
 async function getPopular2Feed(cursor) {
-	const response = await fetch(`/api/getPopular2Feed?cursor=${cursor}`, {
-		method: 'get'
-	});
-	const data = await response.json();
+	const { data } = await axios.get(`/api/getPopular2Feed?cursor=${cursor}`);
 	return data;
 }
 
 async function getLatestFeed(cursor) {
-	const response = await fetch(`/api/getLatestFeed?cursor=${cursor}`, {
-		method: 'get'
-	});
-	const data = await response.json();
+	const { data } = await axios.get(`/api/getLatestFeed?cursor=${cursor}`);
 	return data;
 }
 
 async function getExploreCategories() {
-	const response = await fetch('/api/getExploreCategories', {
-		method: 'get'
-	});
-	const data = await response.json();
+	const { data } = await axios.get('/api/getExploreCategories');
 	return data;
 }
 
 async function getCategoryFeed(categoryName, sort, cursor) {
-	const response = await fetch(
-		`/api/getCategoryFeed?categoryName=${categoryName}&sort=${sort}&cursor=${cursor}`,
-		{
-			method: 'get'
-		}
+	const { data } = await axios.get(
+		`/api/getCategoryFeed?categoryName=${categoryName}&sort=${sort}&cursor=${cursor}`
 	);
-	const data = await response.json();
 	return data;
 }
 
 async function getUser(userId) {
-	const response = await fetch(`/api/getUser?userId=${userId}`, {
-		method: 'get'
-	});
-	const data = await response.json();
+	const { data } = await axios.get(`/api/getUser?userId=${userId}`);
 	return data;
 }
 
 async function getUserPosts(username, cursor) {
-	const response = await fetch(
-		`/api/getUserPosts?username=${username}&cursor=${cursor}`,
-		{
-			method: 'get'
-		}
+	const { data } = await axios.get(
+		`/api/getUserPosts?username=${username}&cursor=${cursor}`
 	);
-	const data = await response.json();
 	return data;
 }
 
 async function getUserRebytes(username, cursor) {
-	const response = await fetch(
-		`/api/getUserRebytes?username=${username}&cursor=${cursor}`,
-		{
-			method: 'get'
-		}
+	const { data } = await axios.get(
+		`/api/getUserRebytes?username=${username}&cursor=${cursor}`
 	);
-	const data = await response.json();
 	return data;
 }
 
 async function getPost(postId) {
-	const response = await fetch(`/api/getPost?id=${postId}`, {
-		method: 'get'
-	});
-	const data = await response.json();
+	const { data } = await axios.get(`/api/getPost?id=${postId}`);
 	return data;
 }
 
 async function getPostComments(postId, cursor) {
-	const response = await fetch(
-		`/api/getPostComments?id=${postId}&cursor=${cursor}`,
-		{
-			method: 'get'
-		}
+	const { data } = await axios.get(
+		`/api/getPostComments?id=${postId}&cursor=${cursor}`
 	);
-	const data = await response.json();
 	return data;
 }
 
 async function getPostLikes(postId, cursor) {
-	const response = await fetch(
-		`/api/getPostLikes?id=${postId}&cursor=${cursor}`,
-		{
-			method: 'get'
-		}
+	const { data } = await axios.get(
+		`/api/getPostLikes?id=${postId}&cursor=${cursor}`
 	);
-	const data = await response.json();
 	return data;
 }
 
 async function searchUser(query) {
-	const response = await fetch(`/api/searchUser?query=${query}`, {
-		method: 'get'
-	});
-	const data = await response.json();
+	const { data } = await axios.get(`/api/searchUser?query=${query}`);
 	return data;
 }
 
