@@ -70,6 +70,15 @@ async function searchUser(query) {
 	return data;
 }
 
+async function authenticate(code) {
+	const { data } = await axios({
+		url: `/api/authenticate`,
+		method: 'post',
+		data: { code }
+	});
+	return data;
+}
+
 const Api = {
 	getPopularFeed,
 	getPopular2Feed,
@@ -82,7 +91,8 @@ const Api = {
 	getPost,
 	getPostComments,
 	getPostLikes,
-	searchUser
+	searchUser,
+	authenticate
 };
 
 export default Api;
