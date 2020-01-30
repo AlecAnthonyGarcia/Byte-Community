@@ -4,12 +4,13 @@ import './style.scss';
 import { Link, withRouter } from 'react-router-dom';
 import { Button, Icon, Spin } from 'antd';
 
-import UserAvatar from '../UserAvatar';
-import BetaBadge from '../BetaBadge';
-
-import moment from 'moment';
 import RebyteIcon from '../RebyteIcon';
 import LoopsIcon from '../LoopsIcon';
+import UserAvatar from '../UserAvatar';
+import BetaBadge from '../BetaBadge';
+import FollowButton from '../FollowButton';
+
+import moment from 'moment';
 
 const User = props => {
 	const {
@@ -91,9 +92,13 @@ const User = props => {
 			<div className="user-info-container">
 				<Spin spinning={loading}></Spin>
 				{!loading && <UserAvatar className="user-avatar" src={avatarURL} />}
+
 				<h1 style={{ color: foregroundColor }} className="user-display-name">
 					{displayName}
 				</h1>
+
+				{!loading && <FollowButton user={user} />}
+
 				<span className="user-username">
 					{username}
 					<BetaBadge

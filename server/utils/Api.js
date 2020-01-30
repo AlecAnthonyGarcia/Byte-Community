@@ -140,6 +140,15 @@ async function getExploreCategories() {
 	}
 }
 
+async function getMe() {
+	try {
+		const { data } = await axios.get(`${ACCOUNT_API}/me`);
+		return data;
+	} catch (err) {
+		return { data: {} };
+	}
+}
+
 async function getGoogleToken(googleCode) {
 	try {
 		const response = await axios({
@@ -178,6 +187,40 @@ async function authenticate(googleCode) {
 	}
 }
 
+async function likePost(postId, isLike) {
+	try {
+		const response = await axios({
+			url: `${POST_API}id/${postId}/feedback/like`,
+			method: isLike ? 'put' : 'delete',
+			data: {
+				postId
+			}
+		});
+
+		const { data } = response;
+		return data;
+	} catch (err) {
+		return { data: {} };
+	}
+}
+
+async function followUser(accountId, isFollow) {
+	try {
+		const response = await axios({
+			url: `${ACCOUNT_API}id/${accountId}/follow`,
+			method: isFollow ? 'put' : 'delete',
+			data: {
+				accountId
+			}
+		});
+
+		const { data } = response;
+		return data;
+	} catch (err) {
+		return { data: {} };
+	}
+}
+
 const Api = {
 	getUser,
 	searchUser,
@@ -193,8 +236,11 @@ const Api = {
 	getMixFeed,
 	getCategoryFeed,
 	getExploreCategories,
+	getMe,
 	getGoogleToken,
-	authenticate
+	authenticate,
+	likePost,
+	followUser
 };
 
 module.exports = Api;

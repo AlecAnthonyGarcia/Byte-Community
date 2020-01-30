@@ -1,6 +1,9 @@
 import React from 'react';
 import './style.scss';
 
+import { likePost, unlikePost } from '../HomePage/homeActions';
+
+import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { Icon } from 'antd';
 import moment from 'moment';
@@ -8,6 +11,7 @@ import moment from 'moment';
 import UserAvatar from '../UserAvatar';
 import CommentsOverlay from '../CommentsOverlay';
 import ShareButton from '../ShareButton';
+import Api from '../utils/Api';
 
 class ByteVideo extends React.Component {
 	constructor(props) {
@@ -19,6 +23,23 @@ class ByteVideo extends React.Component {
 			defaultCommentsOverlayTabKey: 'comments'
 		};
 	}
+
+	onLikeButtonClick = async () => {
+		const { auth, post, likesMap, likePost, unlikePost } = this.props;
+		const { id: postId } = post;
+
+		const { likedByMe, likeCount } = likesMap[postId] || {};
+
+		if (auth) {
+			if (likedByMe) {
+				unlikePost(postId, likeCount);
+			} else {
+				likePost(postId, likeCount);
+			}
+		} else {
+			this.showCommentsOverlay('likes');
+		}
+	};
 
 	onVideoClick = e => {
 		e.preventDefault();
@@ -62,8 +83,8 @@ class ByteVideo extends React.Component {
 
 	render() {
 		const { isCommentOverlayOpen, defaultCommentsOverlayTabKey } = this.state;
-		const { index, post, author, muted } = this.props;
-		const { videoSrc, date, caption, commentCount, likeCount } = post;
+		const { index, post, author, muted, likesMap } = this.props;
+		const { id: postId, videoSrc, date, caption, commentCount } = post;
 		const { avatarURL, username } = author;
 
 		const CommentCount = () => {
@@ -79,14 +100,17 @@ class ByteVideo extends React.Component {
 		};
 
 		const LikeCount = () => {
+			const { likedByMe, likeCount } = likesMap[postId] || {};
 			return (
 				<div
 					className="video-stat-icon-container"
-					onClick={() => {
-						this.showCommentsOverlay('likes');
-					}}
+					onClick={this.onLikeButtonClick}
 				>
-					<Icon type="heart" theme="filled" style={{ fontSize: '24px' }} />
+					<Icon
+						type="heart"
+						theme={likedByMe ? 'filled' : 'outlined'}
+						style={{ fontSize: '24px' }}
+					/>
 					<span>{likeCount}</span>
 				</div>
 			);
@@ -143,4 +167,17 @@ class ByteVideo extends React.Component {
 	}
 }
 
-export default ByteVideo;
+function mapStateToProps(state) {
+	const { authReducer, homeReducer } = state;
+	const { isAuthenticated } = authReducer;
+	const { likesMap } = homeReducer;
+	return {
+		auth: isAuthenticated,
+		likesMap
+	};
+}
+
+export default connect(mapStateToProps, {
+	likePost,
+	unlikePost
+})(ByteVideo);

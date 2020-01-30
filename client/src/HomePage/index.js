@@ -1,6 +1,8 @@
 import React from 'react';
 import './style.scss';
 
+import { setFollowsMap, setLikesMap } from '../HomePage/homeActions';
+
 import logo from '../static/img/logo.png';
 import topOverlay from '../static/img/top_shadow_overlay.png';
 
@@ -172,10 +174,19 @@ class HomePage extends React.Component {
 
 	async getUserFeed(apiMethod, username) {
 		const { cursor: currentCursor, user } = this.state;
+		const { user: authUser } = this.props;
+		const { id: authUserId, username: authUsername } = authUser;
 		let { id: userId } = user;
 
 		if (!userId) {
-			userId = await this.getUserId(username);
+			if (authUsername) {
+				const isProfilePage =
+					username.toLowerCase() === authUsername.toLowerCase();
+				userId = isProfilePage ? authUserId : await this.getUserId(username);
+			} else {
+				userId = await this.getUserId(username);
+			}
+
 			if (!userId) {
 				this.setState({ loading: false, user: null });
 				return;
@@ -245,11 +256,18 @@ class HomePage extends React.Component {
 		cursor
 	}) => {
 		const { posts, accounts } = this.state;
+		const { setLikesMap, setFollowsMap } = this.props;
+
+		const newPostsList = posts.concat(newPosts);
+		const newAccountsMap = { ...accounts, ...newAccounts };
+
+		setLikesMap(newPostsList);
+		setFollowsMap(newAccountsMap);
 
 		this.setState({
 			loading: false,
-			posts: posts.concat(newPosts),
-			accounts: { ...accounts, ...newAccounts },
+			posts: newPostsList,
+			accounts: newAccountsMap,
 			user,
 			cursor,
 			hasMore: cursor ? true : false
@@ -559,22 +577,19 @@ class HomePage extends React.Component {
 		const { loading, user } = this.state;
 		const { auth } = this.props;
 
-		const NoMatchPageComponent = () => {
-			if (!user && !loading) {
-				return <NoMatchPage />;
-			}
-			return null;
-		};
+		const is404Page = !user && !loading;
 
 		const currentFeedType = this.getCurrentFeedType();
 		switch (currentFeedType) {
 			case FEED_TYPES.USER:
 			case FEED_TYPES.REBYTES:
 			case FEED_TYPES.POST:
-				return <NoMatchPageComponent />;
+				if (is404Page) {
+					return <NoMatchPage />;
+				}
 			case FEED_TYPES.MIX:
-				if (!auth) {
-					return <NoMatchPageComponent />;
+				if (!auth && is404Page) {
+					return <NoMatchPage />;
 				}
 			default:
 		}
@@ -599,10 +614,16 @@ class HomePage extends React.Component {
 
 function mapStateToProps(state) {
 	const { authReducer } = state;
-	const { isAuthenticated } = authReducer;
+	const { isAuthenticated, user } = authReducer;
 	return {
-		auth: isAuthenticated
+		auth: isAuthenticated,
+		user
 	};
 }
 
-export default withRouter(connect(mapStateToProps, null)(HomePage));
+export default withRouter(
+	connect(mapStateToProps, {
+		setLikesMap,
+		setFollowsMap
+	})(HomePage)
+);

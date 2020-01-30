@@ -144,10 +144,58 @@ api.get('/api/getExploreCategories', async function(req, res) {
 	res.send(data);
 });
 
+api.get('/api/getMe', async function(req, res) {
+	const response = await ByteApi.getMe();
+
+	const { data } = response;
+
+	res.send(data);
+});
+
 api.post('/api/authenticate', async function(req, res) {
 	const { code: googleCode } = req.body;
 
 	const response = await ByteApi.authenticate(googleCode);
+
+	const { data } = response;
+
+	res.send(data);
+});
+
+api.post('/api/likePost', async function(req, res) {
+	const { postId } = req.body;
+
+	const response = await ByteApi.likePost(postId, true);
+
+	const { data } = response;
+
+	res.send(data);
+});
+
+api.post('/api/unlikePost', async function(req, res) {
+	const { postId } = req.body;
+
+	const response = await ByteApi.likePost(postId, false);
+
+	const { data } = response;
+
+	res.send(data);
+});
+
+api.post('/api/followUser', async function(req, res) {
+	const { userId } = req.body;
+
+	const response = await ByteApi.followUser(userId, true);
+
+	const { data } = response;
+
+	res.send(data);
+});
+
+api.post('/api/unfollowUser', async function(req, res) {
+	const { userId } = req.body;
+
+	const response = await ByteApi.followUser(userId, false);
 
 	const { data } = response;
 

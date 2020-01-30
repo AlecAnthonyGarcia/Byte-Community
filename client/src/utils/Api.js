@@ -29,6 +29,11 @@ async function getExploreCategories() {
 	return data;
 }
 
+async function getMe() {
+	const { data } = await axios.get('/api/getMe');
+	return data;
+}
+
 async function getCategoryFeed(categoryName, sort, cursor) {
 	const { data } = await axios.get(
 		`/api/getCategoryFeed?categoryName=${categoryName}&sort=${sort}&cursor=${cursor}`
@@ -88,6 +93,42 @@ async function authenticate(code) {
 	return data;
 }
 
+async function likePost(postId) {
+	const { data } = await axios({
+		url: `/api/likePost`,
+		method: 'post',
+		data: { postId }
+	});
+	return data;
+}
+
+async function unlikePost(postId) {
+	const { data } = await axios({
+		url: `/api/unlikePost`,
+		method: 'post',
+		data: { postId }
+	});
+	return data;
+}
+
+async function followUser(userId) {
+	const { data } = await axios({
+		url: `/api/followUser`,
+		method: 'post',
+		data: { userId }
+	});
+	return data;
+}
+
+async function unfollowUser(userId) {
+	const { data } = await axios({
+		url: `/api/unfollowUser`,
+		method: 'post',
+		data: { userId }
+	});
+	return data;
+}
+
 const Api = {
 	getTimeline,
 	getPopularFeed,
@@ -95,6 +136,7 @@ const Api = {
 	getLatestFeed,
 	getMixFeed,
 	getExploreCategories,
+	getMe,
 	getCategoryFeed,
 	getUser,
 	getUserPosts,
@@ -103,7 +145,11 @@ const Api = {
 	getPostComments,
 	getPostLikes,
 	searchUser,
-	authenticate
+	authenticate,
+	likePost,
+	unlikePost,
+	followUser,
+	unfollowUser
 };
 
 export default Api;

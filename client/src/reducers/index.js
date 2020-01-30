@@ -1,10 +1,12 @@
 import { combineReducers } from 'redux';
 import authReducer from '../AuthModal/authReducer';
+import homeReducer from '../HomePage/homeReducer';
 
 import { RESET_STATE } from '../AuthModal/authActions';
 
 const appReducer = combineReducers({
-	authReducer
+	authReducer,
+	homeReducer
 });
 
 const rootReducer = (state, action) => {
