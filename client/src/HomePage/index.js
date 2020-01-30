@@ -24,7 +24,7 @@ import NoMatchPage from '../NoMatchPage';
 import Slider from 'react-slick';
 import MediaQuery from 'react-responsive';
 
-import { FEED_TYPES, SORT_TYPES } from '../utils/Constants';
+import { FEED_TYPES, SORT_TYPES, GOOGLE_AUTH_LINK } from '../utils/Constants';
 import { shouldMuteAutoPlayVideo } from '../utils/Utils';
 import Api from '../utils/Api';
 
@@ -55,11 +55,12 @@ class HomePage extends React.Component {
 
 	componentDidUpdate(prevProps) {
 		const {
-			match: { url }
+			match: { url },
+			auth
 		} = this.props;
 		const prevUrl = prevProps.match.url;
 
-		if (prevUrl !== url) {
+		if (prevUrl !== url || prevProps.auth !== auth) {
 			this.onFeedTypeChange();
 		}
 	}
@@ -582,6 +583,7 @@ class HomePage extends React.Component {
 			history.push(`/user/${username}`);
 		} else {
 			setLoginModalVisibility(true);
+			window.open(GOOGLE_AUTH_LINK);
 		}
 	};
 
