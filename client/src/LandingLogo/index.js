@@ -18,6 +18,8 @@ import LoginModal from '../AuthModal/LoginModal';
 
 import { GOOGLE_AUTH_LINK } from '../utils/Constants';
 
+import AnalyticsUtil from '../utils/AnalyticsUtil';
+
 const LandingLogo = props => {
 	const { auth, logout, isLoginModalOpen, setLoginModalVisibility } = props;
 
@@ -25,6 +27,7 @@ const LandingLogo = props => {
 		const onClick = () => {
 			setLoginModalVisibility(true);
 			window.open(GOOGLE_AUTH_LINK);
+			AnalyticsUtil.track('Login Button Click');
 		};
 
 		return (
@@ -35,8 +38,13 @@ const LandingLogo = props => {
 	};
 
 	const LogoutButton = () => {
+		const onClick = () => {
+			logout();
+			AnalyticsUtil.track('Logout Button Click');
+		};
+
 		return (
-			<Button icon="logout" className="login-button" onClick={logout}>
+			<Button icon="logout" className="login-button" onClick={onClick}>
 				Logout
 			</Button>
 		);

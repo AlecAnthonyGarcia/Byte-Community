@@ -9,7 +9,6 @@
 		"@testing-library/user-event": "^7.1.2",
 		"antd": "^3.26.7",
 		"axios": "^0.19.2",
-		"logrocket": "^1.0.6",
 		"moment": "^2.24.0",
 		"node-sass": "^4.13.1",
 		"react": "^16.12.0",

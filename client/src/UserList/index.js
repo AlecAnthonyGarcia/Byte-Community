@@ -7,13 +7,16 @@ import { ConfigProvider, List } from 'antd';
 
 import UserAvatar from '../UserAvatar';
 
+import AnalyticsUtil from '../utils/AnalyticsUtil';
+
 const UserList = props => {
 	const { users, onUserClick } = props;
 
-	const onListItemClick = () => {
+	const onListItemClick = username => {
 		if (onUserClick) {
 			onUserClick();
 		}
+		AnalyticsUtil.track('Search List Item Clicked', { username });
 	};
 
 	const ListEmptyState = () => (
@@ -33,7 +36,7 @@ const UserList = props => {
 					return (
 						<Link
 							to={`/user/${username}`}
-							onClick={onListItemClick}
+							onClick={() => onListItemClick(username)}
 							key={username}
 						>
 							<div className="user-info-container">

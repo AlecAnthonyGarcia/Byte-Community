@@ -11,7 +11,8 @@ import moment from 'moment';
 import UserAvatar from '../UserAvatar';
 import CommentsOverlay from '../CommentsOverlay';
 import ShareButton from '../ShareButton';
-import Api from '../utils/Api';
+
+import AnalyticsUtil from '../utils/AnalyticsUtil';
 
 class ByteVideo extends React.Component {
 	constructor(props) {
@@ -33,11 +34,20 @@ class ByteVideo extends React.Component {
 		if (auth) {
 			if (likedByMe) {
 				unlikePost(postId, likeCount);
+				AnalyticsUtil.track('Unlike Post', {
+					postId
+				});
 			} else {
 				likePost(postId, likeCount);
+				AnalyticsUtil.track('Like Post', {
+					postId
+				});
 			}
 		} else {
 			this.showCommentsOverlay('likes');
+			AnalyticsUtil.track('Like Button Click', {
+				postId
+			});
 		}
 	};
 
@@ -46,6 +56,10 @@ class ByteVideo extends React.Component {
 		const { id: postId } = post;
 
 		this.showCommentsOverlay('comments');
+
+		AnalyticsUtil.track('Comment Button Click', {
+			postId
+		});
 	};
 
 	onVideoClick = e => {

@@ -26,6 +26,7 @@ import MediaQuery from 'react-responsive';
 
 import { FEED_TYPES, SORT_TYPES, GOOGLE_AUTH_LINK } from '../utils/Constants';
 import { shouldMuteAutoPlayVideo } from '../utils/Utils';
+import AnalyticsUtil from '../utils/AnalyticsUtil';
 import Api from '../utils/Api';
 
 class HomePage extends React.Component {
@@ -75,15 +76,19 @@ class HomePage extends React.Component {
 		switch (this.getCurrentFeedType()) {
 			case FEED_TYPES.TIMELINE:
 				this.getTimeline();
+				AnalyticsUtil.track('Load Timeline');
 				break;
 			case FEED_TYPES.POPULAR:
 				this.getPopularFeed();
+				AnalyticsUtil.track('Load Popular Feed');
 				break;
 			case FEED_TYPES.POPULAR2:
 				this.getPopular2Feed();
+				AnalyticsUtil.track('Load Popular 2 Feed');
 				break;
 			case FEED_TYPES.LATEST:
 				this.getLatestFeed();
+				AnalyticsUtil.track('Load Latest Feed');
 				break;
 			case FEED_TYPES.MIX:
 				if (auth) {
@@ -91,20 +96,34 @@ class HomePage extends React.Component {
 				} else {
 					this.setState({ loading: false, user: null });
 				}
+				AnalyticsUtil.track('Load Mix Feed');
 				break;
 			case FEED_TYPES.CATEGORY:
 				let { categoryName, sort } = params;
 				this.getCategoryFeed(categoryName, sort);
+				AnalyticsUtil.track('Load Category Feed', {
+					categoryName,
+					sort
+				});
 				break;
 			case FEED_TYPES.USER:
 				this.getUserPosts(username);
+				AnalyticsUtil.track('Load User', {
+					username
+				});
 				break;
 			case FEED_TYPES.REBYTES:
 				this.getUserRebytes(username);
+				AnalyticsUtil.track('Load User Rebytes', {
+					username
+				});
 				break;
 			case FEED_TYPES.POST:
 				const { postId } = params;
 				this.getPost(postId);
+				AnalyticsUtil.track('Load Post', {
+					postId
+				});
 				break;
 			default:
 		}
@@ -585,14 +604,18 @@ class HomePage extends React.Component {
 			setLoginModalVisibility(true);
 			window.open(GOOGLE_AUTH_LINK);
 		}
+
+		AnalyticsUtil.track('Profile Button Click');
 	};
 
 	showExploreOverlay = () => {
 		this.setState({ isExploreOverlayOpen: true, showSliderArrows: false });
+		AnalyticsUtil.track('Search Button Click');
 	};
 
 	onCloseExploreOverlay = () => {
 		this.setState({ isExploreOverlayOpen: false, showSliderArrows: true });
+		AnalyticsUtil.track('Search Back Button Click');
 	};
 
 	onMuteChange = isMuted => {

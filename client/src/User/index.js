@@ -11,6 +11,7 @@ import BetaBadge from '../BetaBadge';
 import FollowButton from '../FollowButton';
 
 import moment from 'moment';
+import AnalyticsUtil from '../utils/AnalyticsUtil';
 
 const User = props => {
 	const {
@@ -30,12 +31,19 @@ const User = props => {
 	} = user || {};
 
 	const ViewBytesButton = () => {
+		const onViewBytesButtonClick = () => {
+			AnalyticsUtil.track('View Bytes Button Click', {
+				username
+			});
+		};
+
 		if (path.startsWith('/post/') || path.endsWith('/rebytes')) {
 			return (
 				<Link to={`/user/${username}`}>
 					<Button
 						className="view-bytes-button"
 						style={{ backgroundColor: foregroundColor, color: backgroundColor }}
+						onClick={onViewBytesButtonClick}
 					>
 						<Icon
 							component={LoopsIcon}
@@ -54,6 +62,12 @@ const User = props => {
 	};
 
 	const ViewRebytesButton = () => {
+		const onViewRebytesButtonClick = () => {
+			AnalyticsUtil.track('View Rebytes Button Click', {
+				username
+			});
+		};
+
 		if (
 			path.startsWith('/post/') ||
 			(path.startsWith('/user/') && !path.endsWith('/rebytes'))
@@ -63,6 +77,7 @@ const User = props => {
 					<Button
 						className="view-bytes-button"
 						style={{ backgroundColor: foregroundColor, color: backgroundColor }}
+						onClick={onViewRebytesButtonClick}
 					>
 						<Icon
 							component={RebyteIcon}

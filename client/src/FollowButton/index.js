@@ -7,9 +7,11 @@ import { followUser, unfollowUser } from '../HomePage/homeActions';
 
 import { Button, Icon } from 'antd';
 
+import AnalyticsUtil from '../utils/AnalyticsUtil';
+
 const FollowButton = props => {
 	const { auth, user, followsMap, authedUser } = props;
-	const { id: userId, backgroundColor, foregroundColor } = user;
+	const { id: userId, username, backgroundColor, foregroundColor } = user;
 
 	const isFollowing = followsMap[userId];
 	const { id: authedUserId } = authedUser;
@@ -21,8 +23,14 @@ const FollowButton = props => {
 
 		if (isFollowing) {
 			unfollowUser(userId);
+			AnalyticsUtil.track('Follow User', {
+				username
+			});
 		} else {
 			followUser(userId);
+			AnalyticsUtil.track('Unfollow User', {
+				username
+			});
 		}
 	};
 

@@ -8,6 +8,7 @@ import { Button, Icon, Input, Row, Col } from 'antd';
 
 import UserList from '../UserList';
 
+import AnalyticsUtil from '../utils/AnalyticsUtil';
 import Api from '../utils/Api';
 
 class Explore extends React.Component {
@@ -82,8 +83,11 @@ class Explore extends React.Component {
 		}
 	};
 
-	onCategoryClick = () => {
+	onCategoryClick = categoryName => {
 		this.onClose();
+		AnalyticsUtil.track('Category Click', {
+			categoryName
+		});
 	};
 
 	onClose = () => {
@@ -109,7 +113,7 @@ class Explore extends React.Component {
 						<Col span={12} key={titleName}>
 							<Link
 								to={this.getCategoryLink(uri)}
-								onClick={this.onCategoryClick}
+								onClick={() => this.onCategoryClick(titleName)}
 							>
 								<div
 									className="explore-category-container"
@@ -132,7 +136,7 @@ class Explore extends React.Component {
 						<Col span={24} key={titleName}>
 							<Link
 								to={this.getCategoryLink(uri)}
-								onClick={this.onCategoryClick}
+								onClick={() => this.onCategoryClick(titleName)}
 							>
 								<div className="explore-category-main-container">
 									<img
@@ -173,6 +177,9 @@ class Explore extends React.Component {
 				if (value.trim() !== '' && searchQuery !== value) {
 					this.setState({ searchQuery: value });
 					this.searchUser(value);
+					AnalyticsUtil.track('Search', {
+						query: value
+					});
 				}
 			};
 

@@ -1,4 +1,5 @@
 import axios from 'axios';
+import AnalyticsUtil from '../utils/AnalyticsUtil';
 import Api from '../utils/Api';
 
 export const RESET_STATE = 'RESET_STATE';
@@ -28,6 +29,8 @@ export function authenticate({ code }) {
 			dispatch(resetState());
 			dispatch(setCurrentUser(account));
 		}
+
+		AnalyticsUtil.identifyUser(account);
 
 		return authToken;
 	};

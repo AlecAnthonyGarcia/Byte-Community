@@ -4,14 +4,15 @@ import { Provider } from 'react-redux';
 import './index.css';
 import App from './App';
 import configureStore from './configureStore';
-import LogRocket from 'logrocket';
 import * as Sentry from '@sentry/browser';
 import * as serviceWorker from './serviceWorker';
 
+import AnalyticsUtil from './utils/AnalyticsUtil';
+
 const store = configureStore();
 
-// LogRocket Analytics
-// LogRocket.init('');
+// Mixpanel Analytics
+AnalyticsUtil.initializeMixpanel();
 
 // Sentry Analytics
 // Sentry.init({ dsn: '' });

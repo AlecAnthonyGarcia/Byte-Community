@@ -3,6 +3,8 @@ import React from 'react';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { Dropdown, Icon, Menu, message } from 'antd';
 
+import AnalyticsUtil from '../utils/AnalyticsUtil';
+
 const ShareButton = props => {
 	const { children, post, author } = props;
 
@@ -18,9 +20,15 @@ const ShareButton = props => {
 		switch (key) {
 			case 'open':
 				window.open(postUrl, '_blank');
+				AnalyticsUtil.track('Open Post Link', {
+					postId
+				});
 				break;
 			case 'download':
 				window.open(videoSrc, '_blank');
+				AnalyticsUtil.track('Download Video', {
+					postId
+				});
 				break;
 			case 'facebook':
 				shareToFacebook();
@@ -35,6 +43,10 @@ const ShareButton = props => {
 	const shareToFacebook = () => {
 		const url = `https://facebook.com/sharer.php?display=popup&u=${postUrl}`;
 		window.open(url, 'sharer', socialShareWindowOptions);
+
+		AnalyticsUtil.track('Share Post Link', {
+			provider: 'facebook'
+		});
 	};
 
 	const shareToTwitter = () => {
@@ -43,10 +55,17 @@ const ShareButton = props => {
 		const url = `http://twitter.com/intent/tweet?text=${shareText}&url=${postUrl}`;
 
 		window.open(url, 'sharer', socialShareWindowOptions);
+
+		AnalyticsUtil.track('Share Post Link', {
+			provider: 'twitter'
+		});
 	};
 
 	const onLinkCopied = () => {
 		message.success('Post link has been copied.');
+		AnalyticsUtil.track('Copy Post Link', {
+			postId
+		});
 	};
 
 	const shareMenu = (
