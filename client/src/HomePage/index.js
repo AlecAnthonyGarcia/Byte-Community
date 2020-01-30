@@ -4,6 +4,7 @@ import './style.scss';
 import logo from '../static/img/logo.png';
 import topOverlay from '../static/img/top_shadow_overlay.png';
 
+import { connect } from 'react-redux';
 import { Link, withRouter } from 'react-router-dom';
 
 import { Dropdown, Icon, Menu, Row, Col, Spin } from 'antd';
@@ -62,11 +63,15 @@ class HomePage extends React.Component {
 
 	loadFeedData = () => {
 		const {
-			match: { params }
+			match: { params },
+			auth
 		} = this.props;
 		const { username } = params;
 
 		switch (this.getCurrentFeedType()) {
+			case FEED_TYPES.TIMELINE:
+				this.getTimeline();
+				break;
 			case FEED_TYPES.POPULAR:
 				this.getPopularFeed();
 				break;
@@ -75,6 +80,13 @@ class HomePage extends React.Component {
 				break;
 			case FEED_TYPES.LATEST:
 				this.getLatestFeed();
+				break;
+			case FEED_TYPES.MIX:
+				if (auth) {
+					this.getMixFeed();
+				} else {
+					this.setState({ loading: false, user: null });
+				}
 				break;
 			case FEED_TYPES.CATEGORY:
 				let { categoryName, sort } = params;
@@ -101,6 +113,10 @@ class HomePage extends React.Component {
 		}
 	};
 
+	async getTimeline() {
+		this.getFeed(Api.getTimeline);
+	}
+
 	async getPopularFeed() {
 		this.getFeed(Api.getPopularFeed);
 	}
@@ -111,6 +127,10 @@ class HomePage extends React.Component {
 
 	async getLatestFeed() {
 		this.getFeed(Api.getLatestFeed);
+	}
+
+	async getMixFeed() {
+		this.getFeed(Api.getMixFeed);
 	}
 
 	async getCategoryFeed(categoryName, sort) {
@@ -274,10 +294,14 @@ class HomePage extends React.Component {
 
 	getCurrentFeedType = () => {
 		const {
-			match: { path }
+			match: { path },
+			auth
 		} = this.props;
 
-		if (path === '/' || path.startsWith('/popular')) {
+		if (path === '/') {
+			return auth ? FEED_TYPES.TIMELINE : FEED_TYPES.POPULAR;
+		}
+		if (path.startsWith('/popular')) {
 			if (path.startsWith('/popular2')) {
 				return FEED_TYPES.POPULAR2;
 			}
@@ -285,6 +309,9 @@ class HomePage extends React.Component {
 		}
 		if (path.startsWith('/latest')) {
 			return FEED_TYPES.LATEST;
+		}
+		if (path.startsWith('/mix')) {
+			return FEED_TYPES.MIX;
 		}
 		if (path.startsWith('/categories/')) {
 			return FEED_TYPES.CATEGORY;
@@ -305,8 +332,12 @@ class HomePage extends React.Component {
 		switch (this.getCurrentFeedType()) {
 			case FEED_TYPES.POPULAR:
 				return 'Popular Now';
+			case FEED_TYPES.POPULAR2:
+				return 'Popular 2';
 			case FEED_TYPES.LATEST:
 				return 'Latest';
+			case FEED_TYPES.MIX:
+				return 'Your Mix';
 			case FEED_TYPES.CATEGORY:
 				const {
 					match: { params }
@@ -526,16 +557,25 @@ class HomePage extends React.Component {
 
 	render() {
 		const { loading, user } = this.state;
+		const { auth } = this.props;
+
+		const NoMatchPageComponent = () => {
+			if (!user && !loading) {
+				return <NoMatchPage />;
+			}
+			return null;
+		};
 
 		const currentFeedType = this.getCurrentFeedType();
 		switch (currentFeedType) {
 			case FEED_TYPES.USER:
 			case FEED_TYPES.REBYTES:
 			case FEED_TYPES.POST:
-				if (!user && !loading) {
-					return <NoMatchPage />;
+				return <NoMatchPageComponent />;
+			case FEED_TYPES.MIX:
+				if (!auth) {
+					return <NoMatchPageComponent />;
 				}
-				break;
 			default:
 		}
 
@@ -557,4 +597,12 @@ class HomePage extends React.Component {
 	}
 }
 
-export default withRouter(HomePage);
+function mapStateToProps(state) {
+	const { authReducer } = state;
+	const { isAuthenticated } = authReducer;
+	return {
+		auth: isAuthenticated
+	};
+}
+
+export default withRouter(connect(mapStateToProps, null)(HomePage));

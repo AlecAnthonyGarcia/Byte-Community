@@ -5,6 +5,7 @@ const CATEGORY_API = `${BASE_API}categories/`;
 const EXPLORE_API = `${BASE_API}explore`;
 const FEED_API = `${BASE_API}feed/`;
 const POST_API = `${BASE_API}post/`;
+const TIMELINE_API = `${BASE_API}timeline`;
 
 const GOOGLE_AUTH_API = 'https://oauth2.googleapis.com/token';
 const GOOGLE_CLIENT_ID =
@@ -18,7 +19,8 @@ const Constants = {
 	FEED_API,
 	GOOGLE_AUTH_API,
 	GOOGLE_CLIENT_ID,
-	POST_API
+	POST_API,
+	TIMELINE_API
 };
 
 module.exports = Constants;

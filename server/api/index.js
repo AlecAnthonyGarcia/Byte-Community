@@ -17,7 +17,12 @@ const limiter = rateLimit({
 api.use(limiter);
 
 api.all('/api/*', function(req, res, next) {
-	setAuthorizationToken();
+	const {
+		headers: { authorization }
+	} = req;
+
+	setAuthorizationToken(authorization);
+
 	next();
 });
 
@@ -91,6 +96,10 @@ api.get('/api/getPostLikes', async function(req, res) {
 	res.send(data);
 });
 
+api.get('/api/getTimeline', async function(req, res) {
+	return await getFeed(req, res, ByteApi.getTimeline);
+});
+
 api.get('/api/getPopularFeed', async function(req, res) {
 	return await getFeed(req, res, ByteApi.getPopularFeed);
 });
@@ -101,6 +110,10 @@ api.get('/api/getPopular2Feed', async function(req, res) {
 
 api.get('/api/getLatestFeed', async function(req, res) {
 	return await getFeed(req, res, ByteApi.getLatestFeed);
+});
+
+api.get('/api/getMixFeed', async function(req, res) {
+	return await getFeed(req, res, ByteApi.getMixFeed);
 });
 
 async function getFeed(req, res, apiMethod) {
@@ -141,8 +154,11 @@ api.post('/api/authenticate', async function(req, res) {
 	res.send(data);
 });
 
-function setAuthorizationToken() {
-	axios.defaults.headers.common['Authorization'] = getAuthorizationToken();
+function setAuthorizationToken(authorization) {
+	// if the user is authenticated use their auth token else use a token supplied by round-robin iteration
+	const authorizationToken = authorization
+		? authorization
+		: getAuthorizationToken();
 }
 
 function getNextAuthorizationToken(authorizationTokens) {

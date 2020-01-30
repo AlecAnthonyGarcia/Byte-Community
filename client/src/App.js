@@ -17,6 +17,7 @@ function App() {
 				<Route exact path="/popular" component={HomePage} />
 				<Route exact path="/popular2" component={HomePage} />
 				<Route exact path="/latest" component={HomePage} />
+				<Route exact path="/mix" component={HomePage} />
 				<Route
 					exact
 					path="/categories/:categoryName/:sort?"

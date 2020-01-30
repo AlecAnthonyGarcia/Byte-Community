@@ -1,5 +1,10 @@
 import axios from 'axios';
 
+async function getTimeline(cursor) {
+	const { data } = await axios.get(`/api/getTimeline?cursor=${cursor}`);
+	return data;
+}
+
 async function getPopularFeed(cursor) {
 	const { data } = await axios.get(`/api/getPopularFeed?cursor=${cursor}`);
 	return data;
@@ -15,6 +20,10 @@ async function getLatestFeed(cursor) {
 	return data;
 }
 
+async function getMixFeed(cursor) {
+	const { data } = await axios.get(`/api/getMixFeed?cursor=${cursor}`);
+	return data;
+}
 async function getExploreCategories() {
 	const { data } = await axios.get('/api/getExploreCategories');
 	return data;
@@ -80,9 +89,11 @@ async function authenticate(code) {
 }
 
 const Api = {
+	getTimeline,
 	getPopularFeed,
 	getPopular2Feed,
 	getLatestFeed,
+	getMixFeed,
 	getExploreCategories,
 	getCategoryFeed,
 	getUser,

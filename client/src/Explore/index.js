@@ -1,7 +1,9 @@
 import React from 'react';
 import './style.scss';
 
+import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
+
 import { Button, Icon, Input, Row, Col } from 'antd';
 
 import UserList from '../UserList';
@@ -26,6 +28,11 @@ class Explore extends React.Component {
 
 	async getExploreCategories() {
 		const { whitelistedCategories } = this.state;
+		const { auth } = this.props;
+
+		if (auth) {
+			whitelistedCategories.push('byte://feed/mix');
+		}
 
 		const response = await Api.getExploreCategories();
 
@@ -66,6 +73,9 @@ class Explore extends React.Component {
 		}
 		if (feedType === 'global') {
 			return '/latest/';
+		}
+		if (feedType === 'mix') {
+			return '/mix/';
 		}
 		if (feedType.startsWith('categories')) {
 			return '/' + feedType;
@@ -210,4 +220,12 @@ class Explore extends React.Component {
 	}
 }
 
-export default Explore;
+function mapStateToProps(state) {
+	const { authReducer } = state;
+	const { isAuthenticated } = authReducer;
+	return {
+		auth: isAuthenticated
+	};
+}
+
+export default connect(mapStateToProps, null)(Explore);

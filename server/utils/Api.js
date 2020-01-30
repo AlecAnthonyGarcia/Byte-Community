@@ -9,7 +9,8 @@ const {
 	FEED_API,
 	GOOGLE_AUTH_API,
 	GOOGLE_CLIENT_ID,
-	POST_API
+	POST_API,
+	TIMELINE_API
 } = require('./Constants');
 
 async function getUser(userId) {
@@ -81,6 +82,10 @@ async function getPostLikes(postId, cursor) {
 	}
 }
 
+async function getTimeline(cursor) {
+	return await getFeed(TIMELINE_API, cursor);
+}
+
 async function getPopularFeed(cursor) {
 	return await getFeed(`${FEED_API}popular/v2`, cursor);
 }
@@ -91,6 +96,10 @@ async function getPopular2Feed(cursor) {
 
 async function getLatestFeed(cursor) {
 	return await getFeed(`${FEED_API}global`, cursor);
+}
+
+async function getMixFeed(cursor) {
+	return await getFeed(`${FEED_API}mix`, cursor);
 }
 
 async function getFeed(url, cursor) {
@@ -177,9 +186,11 @@ const Api = {
 	getPost,
 	getPostComments,
 	getPostLikes,
+	getTimeline,
 	getPopularFeed,
 	getPopular2Feed,
 	getLatestFeed,
+	getMixFeed,
 	getCategoryFeed,
 	getExploreCategories,
 	getGoogleToken,
