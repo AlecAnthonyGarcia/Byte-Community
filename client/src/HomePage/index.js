@@ -2,6 +2,7 @@ import React from 'react';
 import './style.scss';
 
 import { setFollowsMap, setLikesMap } from '../HomePage/homeActions';
+import { setLoginModalVisibility } from '../AuthModal/authActions';
 
 import logo from '../static/img/logo.png';
 import topOverlay from '../static/img/top_shadow_overlay.png';
@@ -497,6 +498,18 @@ class HomePage extends React.Component {
 									/>
 								)}
 							</MediaQuery>
+
+							{!loading && (
+								<Icon
+									className="profile-button"
+									type="user"
+									style={{
+										fontSize: '32px',
+										color: 'white'
+									}}
+									onClick={this.onProfileButtonClick}
+								/>
+							)}
 						</div>
 					</div>
 				</div>
@@ -559,6 +572,17 @@ class HomePage extends React.Component {
 			getCurrentFeedType === FEED_TYPES.REBYTES ||
 			getCurrentFeedType === FEED_TYPES.POST
 		);
+	};
+
+	onProfileButtonClick = () => {
+		const { auth, user, history, setLoginModalVisibility } = this.props;
+		const { username } = user;
+
+		if (auth) {
+			history.push(`/user/${username}`);
+		} else {
+			setLoginModalVisibility(true);
+		}
 	};
 
 	showExploreOverlay = () => {
@@ -624,6 +648,7 @@ function mapStateToProps(state) {
 export default withRouter(
 	connect(mapStateToProps, {
 		setLikesMap,
-		setFollowsMap
+		setFollowsMap,
+		setLoginModalVisibility
 	})(HomePage)
 );

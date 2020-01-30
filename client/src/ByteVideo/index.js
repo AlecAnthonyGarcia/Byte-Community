@@ -41,6 +41,13 @@ class ByteVideo extends React.Component {
 		}
 	};
 
+	onCommentButtonClick = () => {
+		const { post } = this.props;
+		const { id: postId } = post;
+
+		this.showCommentsOverlay('comments');
+	};
+
 	onVideoClick = e => {
 		e.preventDefault();
 		const { index, currentIndex } = this.props;
@@ -91,7 +98,7 @@ class ByteVideo extends React.Component {
 			return (
 				<div
 					className="video-stat-icon-container"
-					onClick={() => this.showCommentsOverlay('comments')}
+					onClick={this.onCommentButtonClick}
 				>
 					<Icon type="message" theme="filled" style={{ fontSize: '24px' }} />
 					<span>{commentCount}</span>
@@ -108,8 +115,8 @@ class ByteVideo extends React.Component {
 				>
 					<Icon
 						type="heart"
-						theme={likedByMe ? 'filled' : 'outlined'}
-						style={{ fontSize: '24px' }}
+						theme="filled"
+						style={{ color: likedByMe ? 'red' : 'white', fontSize: '24px' }}
 					/>
 					<span>{likeCount}</span>
 				</div>
