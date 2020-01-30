@@ -21,13 +21,15 @@ export function authenticate({ code }) {
 		const { token, account } = response;
 		const { token: authToken } = token;
 
-		localStorage.setItem('user', JSON.stringify(account));
-		localStorage.setItem('authToken', authToken);
-		setAuthorizationToken(token);
-		dispatch(resetState());
-		dispatch(setCurrentUser(account));
+		if (authToken) {
+			localStorage.setItem('user', JSON.stringify(account));
+			localStorage.setItem('authToken', authToken);
+			setAuthorizationToken(token);
+			dispatch(resetState());
+			dispatch(setCurrentUser(account));
+		}
 
-		return response;
+		return authToken;
 	};
 }
 
