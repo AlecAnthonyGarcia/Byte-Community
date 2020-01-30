@@ -131,6 +131,16 @@ api.get('/api/getExploreCategories', async function(req, res) {
 	res.send(data);
 });
 
+api.post('/api/authenticate', async function(req, res) {
+	const { code: googleCode } = req.body;
+
+	const response = await ByteApi.authenticate(googleCode);
+
+	const { data } = response;
+
+	res.send(data);
+});
+
 function setAuthorizationToken() {
 	axios.defaults.headers.common['Authorization'] = getAuthorizationToken();
 }

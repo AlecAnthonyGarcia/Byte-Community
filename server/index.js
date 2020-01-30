@@ -1,6 +1,7 @@
 const express = require('express');
 const path = require('path');
 const fs = require('fs');
+const bodyParser = require('body-parser');
 const moment = require('moment');
 const Sentry = require('@sentry/node');
 const api = require('./api');
@@ -16,6 +17,9 @@ const filePath = path.resolve(__dirname, '../client/build', 'index.html');
 
 // for rate limiting
 app.set('trust proxy', 1);
+
+app.use(bodyParser.json()); // support json encoded bodies
+app.use(bodyParser.urlencoded({ extended: true })); // support encoded bodies
 
 // Include internal API routes
 app.use(api);

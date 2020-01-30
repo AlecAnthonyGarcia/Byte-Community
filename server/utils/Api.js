@@ -1,10 +1,14 @@
 const axios = require('axios');
+const querystring = require('querystring');
 
 const {
 	ACCOUNT_API,
+	AUTHENTICATE_API,
 	CATEGORY_API,
 	EXPLORE_API,
 	FEED_API,
+	GOOGLE_AUTH_API,
+	GOOGLE_CLIENT_ID,
 	POST_API
 } = require('./Constants');
 
@@ -127,6 +131,44 @@ async function getExploreCategories() {
 	}
 }
 
+async function getGoogleToken(googleCode) {
+	try {
+		const response = await axios({
+			url: GOOGLE_AUTH_API,
+			method: 'post',
+			data: querystring.encode({
+				client_id: GOOGLE_CLIENT_ID,
+				code: googleCode,
+				grant_type: 'authorization_code',
+				redirect_uri: 'urn:ietf:wg:oauth:2.0:oob'
+			})
+		});
+
+		const { data } = response;
+		const { id_token } = data;
+		return id_token;
+	} catch (err) {
+		return null;
+	}
+}
+
+async function authenticate(googleCode) {
+	try {
+		const googleToken = await getGoogleToken(googleCode);
+
+		if (googleToken) {
+			const { data } = await axios.post(AUTHENTICATE_API, {
+				token: googleToken
+			});
+			return data;
+		} else {
+			return { data: { token: {} } };
+		}
+	} catch (err) {
+		return { data: { token: {} } };
+	}
+}
+
 const Api = {
 	getUser,
 	searchUser,
@@ -139,7 +181,9 @@ const Api = {
 	getPopular2Feed,
 	getLatestFeed,
 	getCategoryFeed,
-	getExploreCategories
+	getExploreCategories,
+	getGoogleToken,
+	authenticate
 };
 
 module.exports = Api;
