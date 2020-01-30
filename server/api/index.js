@@ -207,6 +207,7 @@ function setAuthorizationToken(authorization) {
 	const authorizationToken = authorization
 		? authorization
 		: getAuthorizationToken();
+	axios.defaults.headers.common['Authorization'] = authorizationToken;
 }
 
 function getNextAuthorizationToken(authorizationTokens) {
