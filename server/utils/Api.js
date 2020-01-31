@@ -96,11 +96,15 @@ async function getPopular2Feed(cursor) {
 }
 
 async function getLatestFeed(cursor) {
-	return await getFeed(`${FEED_API}global`, cursor);
+	return await getFeed(`${FEED_API}latest`, cursor);
 }
 
 async function getMixFeed(cursor) {
 	return await getFeed(`${FEED_API}mix`, cursor);
+}
+
+async function getPicksFeed(pickId, cursor) {
+	return await getFeed(`${FEED_API}picks/${pickId}`, cursor);
 }
 
 async function getFeed(url, cursor) {
@@ -270,6 +274,7 @@ const Api = {
 	getPopular2Feed,
 	getLatestFeed,
 	getMixFeed,
+	getPicksFeed,
 	getCategoryFeed,
 	getExploreCategories,
 	getMe,

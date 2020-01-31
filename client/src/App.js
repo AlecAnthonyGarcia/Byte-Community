@@ -23,6 +23,7 @@ function App() {
 					path="/categories/:categoryName/:sort?"
 					component={HomePage}
 				/>
+				<Route exact path="/picks/:pickId" component={HomePage} />
 				<Route exact path="/user/:username" component={HomePage} />
 				<Route exact path="/user/:username/rebytes" component={HomePage} />
 				<Route exact path="/post/:postId" component={HomePage} />

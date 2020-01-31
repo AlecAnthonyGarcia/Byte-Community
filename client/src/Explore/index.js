@@ -19,7 +19,7 @@ class Explore extends React.Component {
 		whitelistedCategories: [
 			'byte://feed/popular/v2',
 			'byte://feed/popular/v3',
-			'byte://feed/global'
+			'byte://feed/latest'
 		]
 	};
 
@@ -43,7 +43,8 @@ class Explore extends React.Component {
 			const { uri } = category;
 			return (
 				whitelistedCategories.includes(category.uri) ||
-				uri.startsWith('byte://feed/categories/')
+				uri.startsWith('byte://feed/categories/') ||
+				uri.startsWith('byte://feed/picks/')
 			);
 		});
 
@@ -72,13 +73,13 @@ class Explore extends React.Component {
 					return '/popular/';
 			}
 		}
-		if (feedType === 'global') {
+		if (feedType === 'latest') {
 			return '/latest/';
 		}
 		if (feedType === 'mix') {
 			return '/mix/';
 		}
-		if (feedType.startsWith('categories')) {
+		if (feedType.startsWith('categories') || feedType.startsWith('picks')) {
 			return '/' + feedType;
 		}
 	};

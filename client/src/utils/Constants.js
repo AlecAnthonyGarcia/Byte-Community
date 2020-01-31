@@ -7,6 +7,7 @@ export const FEED_TYPES = {
 	POPULAR2: 'popular2',
 	LATEST: 'latest',
 	MIX: 'mix',
+	PICKS: 'picks',
 	CATEGORY: 'category',
 	USER: 'user',
 	REBYTES: 'rebytes',

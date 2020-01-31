@@ -24,6 +24,14 @@ async function getMixFeed(cursor) {
 	const { data } = await axios.get(`/api/getMixFeed?cursor=${cursor}`);
 	return data;
 }
+
+async function getPicksFeed(pickId, cursor) {
+	const { data } = await axios.get(
+		`/api/getPicksFeed?pickId=${pickId}&cursor=${cursor}`
+	);
+	return data;
+}
+
 async function getExploreCategories() {
 	const { data } = await axios.get('/api/getExploreCategories');
 	return data;
@@ -153,6 +161,7 @@ const Api = {
 	getPopular2Feed,
 	getLatestFeed,
 	getMixFeed,
+	getPicksFeed,
 	getExploreCategories,
 	getMe,
 	getCategoryFeed,

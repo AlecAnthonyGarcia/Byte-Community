@@ -98,6 +98,17 @@ class HomePage extends React.Component {
 				}
 				AnalyticsUtil.track('Load Mix Feed');
 				break;
+			case FEED_TYPES.PICKS:
+				let { pickId } = params;
+				this.getPicksFeed(pickId);
+				AnalyticsUtil.track(
+					'Load Picks Feed',
+					{
+						pickId
+					},
+					false
+				);
+				break;
 			case FEED_TYPES.CATEGORY:
 				let { categoryName, sort } = params;
 				this.getCategoryFeed(categoryName, sort);
@@ -170,6 +181,10 @@ class HomePage extends React.Component {
 
 	async getMixFeed() {
 		this.getFeed(Api.getMixFeed);
+	}
+
+	async getPicksFeed(pickId) {
+		this.getFeed(Api.getPicksFeed, pickId);
 	}
 
 	async getCategoryFeed(categoryName, sort) {
@@ -367,6 +382,9 @@ class HomePage extends React.Component {
 		}
 		if (path.startsWith('/mix')) {
 			return FEED_TYPES.MIX;
+		}
+		if (path.startsWith('/picks/')) {
+			return FEED_TYPES.PICKS;
 		}
 		if (path.startsWith('/categories/')) {
 			return FEED_TYPES.CATEGORY;
