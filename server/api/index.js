@@ -202,6 +202,26 @@ api.post('/api/unfollowUser', async function(req, res) {
 	res.send(data);
 });
 
+api.post('/api/postComment', async function(req, res) {
+	const { postId, comment } = req.body;
+
+	const response = await ByteApi.postComment(postId, comment);
+
+	const { data } = response;
+
+	res.send(data);
+});
+
+api.post('/api/deleteComment', async function(req, res) {
+	const { commentId } = req.body;
+
+	const response = await ByteApi.deleteComment(commentId);
+
+	const { data } = response;
+
+	res.send(data);
+});
+
 function setAuthorizationToken(authorization) {
 	// if the user is authenticated use their auth token else use a token supplied by round-robin iteration
 	const authorizationToken = authorization

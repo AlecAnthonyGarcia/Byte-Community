@@ -1,15 +1,19 @@
 import React from 'react';
 
+import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 
-import { ConfigProvider, List, Spin } from 'antd';
+import { ConfigProvider, Dropdown, Menu, List, Spin } from 'antd';
 
 import InfiniteScroll from 'react-infinite-scroller';
 
 import UserAvatar from '../UserAvatar/index.js';
+import CommentComposer from '../CommentComposer';
 
-import Api from '../utils/Api';
 import moment from 'moment';
+
+import AnalyticsUtil from '../utils/AnalyticsUtil';
+import Api from '../utils/Api';
 
 class CommentList extends React.Component {
 	constructor(props) {
@@ -64,8 +68,37 @@ class CommentList extends React.Component {
 		}
 	};
 
+	onCommentPosted = commentResponse => {
+		const { comments, accounts } = this.state;
+		const { accounts: newAccounts, ...comment } = commentResponse;
+
+		this.setState({
+			comments: comments.concat([comment]),
+			accounts: { ...accounts, ...newAccounts }
+		});
+	};
+
+	deleteComment = async deletedCommentId => {
+		const { comments } = this.state;
+
+		await Api.deleteComment(deletedCommentId);
+
+		const newComments = comments.filter(comment => {
+			const { id: commentId } = comment;
+			return commentId !== deletedCommentId;
+		});
+
+		this.setState({
+			comments: newComments
+		});
+
+		AnalyticsUtil.track('Delete Comment');
+	};
+
 	render() {
 		const { isFirstLoad, loading, hasMore, comments, accounts } = this.state;
+		const { auth, user: authUser, post } = this.props;
+		const { id: authUserId } = authUser;
 
 		const ListEmptyState = () => (
 			<div className="empty-state-container">
@@ -74,52 +107,100 @@ class CommentList extends React.Component {
 		);
 
 		return (
-			<div className="comments-overlay-tab-list">
-				<InfiniteScroll
-					initialLoad={false}
-					pageStart={0}
-					loadMore={this.onLoadMore}
-					hasMore={!loading && hasMore}
-					useWindow={false}
+			<>
+				<div
+					className="comments-overlay-tab-list"
+					style={{ height: auth ? '59vh' : '65vh' }}
 				>
-					<ConfigProvider renderEmpty={ListEmptyState}>
-						<List
-							dataSource={comments}
-							loading={loading}
-							renderItem={item => {
-								const { authorID, body, date } = item;
-								const user = accounts[authorID];
-								const { avatarURL, username } = user;
+					<InfiniteScroll
+						initialLoad={false}
+						pageStart={0}
+						loadMore={this.onLoadMore}
+						hasMore={!loading && hasMore}
+						useWindow={false}
+					>
+						<ConfigProvider renderEmpty={ListEmptyState}>
+							<List
+								dataSource={comments}
+								loading={loading}
+								renderItem={item => {
+									const { id: commentId, authorID, body, date } = item;
+									const user = accounts[authorID];
+									const { avatarURL, username } = user;
 
-								return (
-									<Link to={`/user/${username}`} onClick={this.onListItemClick}>
+									const isCommentMenuEnabled = auth && authorID === authUserId;
+
+									const commentMenu = (
+										<Menu>
+											<Menu.Item
+												key="delete"
+												onClick={() => this.deleteComment(commentId)}
+											>
+												Delete Comment
+											</Menu.Item>
+										</Menu>
+									);
+
+									return (
 										<div className="user-info-container">
-											<UserAvatar src={avatarURL} className="user-avatar" />
-											<div className="user-name-container">
-												<div className="comment-username">
-													{`@${username}`}
-													<span className="comment-timestamp">
-														{moment.unix(date).fromNow()}
-													</span>
+											<Link
+												to={`/user/${username}`}
+												onClick={this.onListItemClick}
+											>
+												<UserAvatar src={avatarURL} className="user-avatar" />
+											</Link>
+											<Dropdown
+												overlay={commentMenu}
+												trigger={['click']}
+												disabled={!isCommentMenuEnabled}
+											>
+												<div
+													className="user-name-container"
+													style={{
+														cursor: isCommentMenuEnabled ? 'pointer' : 'initial'
+													}}
+												>
+													<div className="comment-username">
+														<Link
+															to={`/user/${username}`}
+															onClick={this.onListItemClick}
+														>
+															{`@${username}`}
+														</Link>
+														<span className="comment-timestamp">
+															{moment.unix(date).fromNow()}
+														</span>
+													</div>
+
+													<div>{body}</div>
 												</div>
-												<div>{body}</div>
-											</div>
+											</Dropdown>
 										</div>
-									</Link>
-								);
-							}}
-						>
-							{loading && !isFirstLoad && hasMore && (
-								<div className="loading-container">
-									<Spin />
-								</div>
-							)}
-						</List>
-					</ConfigProvider>
-				</InfiniteScroll>
-			</div>
+									);
+								}}
+							>
+								{loading && !isFirstLoad && hasMore && (
+									<div className="loading-container">
+										<Spin />
+									</div>
+								)}
+							</List>
+						</ConfigProvider>
+					</InfiniteScroll>
+				</div>
+				<CommentComposer post={post} onCommentPosted={this.onCommentPosted} />
+			</>
 		);
 	}
 }
 
-export default CommentList;
+function mapStateToProps(state) {
+	const { authReducer } = state;
+	const { isAuthenticated, user } = authReducer;
+	return {
+		auth: isAuthenticated,
+		user
+	};
+}
+
+export default connect(mapStateToProps, null)(CommentList);

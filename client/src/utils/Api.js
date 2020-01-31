@@ -129,6 +129,24 @@ async function unfollowUser(userId) {
 	return data;
 }
 
+async function postComment(postId, comment) {
+	const { data } = await axios({
+		url: `/api/postComment`,
+		method: 'post',
+		data: { postId, comment }
+	});
+	return data;
+}
+
+async function deleteComment(commentId) {
+	const { data } = await axios({
+		url: `/api/deleteComment`,
+		method: 'post',
+		data: { commentId }
+	});
+	return data;
+}
+
 const Api = {
 	getTimeline,
 	getPopularFeed,
@@ -149,7 +167,9 @@ const Api = {
 	likePost,
 	unlikePost,
 	followUser,
-	unfollowUser
+	unfollowUser,
+	postComment,
+	deleteComment
 };
 
 export default Api;

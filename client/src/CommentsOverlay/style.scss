@@ -40,8 +40,39 @@
 	}
 }
 
+.comment-composer-container {
+	display: flex;
+	padding-left: 10px;
+
+	.user-avatar {
+		width: 48px;
+		height: 48px;
+		border-radius: 50%;
+	}
+
+	.comment-composer-input-container {
+		display: flex;
+		flex: 1;
+		align-items: center;
+
+		.comment-text-box {
+			flex: 1;
+			margin-left: 10px;
+		}
+
+		.post-comment-button {
+			width: 40px;
+			margin-left: 10px;
+		}
+	}
+}
+
 .comment-username {
 	font-weight: bold;
+
+	a {
+		color: gray;
+	}
 }
 
 .comment-timestamp {

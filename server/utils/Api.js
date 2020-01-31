@@ -7,6 +7,7 @@ const {
 	CATEGORY_API,
 	EXPLORE_API,
 	FEED_API,
+	FEEDBACK_API,
 	GOOGLE_AUTH_API,
 	GOOGLE_CLIENT_ID,
 	POST_API,
@@ -221,6 +222,41 @@ async function followUser(accountId, isFollow) {
 	}
 }
 
+async function postComment(postID, body) {
+	try {
+		const response = await axios({
+			url: `${POST_API}id/${postID}/feedback/comment`,
+			method: 'post',
+			data: {
+				body,
+				postID
+			}
+		});
+
+		const { data } = response;
+		return data;
+	} catch (err) {
+		return { data: {} };
+	}
+}
+
+async function deleteComment(commentID) {
+	try {
+		const response = await axios({
+			url: `${FEEDBACK_API}comment/id/${commentID}`,
+			method: 'delete',
+			data: {
+				commentID
+			}
+		});
+
+		const { data } = response;
+		return data;
+	} catch (err) {
+		return { data: {} };
+	}
+}
+
 const Api = {
 	getUser,
 	searchUser,
@@ -240,7 +276,9 @@ const Api = {
 	getGoogleToken,
 	authenticate,
 	likePost,
-	followUser
+	followUser,
+	postComment,
+	deleteComment
 };
 
 module.exports = Api;
