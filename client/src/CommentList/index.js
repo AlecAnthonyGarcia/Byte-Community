@@ -80,6 +80,8 @@ class CommentList extends React.Component {
 
 	deleteComment = async deletedCommentId => {
 		const { comments } = this.state;
+		const { post } = this.props;
+		const { id: postId } = post;
 
 		await Api.deleteComment(deletedCommentId);
 
@@ -92,7 +94,13 @@ class CommentList extends React.Component {
 			comments: newComments
 		});
 
-		AnalyticsUtil.track('Delete Comment');
+		AnalyticsUtil.track(
+			'Delete Comment',
+			{
+				postId
+			},
+			false
+		);
 	};
 
 	render() {

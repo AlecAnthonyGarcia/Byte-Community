@@ -101,29 +101,45 @@ class HomePage extends React.Component {
 			case FEED_TYPES.CATEGORY:
 				let { categoryName, sort } = params;
 				this.getCategoryFeed(categoryName, sort);
-				AnalyticsUtil.track('Load Category Feed', {
-					categoryName,
-					sort
-				});
+				AnalyticsUtil.track(
+					'Load Category Feed',
+					{
+						categoryName,
+						sort
+					},
+					true
+				);
 				break;
 			case FEED_TYPES.USER:
 				this.getUserPosts(username);
-				AnalyticsUtil.track('Load User', {
-					username
-				});
+				AnalyticsUtil.track(
+					'Load User',
+					{
+						username
+					},
+					true
+				);
 				break;
 			case FEED_TYPES.REBYTES:
 				this.getUserRebytes(username);
-				AnalyticsUtil.track('Load User Rebytes', {
-					username
-				});
+				AnalyticsUtil.track(
+					'Load User Rebytes',
+					{
+						username
+					},
+					true
+				);
 				break;
 			case FEED_TYPES.POST:
 				const { postId } = params;
 				this.getPost(postId);
-				AnalyticsUtil.track('Load Post', {
-					postId
-				});
+				AnalyticsUtil.track(
+					'Load Post',
+					{
+						postId
+					},
+					false
+				);
 				break;
 			default:
 		}

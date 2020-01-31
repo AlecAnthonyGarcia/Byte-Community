@@ -26,9 +26,13 @@ const ShareButton = props => {
 				break;
 			case 'download':
 				window.open(videoSrc, '_blank');
-				AnalyticsUtil.track('Download Video', {
-					postId
-				});
+				AnalyticsUtil.track(
+					'Download Video',
+					{
+						postId
+					},
+					false
+				);
 				break;
 			case 'facebook':
 				shareToFacebook();
@@ -63,9 +67,13 @@ const ShareButton = props => {
 
 	const onLinkCopied = () => {
 		message.success('Post link has been copied.');
-		AnalyticsUtil.track('Copy Post Link', {
-			postId
-		});
+		AnalyticsUtil.track(
+			'Copy Post Link',
+			{
+				postId
+			},
+			false
+		);
 	};
 
 	const shareMenu = (

@@ -16,7 +16,7 @@ const UserList = props => {
 		if (onUserClick) {
 			onUserClick();
 		}
-		AnalyticsUtil.track('Search List Item Clicked', { username });
+		AnalyticsUtil.track('Search List Item Clicked', { username }, true);
 	};
 
 	const ListEmptyState = () => (

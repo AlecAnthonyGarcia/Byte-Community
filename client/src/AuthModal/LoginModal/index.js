@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 import { authenticate } from '../authActions';
 
 import { Modal, Form, Input, Button, Icon, Alert, Typography } from 'antd';
+import AnalyticsUtil from '../../utils/AnalyticsUtil';
 
 const { Title } = Typography;
 
@@ -39,6 +40,8 @@ class LoginModal extends React.Component {
 						});
 					}
 				});
+
+				AnalyticsUtil.track('Login');
 			}
 		});
 	};

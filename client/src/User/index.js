@@ -32,9 +32,13 @@ const User = props => {
 
 	const ViewBytesButton = () => {
 		const onViewBytesButtonClick = () => {
-			AnalyticsUtil.track('View Bytes Button Click', {
-				username
-			});
+			AnalyticsUtil.track(
+				'View Bytes Button Click',
+				{
+					username
+				},
+				true
+			);
 		};
 
 		if (path.startsWith('/post/') || path.endsWith('/rebytes')) {
@@ -63,9 +67,13 @@ const User = props => {
 
 	const ViewRebytesButton = () => {
 		const onViewRebytesButtonClick = () => {
-			AnalyticsUtil.track('View Rebytes Button Click', {
-				username
-			});
+			AnalyticsUtil.track(
+				'View Rebytes Button Click',
+				{
+					username
+				},
+				true
+			);
 		};
 
 		if (

@@ -85,9 +85,13 @@ class Explore extends React.Component {
 
 	onCategoryClick = categoryName => {
 		this.onClose();
-		AnalyticsUtil.track('Category Click', {
-			categoryName
-		});
+		AnalyticsUtil.track(
+			'Category Click',
+			{
+				categoryName
+			},
+			true
+		);
 	};
 
 	onClose = () => {
@@ -177,9 +181,13 @@ class Explore extends React.Component {
 				if (value.trim() !== '' && searchQuery !== value) {
 					this.setState({ searchQuery: value });
 					this.searchUser(value);
-					AnalyticsUtil.track('Search', {
-						query: value
-					});
+					AnalyticsUtil.track(
+						'Search',
+						{
+							query: value
+						},
+						true
+					);
 				}
 			};
 

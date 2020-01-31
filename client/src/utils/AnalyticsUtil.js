@@ -1,18 +1,24 @@
 const MIXPANEL_TOKEN = null;
 
-export function track(eventName, properties) {
+export function track(eventName, properties, shouldLowercaseProperties) {
 	if (typeof mixpanel !== 'undefined') {
-		const lowercaseProperties = properties
-			? Object.keys(properties).reduce((previousValue, currentValue) => {
-					let value = properties[currentValue];
-					if (typeof value !== 'undefined') {
-						value = value.toLowerCase();
-					}
-					return (previousValue[currentValue] = value), previousValue;
-			  }, {})
-			: null;
-		window.mixpanel.track(eventName, lowercaseProperties);
+		const eventProperties = shouldLowercaseProperties
+			? lowercaseProperties(properties)
+			: properties;
+		window.mixpanel.track(eventName, eventProperties);
 	}
+}
+
+export function lowercaseProperties(properties) {
+	return properties
+		? Object.keys(properties).reduce((previousValue, currentValue) => {
+				let value = properties[currentValue];
+				if (typeof value !== 'undefined') {
+					value = value.toLowerCase();
+				}
+				return (previousValue[currentValue] = value), previousValue;
+		  }, {})
+		: null;
 }
 
 export function identifyUser(user) {

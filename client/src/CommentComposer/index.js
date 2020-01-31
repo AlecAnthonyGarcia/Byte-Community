@@ -47,9 +47,13 @@ class CommentComposer extends React.Component {
 
 		this.setState({ comment: '' });
 
-		AnalyticsUtil.track('Post Comment', {
-			postId
-		});
+		AnalyticsUtil.track(
+			'Post Comment',
+			{
+				postId
+			},
+			false
+		);
 	};
 
 	render() {

@@ -34,20 +34,32 @@ class ByteVideo extends React.Component {
 		if (auth) {
 			if (likedByMe) {
 				unlikePost(postId, likeCount);
-				AnalyticsUtil.track('Unlike Post', {
-					postId
-				});
+				AnalyticsUtil.track(
+					'Unlike Post',
+					{
+						postId
+					},
+					false
+				);
 			} else {
 				likePost(postId, likeCount);
-				AnalyticsUtil.track('Like Post', {
-					postId
-				});
+				AnalyticsUtil.track(
+					'Like Post',
+					{
+						postId
+					},
+					false
+				);
 			}
 		} else {
 			this.showCommentsOverlay('likes');
-			AnalyticsUtil.track('Like Button Click', {
-				postId
-			});
+			AnalyticsUtil.track(
+				'Like Button Click',
+				{
+					postId
+				},
+				false
+			);
 		}
 	};
 
@@ -57,9 +69,13 @@ class ByteVideo extends React.Component {
 
 		this.showCommentsOverlay('comments');
 
-		AnalyticsUtil.track('Comment Button Click', {
-			postId
-		});
+		AnalyticsUtil.track(
+			'Comment Button Click',
+			{
+				postId
+			},
+			false
+		);
 	};
 
 	onVideoClick = e => {

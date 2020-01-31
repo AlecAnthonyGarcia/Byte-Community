@@ -23,14 +23,22 @@ const FollowButton = props => {
 
 		if (isFollowing) {
 			unfollowUser(userId);
-			AnalyticsUtil.track('Follow User', {
-				username
-			});
+			AnalyticsUtil.track(
+				'Follow User',
+				{
+					username
+				},
+				true
+			);
 		} else {
 			followUser(userId);
-			AnalyticsUtil.track('Unfollow User', {
-				username
-			});
+			AnalyticsUtil.track(
+				'Unfollow User',
+				{
+					username
+				},
+				true
+			);
 		}
 	};
 
