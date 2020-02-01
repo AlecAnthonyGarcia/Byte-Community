@@ -2,7 +2,7 @@ import React from 'react';
 import './style.scss';
 
 import { connect } from 'react-redux';
-import { Link } from 'react-router-dom';
+import { Link, withRouter } from 'react-router-dom';
 
 import { Button, Icon, Input, Row, Col } from 'antd';
 
@@ -44,7 +44,8 @@ class Explore extends React.Component {
 			return (
 				whitelistedCategories.includes(category.uri) ||
 				uri.startsWith('byte://feed/categories/') ||
-				uri.startsWith('byte://feed/picks/')
+				uri.startsWith('byte://feed/picks/') ||
+				uri.startsWith('byte://account/id/')
 			);
 		});
 
@@ -60,32 +61,47 @@ class Explore extends React.Component {
 	}
 
 	getCategoryLink = uri => {
-		const [, feedType] = uri.split('feed/');
+		const [, categoryType] = uri.split('byte://');
 
-		if (feedType.startsWith('popular')) {
-			const [, popularFeedType] = feedType.split('popular/');
-			switch (popularFeedType) {
-				case 'v2':
-					return '/popular/';
-				case 'v3':
-					return '/popular2/';
-				default:
-					return '/popular/';
+		if (categoryType.startsWith('feed')) {
+			const [, feedType] = uri.split('feed/');
+
+			if (feedType.startsWith('popular')) {
+				const [, popularFeedType] = feedType.split('popular/');
+				switch (popularFeedType) {
+					case 'v2':
+						return '/popular/';
+					case 'v3':
+						return '/popular2/';
+					default:
+						return '/popular/';
+				}
 			}
-		}
-		if (feedType === 'latest') {
-			return '/latest/';
-		}
-		if (feedType === 'mix') {
-			return '/mix/';
-		}
-		if (feedType.startsWith('categories') || feedType.startsWith('picks')) {
-			return '/' + feedType;
+			if (feedType === 'latest') {
+				return '/latest/';
+			}
+			if (feedType === 'mix') {
+				return '/mix/';
+			}
+			if (feedType.startsWith('categories') || feedType.startsWith('picks')) {
+				return '/' + feedType;
+			}
 		}
 	};
 
-	onCategoryClick = categoryName => {
+	onCategoryClick = category => {
+		const { title, uri } = category;
+		const { title: categoryName } = title;
+
 		this.onClose();
+
+		const [, categoryType] = uri.split('byte://');
+
+		if (categoryType.startsWith('account')) {
+			const [, userId] = uri.split('id/');
+			this.goToUserPage(userId);
+		}
+
 		AnalyticsUtil.track(
 			'Category Click',
 			{
@@ -93,6 +109,15 @@ class Explore extends React.Component {
 			},
 			true
 		);
+	};
+
+	goToUserPage = async userId => {
+		const { history } = this.props;
+
+		const user = await Api.getUser(userId);
+		const { username } = user;
+
+		history.push(`/user/${username}`);
 	};
 
 	onClose = () => {
@@ -109,49 +134,73 @@ class Explore extends React.Component {
 			const { categories } = this.state;
 
 			return categories.map(category => {
-				const { icon, background, title, uri } = category;
+				const { icon, background, title, description, uri } = category;
 				const { color, url } = background;
 				const { title: titleName } = title;
+				const { title: descriptionName, color: descriptionColor } =
+					description || {};
 
 				if (icon) {
+					const CategoryContainer = () => (
+						<div
+							className="explore-category-container"
+							style={{ background: color }}
+							src={icon}
+						>
+							<img
+								className="explore-category-icon"
+								style={{ background: color }}
+								src={icon}
+								alt={titleName}
+							/>
+							<p>{titleName}</p>
+						</div>
+					);
+
 					return (
 						<Col span={12} key={titleName}>
 							<Link
 								to={this.getCategoryLink(uri)}
-								onClick={() => this.onCategoryClick(titleName)}
+								onClick={() => this.onCategoryClick(category)}
 							>
-								<div
-									className="explore-category-container"
-									style={{ background: color }}
-									src={icon}
-								>
-									<img
-										className="explore-category-icon"
-										style={{ background: color }}
-										src={icon}
-										alt={titleName}
-									/>
-									<p>{titleName}</p>
-								</div>
+								<CategoryContainer />
 							</Link>
 						</Col>
 					);
 				} else {
+					const MainCategoryContainer = () => (
+						<div className="explore-category-main-container">
+							<img
+								className="explore-category-main"
+								src={url}
+								alt={titleName}
+							/>
+							<span className="title">{titleName}</span>
+							<span className="description" style={{ color: descriptionColor }}>
+								{descriptionName}
+							</span>
+						</div>
+					);
+
+					const categoryLink = this.getCategoryLink(uri);
+
 					return (
 						<Col span={24} key={titleName}>
-							<Link
-								to={this.getCategoryLink(uri)}
-								onClick={() => this.onCategoryClick(titleName)}
-							>
-								<div className="explore-category-main-container">
-									<img
-										className="explore-category-main"
-										src={url}
-										alt={titleName}
-									/>
-									<span className="title">{titleName}</span>
+							{categoryLink ? (
+								<Link
+									to={categoryLink}
+									onClick={() => this.onCategoryClick(category)}
+								>
+									<MainCategoryContainer />
+								</Link>
+							) : (
+								<div
+									style={{ cursor: 'pointer' }}
+									onClick={() => this.onCategoryClick(category)}
+								>
+									<MainCategoryContainer />
 								</div>
-							</Link>
+							)}
 						</Col>
 					);
 				}
@@ -244,4 +293,4 @@ function mapStateToProps(state) {
 	};
 }
 
-export default connect(mapStateToProps, null)(Explore);
+export default withRouter(connect(mapStateToProps, null)(Explore));
