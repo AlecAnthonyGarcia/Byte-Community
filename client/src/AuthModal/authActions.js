@@ -25,7 +25,7 @@ export function authenticate({ code }) {
 		if (authToken) {
 			localStorage.setItem('user', JSON.stringify(account));
 			localStorage.setItem('authToken', authToken);
-			setAuthorizationToken(token);
+			setAuthorizationToken(authToken);
 			dispatch(resetState());
 			dispatch(setCurrentUser(account));
 		}
