@@ -28,6 +28,7 @@ import { FEED_TYPES, SORT_TYPES, GOOGLE_AUTH_LINK } from '../utils/Constants';
 import { shouldMuteAutoPlayVideo } from '../utils/Utils';
 import AnalyticsUtil from '../utils/AnalyticsUtil';
 import Api from '../utils/Api';
+import ProfileIcon from '../ProfileIcon';
 
 class HomePage extends React.Component {
 	constructor(props) {
@@ -556,10 +557,11 @@ class HomePage extends React.Component {
 							{!loading && (
 								<Icon
 									className="profile-button"
-									type="user"
+									component={ProfileIcon}
 									style={{
-										fontSize: '32px',
-										color: 'white'
+										fontSize: '48px',
+										color: 'white',
+										marginTop: '9px'
 									}}
 									onClick={this.onProfileButtonClick}
 								/>
