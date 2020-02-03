@@ -116,6 +116,10 @@ api.get('/api/getMixFeed', async function(req, res) {
 	return await getFeed(req, res, ByteApi.getMixFeed);
 });
 
+api.get('/api/getActivity', async function(req, res) {
+	return await getFeed(req, res, ByteApi.getActivity);
+});
+
 api.get('/api/getPicksFeed', async function(req, res) {
 	const { pickId, cursor } = req.query;
 

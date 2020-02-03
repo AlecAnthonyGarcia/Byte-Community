@@ -1,0 +1,55 @@
+.notification-list-container {
+	height: 100vh;
+	overflow-y: auto;
+
+	.notification-list-header-container {
+		display: flex;
+		padding: 5px 10px;
+		align-items: center;
+
+		.header-title {
+			font-size: 23px;
+		}
+
+		.back-button {
+			background-color: transparent;
+			border: none;
+			color: white;
+		}
+	}
+
+	.notification-username {
+		flex: 1;
+		margin: 0px 10px;
+
+		a {
+			color: white;
+		}
+	}
+
+	.notification-text {
+		font-size: 15px;
+		color: white;
+		margin-top: 10px;
+	}
+
+	.notification-type-label {
+		color: gray;
+	}
+
+	.notification-timestamp {
+		font-size: 10px;
+		color: gray;
+		margin-left: 10px;
+	}
+
+	.notification-post-thumbnail {
+		width: 45px;
+		height: 70px;
+		object-fit: cover;
+	}
+
+	.empty-state-container {
+		color: white;
+	}
+}

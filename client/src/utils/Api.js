@@ -155,6 +155,11 @@ async function deleteComment(commentId) {
 	return data;
 }
 
+async function getActivity(cursor) {
+	const { data } = await axios.get(`/api/getActivity?cursor=${cursor}`);
+	return data;
+}
+
 const Api = {
 	getTimeline,
 	getPopularFeed,
@@ -178,7 +183,8 @@ const Api = {
 	followUser,
 	unfollowUser,
 	postComment,
-	deleteComment
+	deleteComment,
+	getActivity
 };
 
 export default Api;

@@ -2,6 +2,7 @@ const axios = require('axios');
 const querystring = require('querystring');
 
 const {
+	ACTIVITY_API,
 	ACCOUNT_API,
 	AUTHENTICATE_API,
 	CATEGORY_API,
@@ -105,6 +106,10 @@ async function getMixFeed(cursor) {
 
 async function getPicksFeed(pickId, cursor) {
 	return await getFeed(`${FEED_API}picks/${pickId}`, cursor);
+}
+
+async function getActivity(cursor) {
+	return await getFeed(ACTIVITY_API, cursor);
 }
 
 async function getFeed(url, cursor) {
@@ -283,7 +288,8 @@ const Api = {
 	likePost,
 	followUser,
 	postComment,
-	deleteComment
+	deleteComment,
+	getActivity
 };
 
 module.exports = Api;

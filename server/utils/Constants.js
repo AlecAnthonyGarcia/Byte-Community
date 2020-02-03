@@ -1,4 +1,5 @@
 const BASE_API = 'https://api.byte.co/';
+const ACTIVITY_API = `${BASE_API}activity`;
 const ACCOUNT_API = `${BASE_API}account/`;
 const AUTHENTICATE_API = `${BASE_API}authenticate/google`;
 const CATEGORY_API = `${BASE_API}categories/`;
@@ -13,6 +14,7 @@ const GOOGLE_CLIENT_ID =
 	'236591221969-rgvearthmh0mq7bf3atnne07e6jsqmbf.apps.googleusercontent.com';
 
 const Constants = {
+	ACTIVITY_API,
 	ACCOUNT_API,
 	AUTHENTICATE_API,
 	CATEGORY_API,

@@ -18,3 +18,15 @@ export const SORT_TYPES = {
 	POPULAR: 'popular',
 	RECENT: 'recent'
 };
+
+export const NOTIFICATION_TYPES = {
+	LIKE: 'like',
+	FOLLOW: 'follow',
+	COMMENT: 'comment',
+	MENTION: 'mention'
+};
+
+export const NOTIFICATION_SUB_TYPES = {
+	COMMENT_MENTION: 'comment_mention',
+	POST_MENTION: 'post_mention'
+};

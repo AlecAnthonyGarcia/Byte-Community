@@ -10,13 +10,16 @@ import topOverlay from '../static/img/top_shadow_overlay.png';
 import { connect } from 'react-redux';
 import { Link, withRouter } from 'react-router-dom';
 
-import { Dropdown, Icon, Menu, Row, Col, Spin } from 'antd';
+import { Dropdown, Icon, Menu, message, Row, Col, Spin } from 'antd';
 
 import LandingLogo from '../LandingLogo';
 import SearchIcon from '../SearchIcon';
+import ProfileIcon from '../ProfileIcon';
+import NotificationIcon from '../NotificationIcon';
 import ByteVideo from '../ByteVideo';
 import Explore from '../Explore';
 import User from '../User';
+import NotificationList from '../NotificationList';
 import MuteButton from '../MuteButton';
 import EmptyState from '../EmptyState';
 import NoMatchPage from '../NoMatchPage';
@@ -28,7 +31,6 @@ import { FEED_TYPES, SORT_TYPES, GOOGLE_AUTH_LINK } from '../utils/Constants';
 import { shouldMuteAutoPlayVideo } from '../utils/Utils';
 import AnalyticsUtil from '../utils/AnalyticsUtil';
 import Api from '../utils/Api';
-import ProfileIcon from '../ProfileIcon';
 
 class HomePage extends React.Component {
 	constructor(props) {
@@ -45,6 +47,7 @@ class HomePage extends React.Component {
 			showSliderArrows: true,
 			allowSwipe: true,
 			isExploreOverlayOpen: false,
+			isNotificationsOverlayOpen: false,
 			isMuted: true,
 			isPageScrollLocked: false,
 			currentSortType: SORT_TYPES.POPULAR
@@ -432,6 +435,7 @@ class HomePage extends React.Component {
 			showSliderArrows,
 			allowSwipe,
 			isExploreOverlayOpen,
+			isNotificationsOverlayOpen,
 			isMuted,
 			currentSortType,
 			currentIndex,
@@ -556,6 +560,19 @@ class HomePage extends React.Component {
 
 							{!loading && (
 								<Icon
+									className="notification-button"
+									component={NotificationIcon}
+									style={{
+										fontSize: '48px',
+										color: 'white',
+										marginTop: '9px'
+									}}
+									onClick={this.showNotificationsOverlay}
+								/>
+							)}
+
+							{!loading && (
+								<Icon
 									className="profile-button"
 									component={ProfileIcon}
 									style={{
@@ -576,6 +593,12 @@ class HomePage extends React.Component {
 							<Explore showBackButton onClose={this.onCloseExploreOverlay} />
 						</div>
 					</MediaQuery>
+				)}
+
+				{isNotificationsOverlayOpen && (
+					<div className="notifications-overlay-container">
+						<NotificationList onClose={this.onCloseNotificationsOverlay} />
+					</div>
 				)}
 			</>
 		);
@@ -654,6 +677,30 @@ class HomePage extends React.Component {
 		AnalyticsUtil.track('Search Back Button Click');
 	};
 
+	showNotificationsOverlay = () => {
+		const { auth } = this.props;
+
+		if (auth) {
+			this.setState({
+				isNotificationsOverlayOpen: true,
+				showSliderArrows: false
+			});
+		} else {
+			message.warning('Please login to view your notifications.');
+		}
+
+		AnalyticsUtil.track('Notifications Button Click');
+	};
+
+	onCloseNotificationsOverlay = () => {
+		this.setState({
+			isNotificationsOverlayOpen: false,
+			showSliderArrows: true
+		});
+
+		AnalyticsUtil.track('Notifications Back Button Click');
+	};
+
 	onMuteChange = isMuted => {
 		this.setState({ isMuted });
 	};
@@ -672,10 +719,12 @@ class HomePage extends React.Component {
 				if (is404Page) {
 					return <NoMatchPage />;
 				}
+				break;
 			case FEED_TYPES.MIX:
 				if (!auth && is404Page) {
 					return <NoMatchPage />;
 				}
+				break;
 			default:
 		}
 
