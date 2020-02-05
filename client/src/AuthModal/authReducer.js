@@ -1,14 +1,16 @@
 import {
 	SET_CURRENT_USER,
 	SET_LOGIN_MODAL_VISIBILITY,
-	SET_SIGNUP_MODAL_VISIBILITY
+	SET_SIGNUP_MODAL_VISIBILITY,
+	SET_GOOGLE_TOKEN
 } from './authActions';
 
 const DEFAULT_STATE = {
 	isAuthenticated: false,
 	isLoginModalOpen: false,
 	isSignupModalOpen: false,
-	user: {}
+	user: {},
+	googleToken: null
 };
 
 export default (state = DEFAULT_STATE, action) => {
@@ -28,6 +30,11 @@ export default (state = DEFAULT_STATE, action) => {
 			return {
 				...state,
 				isSignupModalOpen: action.visible
+			};
+		case SET_GOOGLE_TOKEN:
+			return {
+				...state,
+				googleToken: action.googleToken
 			};
 		default:
 			return state;

@@ -184,14 +184,38 @@ async function authenticate(googleCode) {
 	try {
 		const googleToken = await getGoogleToken(googleCode);
 
-		if (googleToken) {
-			const { data } = await axios.post(AUTHENTICATE_API, {
-				token: googleToken
-			});
-			return data;
-		} else {
-			return { data: { token: {} } };
+		let response = await axios.post(AUTHENTICATE_API, {
+			token: googleToken
+		});
+
+		const { data } = response;
+		const { error } = data;
+
+		if (error) {
+			response = {
+				data: {
+					...data,
+					googleToken
+				}
+			};
 		}
+
+		return response;
+	} catch (err) {
+		return { data: { token: {} } };
+	}
+}
+
+async function register(username, googleToken) {
+	try {
+		const response = await axios.post(`${ACCOUNT_API}register`, {
+			username,
+			token: googleToken,
+			service: 'google',
+			inviteCode: 'NA'
+		});
+
+		return response;
 	} catch (err) {
 		return { data: { token: {} } };
 	}
@@ -285,6 +309,7 @@ const Api = {
 	getMe,
 	getGoogleToken,
 	authenticate,
+	register,
 	likePost,
 	followUser,
 	postComment,

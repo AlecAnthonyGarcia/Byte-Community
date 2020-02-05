@@ -2,12 +2,15 @@ import React from 'react';
 
 import { connect } from 'react-redux';
 
-import { authenticate } from '../authActions';
+import {
+	authenticate,
+	setSignupModalVisibility,
+	setGoogleToken
+} from '../authActions';
 
-import { Modal, Form, Input, Button, Icon, Alert, Typography } from 'antd';
+import { Modal, Form, Input, Button, Icon, Alert } from 'antd';
+
 import AnalyticsUtil from '../../utils/AnalyticsUtil';
-
-const { Title } = Typography;
 
 class LoginModal extends React.Component {
 	constructor(props) {
@@ -23,7 +26,7 @@ class LoginModal extends React.Component {
 	};
 
 	handleSubmit = e => {
-		const { form, authenticate } = this.props;
+		const { form, authenticate, setGoogleToken } = this.props;
 
 		e.preventDefault();
 
@@ -31,19 +34,41 @@ class LoginModal extends React.Component {
 			if (!err) {
 				this.setState({ loading: true });
 
-				authenticate(values).then(authToken => {
+				authenticate(values).then(response => {
 					this.setState({ loading: false });
 
-					if (!authToken) {
-						this.setState({
-							errorMessageText: 'The Google code you provided was invalid.'
-						});
+					const { error, googleToken } = response;
+
+					if (error) {
+						setGoogleToken(googleToken);
+						this.handleError(error);
+					} else {
+						AnalyticsUtil.track('Login');
 					}
 				});
-
-				AnalyticsUtil.track('Login');
 			}
 		});
+	};
+
+	handleError = error => {
+		const { setSignupModalVisibility } = this.props;
+		const { code } = error;
+
+		switch (code) {
+			case 1300:
+				this.setState({
+					errorMessageText: 'The Google code you provided was invalid.'
+				});
+				break;
+			case 1305:
+				setSignupModalVisibility(true);
+				this.onCancel();
+				break;
+			default:
+				this.setState({
+					errorMessageText: 'There was an unknown error.'
+				});
+		}
 	};
 
 	onCancel = () => {
@@ -94,6 +119,7 @@ class LoginModal extends React.Component {
 								<a
 									href="https://github.com/CaliAlec/Byte-Community"
 									target="_blank"
+									rel="noopener noreferrer"
 								>
 									open source on GitHub
 								</a>{' '}
@@ -105,6 +131,7 @@ class LoginModal extends React.Component {
 								<a
 									href="https://community.byte.co/t/important-note-about-unofficial-websites/47684"
 									target="_blank"
+									rel="noopener noreferrer"
 								>
 									here
 								</a>
@@ -160,4 +187,8 @@ class LoginModal extends React.Component {
 
 const WrappedForm = Form.create({ name: 'login' })(LoginModal);
 
-export default connect(null, { authenticate })(WrappedForm);
+export default connect(null, {
+	authenticate,
+	setSignupModalVisibility,
+	setGoogleToken
+})(WrappedForm);

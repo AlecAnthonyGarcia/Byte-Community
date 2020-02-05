@@ -6,6 +6,7 @@ export const RESET_STATE = 'RESET_STATE';
 export const SET_CURRENT_USER = 'SET_CURRENT_USER';
 export const SET_LOGIN_MODAL_VISIBILITY = 'SET_LOGIN_MODAL_VISIBILITY';
 export const SET_SIGNUP_MODAL_VISIBILITY = 'SET_SIGNUP_MODAL_VISIBILITY';
+export const SET_GOOGLE_TOKEN = 'SET_GOOGLE_TOKEN';
 
 export function setAuthorizationToken(token) {
 	if (token) {
@@ -15,24 +16,41 @@ export function setAuthorizationToken(token) {
 	}
 }
 
+function handleAuth(response, dispatch) {
+	const { data } = response;
+	const { token, account } = data || {};
+
+	if (token) {
+		const { token: authToken } = token;
+
+		localStorage.setItem('user', JSON.stringify(account));
+		localStorage.setItem('authToken', authToken);
+
+		setAuthorizationToken(authToken);
+		dispatch(resetState());
+		dispatch(setCurrentUser(account));
+
+		AnalyticsUtil.identifyUser(account);
+	}
+}
+
 export function authenticate({ code }) {
 	return async dispatch => {
 		const response = await Api.authenticate(code);
 
-		const { token, account } = response;
-		const { token: authToken } = token;
+		handleAuth(response, dispatch);
 
-		if (authToken) {
-			localStorage.setItem('user', JSON.stringify(account));
-			localStorage.setItem('authToken', authToken);
-			setAuthorizationToken(authToken);
-			dispatch(resetState());
-			dispatch(setCurrentUser(account));
-		}
+		return response;
+	};
+}
 
-		AnalyticsUtil.identifyUser(account);
+export function register({ username, googleToken }) {
+	return async dispatch => {
+		const response = await Api.register(username, googleToken);
 
-		return authToken;
+		handleAuth(response, dispatch);
+
+		return response;
 	};
 }
 
@@ -69,5 +87,12 @@ export function setSignupModalVisibility(visible) {
 	return {
 		type: SET_SIGNUP_MODAL_VISIBILITY,
 		visible
+	};
+}
+
+export function setGoogleToken(googleToken) {
+	return {
+		type: SET_GOOGLE_TOKEN,
+		googleToken
 	};
 }

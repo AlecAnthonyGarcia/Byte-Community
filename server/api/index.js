@@ -176,6 +176,16 @@ api.post('/api/authenticate', async function(req, res) {
 	res.send(data);
 });
 
+api.post('/api/register', async function(req, res) {
+	const { username, token: googleToken } = req.body;
+
+	const response = await ByteApi.register(username, googleToken);
+
+	const { data } = response;
+
+	res.send(data);
+});
+
 api.post('/api/likePost', async function(req, res) {
 	const { postId } = req.body;
 

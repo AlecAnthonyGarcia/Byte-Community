@@ -15,13 +15,20 @@ import {
 } from '../AuthModal/authActions';
 
 import LoginModal from '../AuthModal/LoginModal';
+import SignupModal from '../AuthModal/SignupModal';
 
 import { GOOGLE_AUTH_LINK } from '../utils/Constants';
 
 import AnalyticsUtil from '../utils/AnalyticsUtil';
 
 const LandingLogo = props => {
-	const { auth, logout, isLoginModalOpen, setLoginModalVisibility } = props;
+	const {
+		auth,
+		logout,
+		isLoginModalOpen,
+		isSignupModalOpen,
+		setLoginModalVisibility
+	} = props;
 
 	const LoginButton = () => {
 		const onClick = () => {
@@ -55,6 +62,11 @@ const LandingLogo = props => {
 		setLoginModalVisibility(false);
 	};
 
+	const onSignupModalClose = () => {
+		const { setSignupModalVisibility } = props;
+		setSignupModalVisibility(false);
+	};
+
 	return (
 		<div className="landing-logo-container">
 			<video
@@ -72,6 +84,7 @@ const LandingLogo = props => {
 			</div>
 
 			<LoginModal isOpen={isLoginModalOpen} onClose={onLoginModalClose} />
+			<SignupModal isOpen={isSignupModalOpen} onClose={onSignupModalClose} />
 		</div>
 	);
 };

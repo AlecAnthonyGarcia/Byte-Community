@@ -101,6 +101,15 @@ async function authenticate(code) {
 	return data;
 }
 
+async function register(username, token) {
+	const { data } = await axios({
+		url: `/api/register`,
+		method: 'post',
+		data: { username, token }
+	});
+	return data;
+}
+
 async function likePost(postId) {
 	const { data } = await axios({
 		url: `/api/likePost`,
@@ -178,6 +187,7 @@ const Api = {
 	getPostLikes,
 	searchUser,
 	authenticate,
+	register,
 	likePost,
 	unlikePost,
 	followUser,
