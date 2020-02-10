@@ -15,7 +15,7 @@ const filePath = path.resolve(__dirname, '../client/build', 'index.html');
 // Sentry Analytics
 // +Sentry.init({ dsn: '' });
 
-// for rate limiting
+// required for rate limiting proxy API requests
 app.set('trust proxy', 1);
 
 app.use(bodyParser.json()); // support json encoded bodies
@@ -24,6 +24,7 @@ app.use(bodyParser.urlencoded({ extended: true })); // support encoded bodies
 // Include internal API routes
 app.use(api);
 
+// handle /user/ route to support Open Graph tags
 app.get('/user/:username', function(req, res) {
 	fs.readFile(filePath, 'utf8', async function(err, fileData) {
 		if (err) {
@@ -61,6 +62,7 @@ app.get('/user/:username', function(req, res) {
 	});
 });
 
+// handle /post/ route to support Open Graph tags
 app.get('/post/:postId', function(req, res) {
 	fs.readFile(filePath, 'utf8', async function(err, fileData) {
 		if (err) {
@@ -104,6 +106,7 @@ app.get('*', function(req, res) {
 
 app.listen(port, () => console.log(`Listening on port ${port}`));
 
+// sets the default Open Graph tags for all other routes
 function handleDefaultRoute(response) {
 	fs.readFile(filePath, 'utf8', async function(err, fileData) {
 		if (err) {

@@ -70,6 +70,7 @@ class HomePage extends React.Component {
 		}
 	}
 
+	// loads the appropriate feed data based on the current route
 	loadFeedData = () => {
 		const {
 			match: { params },
@@ -160,6 +161,7 @@ class HomePage extends React.Component {
 		}
 	};
 
+	// pagination callback to load more data
 	loadMoreFeedData = () => {
 		const { hasMore } = this.state;
 		if (hasMore) {
@@ -196,6 +198,7 @@ class HomePage extends React.Component {
 			sort = sort.toLowerCase();
 		}
 		if (!Object.values(SORT_TYPES).includes(sort)) {
+			// set default sort type to popular
 			sort = SORT_TYPES.POPULAR;
 		}
 		this.setState({ currentSortType: sort });
@@ -236,6 +239,7 @@ class HomePage extends React.Component {
 
 		if (!userId) {
 			if (authUsername) {
+				// if current user page is the user that is logged in, use their userId to prevent wasted API call
 				const isProfilePage =
 					username.toLowerCase() === authUsername.toLowerCase();
 				userId = isProfilePage ? authUserId : await this.getUserId(username);
@@ -280,6 +284,7 @@ class HomePage extends React.Component {
 		this.updateFeedData({ posts, accounts, user: userObj });
 	}
 
+	// reset state when feed type changes to accommodate new feed data
 	onFeedTypeChange = () => {
 		const { isMuted } = this.state;
 		const { current: slider } = this.sliderRef;
@@ -305,6 +310,7 @@ class HomePage extends React.Component {
 		);
 	};
 
+	// called whenever the feed data changes
 	updateFeedData = ({
 		posts: newPosts,
 		accounts: newAccounts,
@@ -344,6 +350,7 @@ class HomePage extends React.Component {
 		const video = document.getElementById(`byte-video-${currentSlide}`);
 		this.setState({ currentIndex: nextSlide });
 		if (video) {
+			// pause the current video
 			video.pause();
 		}
 	};
@@ -352,20 +359,25 @@ class HomePage extends React.Component {
 		const { posts } = this.state;
 		const video = document.getElementById(`byte-video-${currentSlide}`);
 		if (video) {
+			// play the new video
 			video.play();
 		}
 
+		// noticeable on mobile: prevents scrolling after the first video
 		if (currentSlide === 0) {
 			this.unlockPageScroll();
 		} else {
 			this.lockPageScroll();
 		}
 
-		if (posts.length - (currentSlide + 1) === 3) {
+		// pagination to load more feed data after buffer has been reached
+		const PAGINATION_BUFFER = 3;
+		if (posts.length - (currentSlide + 1) === PAGINATION_BUFFER) {
 			this.loadMoreFeedData();
 		}
 	};
 
+	// returns the type of the feed based on the current route
 	getCurrentFeedType = () => {
 		const {
 			match: { path },
@@ -405,6 +417,7 @@ class HomePage extends React.Component {
 		}
 	};
 
+	// returns the name of the current category based on the current feed type
 	getCategoryName = () => {
 		switch (this.getCurrentFeedType()) {
 			case FEED_TYPES.POPULAR:
@@ -428,6 +441,7 @@ class HomePage extends React.Component {
 		}
 	};
 
+	// middle component is the main component since the left and right components collapse on mobile
 	getMiddleComponent = () => {
 		const {
 			loading,
@@ -457,6 +471,7 @@ class HomePage extends React.Component {
 			afterChange: this.afterSlideChange
 		};
 
+		// empty state
 		if (posts.length === 0 && !loading) {
 			return (
 				<>
@@ -604,6 +619,7 @@ class HomePage extends React.Component {
 		);
 	};
 
+	// the right component is either Explore or User
 	getRightComponent = () => {
 		if (this.shouldShowUserComponent()) {
 			const { loading, user } = this.state;

@@ -5,19 +5,22 @@ const slowDown = require('express-slow-down');
 
 const ByteApi = require('../utils/Api');
 
+// auth tokens that are used to authenticate Byte API requests
 const authorizationTokens = ['']; // TODO: add your own authorization tokens
 
 const getAuthorizationToken = getNextAuthorizationToken(authorizationTokens);
 
+// limit proxy API requests to prevent scripted abuse that would impact the performance of the web app
 const speedLimiter = slowDown({
 	windowMs: 5 * 1000, // 5 seconds
 	delayAfter: 5, // allow 5 requests per 5 seconds, then...
 	delayMs: 3000 // begin adding 3000ms of delay per request above 5
 });
 
-// only apply to requests that begin with /api/
+// only apply limiter to requests that begin with /api/
 api.use('/api/', speedLimiter);
 
+// set Authorization header on all API requests
 api.all('/api/*', function(req, res, next) {
 	const {
 		headers: { authorization }
@@ -256,6 +259,7 @@ function setAuthorizationToken(authorization) {
 	axios.defaults.headers.common['Authorization'] = authorizationToken;
 }
 
+// returns the next token in the round-robin iteration
 function getNextAuthorizationToken(authorizationTokens) {
 	let currentTokenIndex = 0;
 	return function() {

@@ -40,6 +40,7 @@ class LoginModal extends React.Component {
 					const { error, googleToken } = response;
 
 					if (error) {
+						// set Google token in Redux so SignupModal can use it in register call
 						setGoogleToken(googleToken);
 						this.handleError(error);
 					} else {
