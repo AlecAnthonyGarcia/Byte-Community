@@ -1,7 +1,7 @@
 const express = require('express');
 const api = express.Router();
 const axios = require('axios');
-const rateLimit = require('express-rate-limit');
+const slowDown = require('express-slow-down');
 
 const ByteApi = require('../utils/Api');
 
@@ -9,12 +9,14 @@ const authorizationTokens = ['']; // TODO: add your own authorization tokens
 
 const getAuthorizationToken = getNextAuthorizationToken(authorizationTokens);
 
-const limiter = rateLimit({
-	windowMs: 2 * 1000, // 2 seconds
-	max: 21 // limit each IP to 21 requests per windowMs
+const speedLimiter = slowDown({
+	windowMs: 5 * 1000, // 5 seconds
+	delayAfter: 5, // allow 5 requests per 5 seconds, then...
+	delayMs: 3000 // begin adding 3000ms of delay per request above 5
 });
 
-api.use(limiter);
+// only apply to requests that begin with /api/
+api.use('/api/', speedLimiter);
 
 api.all('/api/*', function(req, res, next) {
 	const {
