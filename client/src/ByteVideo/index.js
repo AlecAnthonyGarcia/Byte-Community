@@ -153,6 +153,28 @@ class ByteVideo extends React.Component {
 			);
 		};
 
+		const VideoCaption = () => {
+			const replaceHashtagsWithLinks = (text) => {
+				return text.replace(
+					/#([^\b#.,， ]*)/gi,
+					`<a class="video-caption-hashtag" href="/hashtag/$1/">#$1</a>`
+				);
+			};
+
+			const getCaptionText = () => {
+				return { __html: replaceHashtagsWithLinks(caption) };
+			};
+
+			return (
+				<div className="video-caption">
+					<span
+						className="caption"
+						dangerouslySetInnerHTML={getCaptionText()}
+					/>
+				</div>
+			);
+		};
+
 		return (
 			<div className="video-container">
 				<video
@@ -169,7 +191,7 @@ class ByteVideo extends React.Component {
 				/>
 
 				<div className="video-info-container">
-					<div className="video-caption">{caption}</div>
+					<VideoCaption />
 					<span className="user-info-container">
 						<Link to={`/user/${username}`} className="user-avatar-container">
 							<UserAvatar className="user-avatar" src={avatarURL} />

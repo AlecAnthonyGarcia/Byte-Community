@@ -446,12 +446,20 @@ class HomePage extends React.Component {
 				return 'Latest';
 			case FEED_TYPES.MIX:
 				return 'Your Mix';
-			case FEED_TYPES.CATEGORY:
+			case FEED_TYPES.HASHTAG: {
+				const {
+					match: { params }
+				} = this.props;
+				const { hashtag } = params;
+				return `#${hashtag}`;
+			}
+			case FEED_TYPES.CATEGORY: {
 				const {
 					match: { params }
 				} = this.props;
 				const { categoryName } = params;
 				return categoryName;
+			}
 			case FEED_TYPES.REBYTES:
 				return 'Rebytes';
 			default:
