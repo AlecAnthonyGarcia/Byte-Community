@@ -21,7 +21,7 @@ import { GOOGLE_AUTH_LINK } from '../utils/Constants';
 
 import AnalyticsUtil from '../utils/AnalyticsUtil';
 
-const LandingLogo = props => {
+const LandingLogo = (props) => {
 	const {
 		auth,
 		logout,

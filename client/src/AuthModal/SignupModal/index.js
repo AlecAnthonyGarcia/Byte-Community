@@ -21,7 +21,7 @@ class SignupModal extends React.Component {
 		};
 	};
 
-	handleSubmit = e => {
+	handleSubmit = (e) => {
 		const { form, register, googleToken } = this.props;
 
 		e.preventDefault();
@@ -35,7 +35,7 @@ class SignupModal extends React.Component {
 					googleToken
 				};
 
-				register(params).then(response => {
+				register(params).then((response) => {
 					this.setState({ loading: false });
 
 					const { error } = response;
@@ -50,7 +50,7 @@ class SignupModal extends React.Component {
 		});
 	};
 
-	handleError = error => {
+	handleError = (error) => {
 		const { code } = error;
 
 		switch (code) {

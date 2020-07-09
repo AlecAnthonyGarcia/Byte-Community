@@ -13,7 +13,7 @@ import ShareButton from '../ShareButton';
 
 const { TabPane } = Tabs;
 
-const CommentsOverlay = props => {
+const CommentsOverlay = (props) => {
 	const { defaultTabKey, post, author, onClose } = props;
 	const { commentCount, likeCount, loopCount } = post;
 

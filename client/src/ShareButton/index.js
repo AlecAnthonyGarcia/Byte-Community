@@ -5,7 +5,7 @@ import { Dropdown, Icon, Menu, message } from 'antd';
 
 import AnalyticsUtil from '../utils/AnalyticsUtil';
 
-const ShareButton = props => {
+const ShareButton = (props) => {
 	const { children, post, author } = props;
 
 	const { id: postId, videoSrc } = post;

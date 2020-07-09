@@ -9,10 +9,10 @@ import UserAvatar from '../UserAvatar';
 
 import AnalyticsUtil from '../utils/AnalyticsUtil';
 
-const UserList = props => {
+const UserList = (props) => {
 	const { users, onUserClick } = props;
 
-	const onListItemClick = username => {
+	const onListItemClick = (username) => {
 		if (onUserClick) {
 			onUserClick();
 		}
@@ -30,7 +30,7 @@ const UserList = props => {
 			<List
 				className="user-list"
 				dataSource={users}
-				renderItem={item => {
+				renderItem={(item) => {
 					const { avatarURL, username, displayName } = item;
 
 					return (

@@ -28,7 +28,7 @@ const PostCommentIcon = () => (
 	</svg>
 );
 
-const PostCommentButton = props => {
+const PostCommentButton = (props) => {
 	return (
 		<Icon
 			{...props}

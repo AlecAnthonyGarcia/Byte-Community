@@ -6,7 +6,7 @@ export const SET_FOLLOWS_MAP = 'SET_FOLLOWS_MAP';
 export const SET_LIKES_MAP = 'SET_LIKES_MAP';
 
 export function likePost(postId, currentLikeCount) {
-	return async dispatch => {
+	return async (dispatch) => {
 		const response = await Api.likePost(postId);
 
 		dispatch(setLikeCount(postId, currentLikeCount + 1, true));
@@ -16,7 +16,7 @@ export function likePost(postId, currentLikeCount) {
 }
 
 export function unlikePost(postId, currentLikeCount) {
-	return async dispatch => {
+	return async (dispatch) => {
 		const response = await Api.unlikePost(postId);
 
 		dispatch(setLikeCount(postId, currentLikeCount - 1, false));
@@ -26,7 +26,7 @@ export function unlikePost(postId, currentLikeCount) {
 }
 
 export function followUser(userId) {
-	return async dispatch => {
+	return async (dispatch) => {
 		const response = await Api.followUser(userId);
 
 		dispatch(setFollowed(userId, true));
@@ -36,7 +36,7 @@ export function followUser(userId) {
 }
 
 export function unfollowUser(userId) {
-	return async dispatch => {
+	return async (dispatch) => {
 		const response = await Api.unfollowUser(userId);
 
 		dispatch(setFollowed(userId, false));
@@ -65,7 +65,7 @@ export function setFollowsMap(accounts) {
 export function setLikesMap(posts) {
 	let likesMap = {};
 
-	posts.forEach(post => {
+	posts.forEach((post) => {
 		const { id: postId, likedByMe, likeCount } = post;
 		likesMap[postId] = {
 			likedByMe,

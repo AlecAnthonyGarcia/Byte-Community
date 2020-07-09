@@ -13,7 +13,7 @@ import FollowButton from '../FollowButton';
 import moment from 'moment';
 import AnalyticsUtil from '../utils/AnalyticsUtil';
 
-const User = props => {
+const User = (props) => {
 	const {
 		loading,
 		user,

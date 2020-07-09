@@ -32,7 +32,7 @@ const UnmuteIcon = () => (
 	</svg>
 );
 
-const MuteButton = props => {
+const MuteButton = (props) => {
 	const { index, onMuteChange, isMuted, style } = props;
 
 	const toggleMute = () => {

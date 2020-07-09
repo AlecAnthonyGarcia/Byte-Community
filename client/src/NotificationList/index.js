@@ -65,7 +65,7 @@ class NotificationList extends React.Component {
 		});
 	};
 
-	getNotificationTypeLabel = type => {
+	getNotificationTypeLabel = (type) => {
 		switch (type) {
 			case NOTIFICATION_TYPES.LIKE:
 				return 'liked your post';
@@ -79,7 +79,7 @@ class NotificationList extends React.Component {
 		}
 	};
 
-	getNotificationUser = notification => {
+	getNotificationUser = (notification) => {
 		const { accounts, posts } = this.state;
 		const { subType, body } = notification;
 		const { id: postId, authorID, followerAccountID } = body;
@@ -101,7 +101,7 @@ class NotificationList extends React.Component {
 		return user;
 	};
 
-	getNotificationText = notification => {
+	getNotificationText = (notification) => {
 		const { posts } = this.state;
 		const { subType, body } = notification;
 		const { id: postId, body: notificationText } = body;
@@ -115,7 +115,7 @@ class NotificationList extends React.Component {
 		}
 	};
 
-	getNotificationPost = notification => {
+	getNotificationPost = (notification) => {
 		const { posts } = this.state;
 		const { subType, body } = notification;
 		const { id: authorPostId, postID } = body;
@@ -210,7 +210,7 @@ class NotificationList extends React.Component {
 						<List
 							dataSource={notifications}
 							loading={loading}
-							renderItem={item => {
+							renderItem={(item) => {
 								const { type, date } = item;
 								const user = this.getNotificationUser(item);
 								const { avatarURL, username } = user;

@@ -35,7 +35,7 @@ function handleAuth(response, dispatch) {
 }
 
 export function authenticate({ code }) {
-	return async dispatch => {
+	return async (dispatch) => {
 		const response = await Api.authenticate(code);
 
 		handleAuth(response, dispatch);
@@ -45,7 +45,7 @@ export function authenticate({ code }) {
 }
 
 export function register({ username, googleToken }) {
-	return async dispatch => {
+	return async (dispatch) => {
 		const response = await Api.register(username, googleToken);
 
 		handleAuth(response, dispatch);
@@ -55,7 +55,7 @@ export function register({ username, googleToken }) {
 }
 
 export function logout() {
-	return dispatch => {
+	return (dispatch) => {
 		localStorage.removeItem('user');
 		localStorage.removeItem('authToken');
 		setAuthorizationToken(false);

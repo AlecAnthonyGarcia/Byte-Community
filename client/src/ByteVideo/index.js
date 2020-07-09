@@ -78,7 +78,7 @@ class ByteVideo extends React.Component {
 		);
 	};
 
-	onVideoClick = e => {
+	onVideoClick = (e) => {
 		e.preventDefault();
 		const { index, currentIndex } = this.props;
 		const { isVideoPlaying } = this.state;
@@ -96,7 +96,7 @@ class ByteVideo extends React.Component {
 		}
 	};
 
-	showCommentsOverlay = defaultCommentsOverlayTabKey => {
+	showCommentsOverlay = (defaultCommentsOverlayTabKey) => {
 		const { onCommentsOverlayChange } = this.props;
 		this.setState({ isCommentOverlayOpen: true, defaultCommentsOverlayTabKey });
 		onCommentsOverlayChange(true);

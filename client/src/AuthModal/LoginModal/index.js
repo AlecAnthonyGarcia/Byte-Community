@@ -25,7 +25,7 @@ class LoginModal extends React.Component {
 		};
 	};
 
-	handleSubmit = e => {
+	handleSubmit = (e) => {
 		const { form, authenticate, setGoogleToken } = this.props;
 
 		e.preventDefault();
@@ -34,7 +34,7 @@ class LoginModal extends React.Component {
 			if (!err) {
 				this.setState({ loading: true });
 
-				authenticate(values).then(response => {
+				authenticate(values).then((response) => {
 					this.setState({ loading: false });
 
 					const { error, googleToken } = response;
@@ -51,7 +51,7 @@ class LoginModal extends React.Component {
 		});
 	};
 
-	handleError = error => {
+	handleError = (error) => {
 		const { setSignupModalVisibility } = this.props;
 		const { code } = error;
 

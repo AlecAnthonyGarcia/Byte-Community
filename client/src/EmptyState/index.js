@@ -9,7 +9,7 @@ import MediaQuery from 'react-responsive';
 
 import { Button, Icon } from 'antd';
 
-const EmptyState = props => {
+const EmptyState = (props) => {
 	const { message } = props;
 
 	const ExploreBytesButton = () => {

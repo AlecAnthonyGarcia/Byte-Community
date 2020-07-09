@@ -39,7 +39,7 @@ class Explore extends React.Component {
 
 		const { layout: explore } = response;
 
-		const categories = explore.filter(category => {
+		const categories = explore.filter((category) => {
 			const { uri } = category;
 			return (
 				whitelistedCategories.includes(category.uri) ||
@@ -60,7 +60,7 @@ class Explore extends React.Component {
 		this.setState({ users });
 	}
 
-	getCategoryLink = uri => {
+	getCategoryLink = (uri) => {
 		const [, categoryType] = uri.split('byte://');
 
 		if (categoryType.startsWith('feed')) {
@@ -89,7 +89,7 @@ class Explore extends React.Component {
 		}
 	};
 
-	onCategoryClick = category => {
+	onCategoryClick = (category) => {
 		const { title, uri } = category;
 		const { title: categoryName } = title;
 
@@ -111,7 +111,7 @@ class Explore extends React.Component {
 		);
 	};
 
-	goToUserPage = async userId => {
+	goToUserPage = async (userId) => {
 		const { history } = this.props;
 
 		const user = await Api.getUser(userId);
@@ -133,7 +133,7 @@ class Explore extends React.Component {
 		const CategoryList = () => {
 			const { categories } = this.state;
 
-			return categories.map(category => {
+			return categories.map((category) => {
 				const { icon, background, title, description, uri } = category;
 				const { color, url } = background;
 				const { title: titleName } = title;
@@ -210,7 +210,7 @@ class Explore extends React.Component {
 		const SearchBar = () => {
 			const { searchQuery } = this.state;
 
-			const onChange = e => {
+			const onChange = (e) => {
 				const {
 					target: { value: searchQuery }
 				} = e;
@@ -220,7 +220,7 @@ class Explore extends React.Component {
 				}
 			};
 
-			const onPressEnter = e => {
+			const onPressEnter = (e) => {
 				e.preventDefault();
 
 				const { searchQuery } = this.state;

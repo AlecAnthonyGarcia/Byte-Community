@@ -9,7 +9,7 @@ import { Button, Icon } from 'antd';
 
 import AnalyticsUtil from '../utils/AnalyticsUtil';
 
-const FollowButton = props => {
+const FollowButton = (props) => {
 	const { auth, user, followsMap, authedUser } = props;
 	const { id: userId, username, backgroundColor, foregroundColor } = user;
 
@@ -51,7 +51,7 @@ const FollowButton = props => {
 			className="follow-button"
 			style={{ backgroundColor: foregroundColor, color: backgroundColor }}
 			shape="round"
-			onClick={e => onFollowButtonClick(e, userId)}
+			onClick={(e) => onFollowButtonClick(e, userId)}
 		>
 			<Icon
 				type={isFollowing ? 'check-circle' : 'user-add'}

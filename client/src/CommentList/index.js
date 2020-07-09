@@ -68,7 +68,7 @@ class CommentList extends React.Component {
 		}
 	};
 
-	onCommentPosted = commentResponse => {
+	onCommentPosted = (commentResponse) => {
 		const { comments, accounts } = this.state;
 		const { accounts: newAccounts, ...comment } = commentResponse;
 
@@ -78,14 +78,14 @@ class CommentList extends React.Component {
 		});
 	};
 
-	deleteComment = async deletedCommentId => {
+	deleteComment = async (deletedCommentId) => {
 		const { comments } = this.state;
 		const { post } = this.props;
 		const { id: postId } = post;
 
 		await Api.deleteComment(deletedCommentId);
 
-		const newComments = comments.filter(comment => {
+		const newComments = comments.filter((comment) => {
 			const { id: commentId } = comment;
 			return commentId !== deletedCommentId;
 		});
@@ -131,7 +131,7 @@ class CommentList extends React.Component {
 							<List
 								dataSource={comments}
 								loading={loading}
-								renderItem={item => {
+								renderItem={(item) => {
 									const { id: commentId, authorID, body, date } = item;
 									const user = accounts[authorID];
 									const { avatarURL, username } = user;

@@ -79,7 +79,7 @@ class LikeList extends React.Component {
 						<List
 							dataSource={likes}
 							loading={loading}
-							renderItem={item => {
+							renderItem={(item) => {
 								const { avatarURL, username, displayName } = item;
 
 								return (

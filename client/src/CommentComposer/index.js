@@ -18,7 +18,7 @@ class CommentComposer extends React.Component {
 		};
 	}
 
-	onCommentChange = e => {
+	onCommentChange = (e) => {
 		const {
 			target: { value: comment }
 		} = e;
@@ -37,7 +37,7 @@ class CommentComposer extends React.Component {
 		}
 	};
 
-	postComment = async comment => {
+	postComment = async (comment) => {
 		const { post, onCommentPosted } = this.props;
 		const { id: postId } = post;
 

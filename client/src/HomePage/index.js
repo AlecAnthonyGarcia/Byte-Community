@@ -258,7 +258,7 @@ class HomePage extends React.Component {
 		let { posts, rebytes, accounts, cursor } = response;
 
 		if (rebytes) {
-			posts = rebytes.map(rebyte => {
+			posts = rebytes.map((rebyte) => {
 				const { post } = rebyte;
 				return post;
 			});
@@ -355,7 +355,7 @@ class HomePage extends React.Component {
 		}
 	};
 
-	afterSlideChange = currentSlide => {
+	afterSlideChange = (currentSlide) => {
 		const { posts } = this.state;
 		const video = document.getElementById(`byte-video-${currentSlide}`);
 		if (video) {
@@ -648,14 +648,14 @@ class HomePage extends React.Component {
 		});
 	};
 
-	onCommentsOverlayChange = isVisible => {
+	onCommentsOverlayChange = (isVisible) => {
 		this.setState({
 			showSliderArrows: isVisible ? false : true,
 			allowSwipe: isVisible ? false : true
 		});
 	};
 
-	onSortChange = e => {
+	onSortChange = (e) => {
 		const { key: currentSortType } = e;
 		this.setState({ currentSortType });
 	};
@@ -717,7 +717,7 @@ class HomePage extends React.Component {
 		AnalyticsUtil.track('Notifications Back Button Click');
 	};
 
-	onMuteChange = isMuted => {
+	onMuteChange = (isMuted) => {
 		this.setState({ isMuted });
 	};
 

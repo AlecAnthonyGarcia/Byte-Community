@@ -21,7 +21,7 @@ const speedLimiter = slowDown({
 api.use('/api/', speedLimiter);
 
 // set Authorization header on all API requests
-api.all('/api/*', function(req, res, next) {
+api.all('/api/*', function (req, res, next) {
 	const {
 		headers: { authorization }
 	} = req;
@@ -31,7 +31,7 @@ api.all('/api/*', function(req, res, next) {
 	next();
 });
 
-api.get('/api/getUser', async function(req, res) {
+api.get('/api/getUser', async function (req, res) {
 	const userId = req.query.userId;
 
 	const response = await ByteApi.getUser(userId);
@@ -41,7 +41,7 @@ api.get('/api/getUser', async function(req, res) {
 	res.send(data);
 });
 
-api.get('/api/searchUser', async function(req, res) {
+api.get('/api/searchUser', async function (req, res) {
 	const { query } = req.query;
 
 	const response = await ByteApi.searchUser(query);
@@ -51,7 +51,7 @@ api.get('/api/searchUser', async function(req, res) {
 	res.send(data);
 });
 
-api.get('/api/getUserPosts', async function(req, res) {
+api.get('/api/getUserPosts', async function (req, res) {
 	const { username, cursor } = req.query;
 
 	const response = await ByteApi.getUserPosts(username, cursor);
@@ -61,7 +61,7 @@ api.get('/api/getUserPosts', async function(req, res) {
 	res.send(data);
 });
 
-api.get('/api/getUserRebytes', async function(req, res) {
+api.get('/api/getUserRebytes', async function (req, res) {
 	const { username, cursor } = req.query;
 
 	const response = await ByteApi.getUserRebytes(username, cursor);
@@ -71,7 +71,7 @@ api.get('/api/getUserRebytes', async function(req, res) {
 	res.send(data);
 });
 
-api.get('/api/getPost', async function(req, res) {
+api.get('/api/getPost', async function (req, res) {
 	const { id } = req.query;
 
 	const response = await ByteApi.getPost(id);
@@ -81,7 +81,7 @@ api.get('/api/getPost', async function(req, res) {
 	res.send(error ? response : data);
 });
 
-api.get('/api/getPostComments', async function(req, res) {
+api.get('/api/getPostComments', async function (req, res) {
 	const { id, cursor } = req.query;
 
 	const response = await ByteApi.getPostComments(id, cursor);
@@ -91,7 +91,7 @@ api.get('/api/getPostComments', async function(req, res) {
 	res.send(data);
 });
 
-api.get('/api/getPostLikes', async function(req, res) {
+api.get('/api/getPostLikes', async function (req, res) {
 	const { id, cursor } = req.query;
 
 	const response = await ByteApi.getPostLikes(id, cursor);
@@ -101,31 +101,31 @@ api.get('/api/getPostLikes', async function(req, res) {
 	res.send(data);
 });
 
-api.get('/api/getTimeline', async function(req, res) {
+api.get('/api/getTimeline', async function (req, res) {
 	return await getFeed(req, res, ByteApi.getTimeline);
 });
 
-api.get('/api/getPopularFeed', async function(req, res) {
+api.get('/api/getPopularFeed', async function (req, res) {
 	return await getFeed(req, res, ByteApi.getPopularFeed);
 });
 
-api.get('/api/getPopular2Feed', async function(req, res) {
+api.get('/api/getPopular2Feed', async function (req, res) {
 	return await getFeed(req, res, ByteApi.getPopular2Feed);
 });
 
-api.get('/api/getLatestFeed', async function(req, res) {
+api.get('/api/getLatestFeed', async function (req, res) {
 	return await getFeed(req, res, ByteApi.getLatestFeed);
 });
 
-api.get('/api/getMixFeed', async function(req, res) {
+api.get('/api/getMixFeed', async function (req, res) {
 	return await getFeed(req, res, ByteApi.getMixFeed);
 });
 
-api.get('/api/getActivity', async function(req, res) {
+api.get('/api/getActivity', async function (req, res) {
 	return await getFeed(req, res, ByteApi.getActivity);
 });
 
-api.get('/api/getPicksFeed', async function(req, res) {
+api.get('/api/getPicksFeed', async function (req, res) {
 	const { pickId, cursor } = req.query;
 
 	const response = await ByteApi.getPicksFeed(pickId, cursor);
@@ -145,7 +145,7 @@ async function getFeed(req, res, apiMethod) {
 	res.send(data);
 }
 
-api.get('/api/getCategoryFeed', async function(req, res) {
+api.get('/api/getCategoryFeed', async function (req, res) {
 	const { categoryName, sort, cursor } = req.query;
 
 	const response = await ByteApi.getCategoryFeed(categoryName, sort, cursor);
@@ -155,7 +155,7 @@ api.get('/api/getCategoryFeed', async function(req, res) {
 	res.send(data);
 });
 
-api.get('/api/getExploreCategories', async function(req, res) {
+api.get('/api/getExploreCategories', async function (req, res) {
 	const response = await ByteApi.getExploreCategories();
 
 	const { data } = response;
@@ -163,7 +163,7 @@ api.get('/api/getExploreCategories', async function(req, res) {
 	res.send(data);
 });
 
-api.get('/api/getMe', async function(req, res) {
+api.get('/api/getMe', async function (req, res) {
 	const response = await ByteApi.getMe();
 
 	const { data } = response;
@@ -171,7 +171,7 @@ api.get('/api/getMe', async function(req, res) {
 	res.send(data);
 });
 
-api.post('/api/authenticate', async function(req, res) {
+api.post('/api/authenticate', async function (req, res) {
 	const { code: googleCode } = req.body;
 
 	const response = await ByteApi.authenticate(googleCode);
@@ -181,7 +181,7 @@ api.post('/api/authenticate', async function(req, res) {
 	res.send(data);
 });
 
-api.post('/api/register', async function(req, res) {
+api.post('/api/register', async function (req, res) {
 	const { username, token: googleToken } = req.body;
 
 	const response = await ByteApi.register(username, googleToken);
@@ -191,7 +191,7 @@ api.post('/api/register', async function(req, res) {
 	res.send(data);
 });
 
-api.post('/api/likePost', async function(req, res) {
+api.post('/api/likePost', async function (req, res) {
 	const { postId } = req.body;
 
 	const response = await ByteApi.likePost(postId, true);
@@ -201,7 +201,7 @@ api.post('/api/likePost', async function(req, res) {
 	res.send(data);
 });
 
-api.post('/api/unlikePost', async function(req, res) {
+api.post('/api/unlikePost', async function (req, res) {
 	const { postId } = req.body;
 
 	const response = await ByteApi.likePost(postId, false);
@@ -211,7 +211,7 @@ api.post('/api/unlikePost', async function(req, res) {
 	res.send(data);
 });
 
-api.post('/api/followUser', async function(req, res) {
+api.post('/api/followUser', async function (req, res) {
 	const { userId } = req.body;
 
 	const response = await ByteApi.followUser(userId, true);
@@ -221,7 +221,7 @@ api.post('/api/followUser', async function(req, res) {
 	res.send(data);
 });
 
-api.post('/api/unfollowUser', async function(req, res) {
+api.post('/api/unfollowUser', async function (req, res) {
 	const { userId } = req.body;
 
 	const response = await ByteApi.followUser(userId, false);
@@ -231,7 +231,7 @@ api.post('/api/unfollowUser', async function(req, res) {
 	res.send(data);
 });
 
-api.post('/api/postComment', async function(req, res) {
+api.post('/api/postComment', async function (req, res) {
 	const { postId, comment } = req.body;
 
 	const response = await ByteApi.postComment(postId, comment);
@@ -241,7 +241,7 @@ api.post('/api/postComment', async function(req, res) {
 	res.send(data);
 });
 
-api.post('/api/deleteComment', async function(req, res) {
+api.post('/api/deleteComment', async function (req, res) {
 	const { commentId } = req.body;
 
 	const response = await ByteApi.deleteComment(commentId);
@@ -262,7 +262,7 @@ function setAuthorizationToken(authorization) {
 // returns the next token in the round-robin iteration
 function getNextAuthorizationToken(authorizationTokens) {
 	let currentTokenIndex = 0;
-	return function() {
+	return function () {
 		if (currentTokenIndex >= authorizationTokens.length) currentTokenIndex = 0;
 		return authorizationTokens[currentTokenIndex++];
 	};

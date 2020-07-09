@@ -30,7 +30,7 @@ const BetaBadgeIcon = () => (
 	</svg>
 );
 
-const BetaBadge = props => {
+const BetaBadge = (props) => {
 	const { color, registrationDate } = props;
 
 	if (isBetaTester(registrationDate)) {
