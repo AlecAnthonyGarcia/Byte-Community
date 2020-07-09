@@ -42,10 +42,11 @@ class Explore extends React.Component {
 		const categories = explore.filter((category) => {
 			const { uri } = category;
 			return (
-				whitelistedCategories.includes(category.uri) ||
-				uri.startsWith('byte://feed/categories/') ||
-				uri.startsWith('byte://feed/picks/') ||
-				uri.startsWith('byte://account/id/')
+				uri &&
+				(whitelistedCategories.includes(uri) ||
+					uri.startsWith('byte://feed/categories/') ||
+					uri.startsWith('byte://feed/picks/') ||
+					uri.startsWith('byte://account/id/'))
 			);
 		});
 
