@@ -24,6 +24,7 @@ function App() {
 					component={HomePage}
 				/>
 				<Route exact path="/picks/:pickId" component={HomePage} />
+				<Route exact path="/hashtag/:hashtag" component={HomePage} />
 				<Route exact path="/user/:username" component={HomePage} />
 				<Route exact path="/user/:username/rebytes" component={HomePage} />
 				<Route exact path="/post/:postId" component={HomePage} />

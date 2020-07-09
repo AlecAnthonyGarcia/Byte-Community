@@ -32,6 +32,13 @@ async function getPicksFeed(pickId, cursor) {
 	return data;
 }
 
+async function getHashtagFeed(hashtag, cursor) {
+	const { data } = await axios.get(
+		`/api/getHashtagFeed?hashtag=${hashtag}&cursor=${cursor}`
+	);
+	return data;
+}
+
 async function getExploreCategories() {
 	const { data } = await axios.get('/api/getExploreCategories');
 	return data;
@@ -176,6 +183,7 @@ const Api = {
 	getLatestFeed,
 	getMixFeed,
 	getPicksFeed,
+	getHashtagFeed,
 	getExploreCategories,
 	getMe,
 	getCategoryFeed,

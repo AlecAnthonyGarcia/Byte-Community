@@ -145,6 +145,16 @@ async function getFeed(req, res, apiMethod) {
 	res.send(data);
 }
 
+api.get('/api/getHashtagFeed', async function (req, res) {
+	const { hashtag, cursor } = req.query;
+
+	const response = await ByteApi.getHashtagFeed(hashtag, cursor);
+
+	const { data } = response;
+
+	res.send(data);
+});
+
 api.get('/api/getCategoryFeed', async function (req, res) {
 	const { categoryName, sort, cursor } = req.query;
 

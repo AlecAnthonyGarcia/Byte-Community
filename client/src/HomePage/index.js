@@ -126,6 +126,17 @@ class HomePage extends React.Component {
 					true
 				);
 				break;
+			case FEED_TYPES.HASHTAG:
+				let { hashtag } = params;
+				this.getHashtagFeed(hashtag);
+				AnalyticsUtil.track(
+					'Load Hashtag Feed',
+					{
+						hashtag
+					},
+					true
+				);
+				break;
 			case FEED_TYPES.USER:
 				this.getUserPosts(username);
 				AnalyticsUtil.track(
@@ -191,6 +202,10 @@ class HomePage extends React.Component {
 
 	async getPicksFeed(pickId) {
 		this.getFeed(Api.getPicksFeed, pickId);
+	}
+
+	async getHashtagFeed(hashtag) {
+		this.getFeed(Api.getHashtagFeed, hashtag);
 	}
 
 	async getCategoryFeed(categoryName, sort) {
@@ -401,6 +416,9 @@ class HomePage extends React.Component {
 		}
 		if (path.startsWith('/picks/')) {
 			return FEED_TYPES.PICKS;
+		}
+		if (path.startsWith('/hashtag/')) {
+			return FEED_TYPES.HASHTAG;
 		}
 		if (path.startsWith('/categories/')) {
 			return FEED_TYPES.CATEGORY;

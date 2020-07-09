@@ -108,6 +108,10 @@ async function getPicksFeed(pickId, cursor) {
 	return await getFeed(`${FEED_API}picks/${pickId}`, cursor);
 }
 
+async function getHashtagFeed(hashtag, cursor) {
+	return await getFeed(`${FEED_API}hashtags/${hashtag}`, cursor);
+}
+
 async function getActivity(cursor) {
 	return await getFeed(ACTIVITY_API, cursor);
 }
@@ -304,6 +308,7 @@ const Api = {
 	getLatestFeed,
 	getMixFeed,
 	getPicksFeed,
+	getHashtagFeed,
 	getCategoryFeed,
 	getExploreCategories,
 	getMe,

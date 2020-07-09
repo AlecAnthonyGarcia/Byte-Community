@@ -9,6 +9,7 @@ export const FEED_TYPES = {
 	MIX: 'mix',
 	PICKS: 'picks',
 	CATEGORY: 'category',
+	HASHTAG: 'hashtag',
 	USER: 'user',
 	REBYTES: 'rebytes',
 	POST: 'post'
