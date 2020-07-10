@@ -40,13 +40,18 @@ class Explore extends React.Component {
 
 		const categories = explore.filter((category) => {
 			const { uri } = category;
-			return (
-				uri &&
-				(whitelistedCategories.includes(uri) ||
-					uri.startsWith('byte://feed/categories/') ||
+
+			if (uri) {
+				return (
+					whitelistedCategories.includes(uri) ||
+					uri.startsWith('byte://community/id/') ||
 					uri.startsWith('byte://feed/picks/') ||
-					uri.startsWith('byte://account/id/'))
-			);
+					uri.startsWith('byte://feed/hashtags/') ||
+					uri.startsWith('byte://account/id/')
+				);
+			}
+
+			return category;
 		});
 
 		this.setState({ categories });
@@ -54,6 +59,10 @@ class Explore extends React.Component {
 
 	getCategoryLink = (uri) => {
 		const [, categoryType] = uri.split('byte://');
+
+		if (!categoryType) {
+			return '';
+		}
 
 		if (categoryType.startsWith('feed')) {
 			const [, feedType] = uri.split('feed/');
@@ -69,35 +78,44 @@ class Explore extends React.Component {
 						return '/popular/';
 				}
 			}
+			if (feedType.startsWith('hashtags')) {
+				const [, hashtag] = feedType.split('hashtags/');
+				return `/hashtag/${hashtag}`;
+			}
 			if (feedType === 'latest') {
 				return '/latest/';
 			}
 			if (feedType === 'mix') {
 				return '/mix/';
 			}
-			if (feedType.startsWith('categories') || feedType.startsWith('picks')) {
+			if (feedType.startsWith('picks')) {
 				return '/' + feedType;
 			}
 		}
+
+		if (categoryType.startsWith('community/id/')) {
+			const [, communityId] = categoryType.split('community/id/');
+			return `/community/${communityId}`;
+		}
 	};
 
-	onCategoryClick = (category) => {
+	onCommunityClick = (category) => {
 		const { title, uri } = category;
-		const { title: categoryName } = title;
+		const { title: communityName } = title;
 
 		this.onClose();
 
-		const [, categoryType] = uri.split('byte://');
+		const [, communityType] = uri.split('byte://');
 
-		if (categoryType.startsWith('account')) {
+		if (communityType.startsWith('account')) {
 			const [, userId] = uri.split('id/');
 			this.goToUserPage(userId);
 		}
 
 		AnalyticsUtil.track(
-			'Category Click',
+			'Community Click',
 			{
-				categoryName
+				communityName
 			},
 			true
 		);
@@ -126,79 +144,142 @@ class Explore extends React.Component {
 	render() {
 		const { showBackButton } = this.props;
 
+		const CategoryHeader = (props) => {
+			const { category } = props;
+			const { title } = category;
+			const { title: titleName, color } = title || {};
+
+			return (
+				<h3 className="explore-category-header" style={{ color }}>
+					{titleName}
+				</h3>
+			);
+		};
+
+		const CategoryLinkContainer = (props) => {
+			const { children, spanLength, keyName, category } = props;
+			const { uri } = category;
+
+			return (
+				<Col span={spanLength} key={keyName}>
+					<Link
+						to={this.getCategoryLink(uri)}
+						onClick={() => this.onCommunityClick(category)}
+					>
+						{children}
+					</Link>
+				</Col>
+			);
+		};
+
+		const CategoryLink = (props) => {
+			const { category } = props;
+			const { title } = category;
+			const { title: titleName, backgroundColor, color } = title || {};
+
+			return (
+				<CategoryLinkContainer
+					spanLength={24}
+					keyName={titleName}
+					category={category}
+				>
+					<h3 className="explore-category-link" style={{ color }}>
+						<span
+							style={{ backgroundColor }}
+							className="explore-category-link-title"
+						>
+							{titleName}
+						</span>
+					</h3>
+				</CategoryLinkContainer>
+			);
+		};
+
+		const CategoryMediumButton = (props) => {
+			const { category } = props;
+			const { icon, background, title } = category;
+			const { color } = background || {};
+			const { title: titleName } = title || {};
+
+			return (
+				<CategoryLinkContainer
+					spanLength={12}
+					keyName={titleName}
+					category={category}
+				>
+					<div
+						className="explore-category-container"
+						style={{ background: color }}
+						src={icon}
+					>
+						<img
+							className="explore-category-icon"
+							style={{ background: color }}
+							src={icon}
+							alt={titleName}
+						/>
+						<p>{titleName}</p>
+					</div>
+				</CategoryLinkContainer>
+			);
+		};
+
+		const CategoryLargeButton = (props) => {
+			const { category } = props;
+			const { background, title, description, uri } = category;
+			const { url } = background || {};
+			const { title: titleName } = title || {};
+			const { title: descriptionName, color: descriptionColor } =
+				description || {};
+
+			const MainCategoryContainer = () => (
+				<div className="explore-category-main-container">
+					<img className="explore-category-main" src={url} alt={titleName} />
+					<span className="title">{titleName}</span>
+					<span className="description" style={{ color: descriptionColor }}>
+						{descriptionName}
+					</span>
+				</div>
+			);
+
+			const categoryLink = this.getCategoryLink(uri);
+
+			return (
+				<Col span={24} key={titleName}>
+					{categoryLink ? (
+						<Link
+							to={categoryLink}
+							onClick={() => this.onCommunityClick(category)}
+						>
+							<MainCategoryContainer />
+						</Link>
+					) : (
+						<div
+							style={{ cursor: 'pointer' }}
+							onClick={() => this.onCommunityClick(category)}
+						>
+							<MainCategoryContainer />
+						</div>
+					)}
+				</Col>
+			);
+		};
+
 		const CategoryList = () => {
 			const { categories } = this.state;
 
 			return categories.map((category) => {
-				const { icon, background, title, description, uri } = category;
-				const { color, url } = background;
-				const { title: titleName } = title;
-				const { title: descriptionName, color: descriptionColor } =
-					description || {};
+				const { type } = category;
 
-				if (icon) {
-					const CategoryContainer = () => (
-						<div
-							className="explore-category-container"
-							style={{ background: color }}
-							src={icon}
-						>
-							<img
-								className="explore-category-icon"
-								style={{ background: color }}
-								src={icon}
-								alt={titleName}
-							/>
-							<p>{titleName}</p>
-						</div>
-					);
-
-					return (
-						<Col span={12} key={titleName}>
-							<Link
-								to={this.getCategoryLink(uri)}
-								onClick={() => this.onCategoryClick(category)}
-							>
-								<CategoryContainer />
-							</Link>
-						</Col>
-					);
-				} else {
-					const MainCategoryContainer = () => (
-						<div className="explore-category-main-container">
-							<img
-								className="explore-category-main"
-								src={url}
-								alt={titleName}
-							/>
-							<span className="title">{titleName}</span>
-							<span className="description" style={{ color: descriptionColor }}>
-								{descriptionName}
-							</span>
-						</div>
-					);
-
-					const categoryLink = this.getCategoryLink(uri);
-
-					return (
-						<Col span={24} key={titleName}>
-							{categoryLink ? (
-								<Link
-									to={categoryLink}
-									onClick={() => this.onCategoryClick(category)}
-								>
-									<MainCategoryContainer />
-								</Link>
-							) : (
-								<div
-									style={{ cursor: 'pointer' }}
-									onClick={() => this.onCategoryClick(category)}
-								>
-									<MainCategoryContainer />
-								</div>
-							)}
-						</Col>
-					);
+				switch (type) {
+					case 'header':
+						return <CategoryHeader category={category} />;
+					case 'link':
+						return <CategoryLink category={category} />;
+					case 'medium':
+						return <CategoryMediumButton category={category} />;
+					case 'large':
+						return <CategoryLargeButton category={category} />;
 				}
 			});
 		};

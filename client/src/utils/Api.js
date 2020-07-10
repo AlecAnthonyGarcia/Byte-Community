@@ -49,9 +49,9 @@ async function getMe() {
 	return data;
 }
 
-async function getCategoryFeed(categoryName, sort, cursor) {
+async function getCommunityFeed(communityName, sort, cursor) {
 	const { data } = await axios.get(
-		`/api/getCategoryFeed?categoryName=${categoryName}&sort=${sort}&cursor=${cursor}`
+		`/api/getCommunityFeed?communityName=${communityName}&sort=${sort}&cursor=${cursor}`
 	);
 	return data;
 }
@@ -191,7 +191,7 @@ const Api = {
 	getHashtagFeed,
 	getExploreCategories,
 	getMe,
-	getCategoryFeed,
+	getCommunityFeed,
 	getUser,
 	getUserPosts,
 	getUserRebytes,

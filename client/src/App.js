@@ -20,7 +20,7 @@ function App() {
 				<Route exact path="/mix" component={HomePage} />
 				<Route
 					exact
-					path="/categories/:categoryName/:sort?"
+					path="/community/:communityName/:sort?"
 					component={HomePage}
 				/>
 				<Route exact path="/picks/:pickId" component={HomePage} />

@@ -8,7 +8,7 @@ export const FEED_TYPES = {
 	LATEST: 'latest',
 	MIX: 'mix',
 	PICKS: 'picks',
-	CATEGORY: 'category',
+	COMMUNITY: 'community',
 	HASHTAG: 'hashtag',
 	USER: 'user',
 	REBYTES: 'rebytes',

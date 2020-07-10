@@ -1,6 +1,7 @@
 const express = require('express');
 const path = require('path');
 const fs = require('fs');
+const qs = require('qs');
 const bodyParser = require('body-parser');
 const moment = require('moment');
 const Sentry = require('@sentry/node');
@@ -17,6 +18,15 @@ const filePath = path.resolve(__dirname, '../client/build', 'index.html');
 
 // required for rate limiting proxy API requests
 app.set('trust proxy', 1);
+
+// required for parsing community names with "+" in them
+app.set('query parser', function (str) {
+	return qs.parse(str, {
+		decoder: function (s) {
+			return decodeURIComponent(s);
+		}
+	});
+});
 
 app.use(bodyParser.json()); // support json encoded bodies
 app.use(bodyParser.urlencoded({ extended: true })); // support encoded bodies

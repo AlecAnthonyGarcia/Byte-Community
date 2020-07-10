@@ -2,7 +2,6 @@ const BASE_API = 'https://api.byte.co/';
 const ACTIVITY_API = `${BASE_API}activity`;
 const ACCOUNT_API = `${BASE_API}account/`;
 const AUTHENTICATE_API = `${BASE_API}authenticate/google`;
-const CATEGORY_API = `${BASE_API}categories/`;
 const EXPLORE_API = `${BASE_API}explore`;
 const HASHTAGS_API = `${BASE_API}hashtags/`;
 const FEED_API = `${BASE_API}feed/`;
@@ -18,7 +17,6 @@ const Constants = {
 	ACTIVITY_API,
 	ACCOUNT_API,
 	AUTHENTICATE_API,
-	CATEGORY_API,
 	EXPLORE_API,
 	HASHTAGS_API,
 	FEED_API,

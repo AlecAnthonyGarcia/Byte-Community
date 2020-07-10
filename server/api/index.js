@@ -165,10 +165,10 @@ api.get('/api/getHashtagFeed', async function (req, res) {
 	res.send(data);
 });
 
-api.get('/api/getCategoryFeed', async function (req, res) {
-	const { categoryName, sort, cursor } = req.query;
+api.get('/api/getCommunityFeed', async function (req, res) {
+	const { communityName, sort, cursor } = req.query;
 
-	const response = await ByteApi.getCategoryFeed(categoryName, sort, cursor);
+	const response = await ByteApi.getCommunityFeed(communityName, sort, cursor);
 
 	const { data } = response;
 

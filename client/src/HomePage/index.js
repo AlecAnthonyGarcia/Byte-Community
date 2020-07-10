@@ -114,13 +114,13 @@ class HomePage extends React.Component {
 					false
 				);
 				break;
-			case FEED_TYPES.CATEGORY:
-				let { categoryName, sort } = params;
-				this.getCategoryFeed(categoryName, sort);
+			case FEED_TYPES.COMMUNITY:
+				let { communityName, sort } = params;
+				this.getCommunityFeed(communityName, sort);
 				AnalyticsUtil.track(
-					'Load Category Feed',
+					'Load Community Feed',
 					{
-						categoryName,
+						communityName,
 						sort
 					},
 					true
@@ -208,7 +208,7 @@ class HomePage extends React.Component {
 		this.getFeed(Api.getHashtagFeed, hashtag);
 	}
 
-	async getCategoryFeed(categoryName, sort) {
+	async getCommunityFeed(communityName, sort) {
 		if (sort) {
 			sort = sort.toLowerCase();
 		}
@@ -217,7 +217,7 @@ class HomePage extends React.Component {
 			sort = SORT_TYPES.POPULAR;
 		}
 		this.setState({ currentSortType: sort });
-		this.getFeed(Api.getCategoryFeed, categoryName, sort);
+		this.getFeed(Api.getCommunityFeed, communityName, sort);
 	}
 
 	async getUserPosts(username) {
@@ -420,8 +420,8 @@ class HomePage extends React.Component {
 		if (path.startsWith('/hashtag/')) {
 			return FEED_TYPES.HASHTAG;
 		}
-		if (path.startsWith('/categories/')) {
-			return FEED_TYPES.CATEGORY;
+		if (path.startsWith('/community/')) {
+			return FEED_TYPES.COMMUNITY;
 		}
 		if (path.startsWith('/post/')) {
 			return FEED_TYPES.POST;
@@ -441,7 +441,7 @@ class HomePage extends React.Component {
 			case FEED_TYPES.POPULAR:
 				return 'Popular Now';
 			case FEED_TYPES.POPULAR2:
-				return 'Popular 2';
+				return 'New & Trending';
 			case FEED_TYPES.LATEST:
 				return 'Latest';
 			case FEED_TYPES.MIX:
@@ -453,7 +453,7 @@ class HomePage extends React.Component {
 				const { hashtag } = params;
 				return `#${hashtag}`;
 			}
-			case FEED_TYPES.CATEGORY: {
+			case FEED_TYPES.COMMUNITY: {
 				const {
 					match: { params }
 				} = this.props;
@@ -514,15 +514,15 @@ class HomePage extends React.Component {
 		const {
 			match: { params }
 		} = this.props;
-		const { categoryName } = params;
+		const { communityName } = params;
 
 		const sortMenu = (
 			<Menu onClick={this.onSortChange}>
 				<Menu.Item key="popular">
-					<Link to={`/categories/${categoryName}/popular`}>Popular</Link>
+					<Link to={`/community/${communityName}/popular`}>Popular</Link>
 				</Menu.Item>
 				<Menu.Item key="recent">
-					<Link to={`/categories/${categoryName}/recent`}>Recent</Link>
+					<Link to={`/community/${communityName}/recent`}>Recent</Link>
 				</Menu.Item>
 			</Menu>
 		);
@@ -570,7 +570,7 @@ class HomePage extends React.Component {
 									<div className="category-name">{this.getCategoryName()}</div>
 								)}
 
-								{!loading && currentFeedType === FEED_TYPES.CATEGORY && (
+								{!loading && currentFeedType === FEED_TYPES.COMMUNITY && (
 									<Dropdown
 										className="sort-dropdown"
 										overlay={sortMenu}

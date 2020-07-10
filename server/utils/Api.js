@@ -5,7 +5,6 @@ const {
 	ACTIVITY_API,
 	ACCOUNT_API,
 	AUTHENTICATE_API,
-	CATEGORY_API,
 	EXPLORE_API,
 	FEED_API,
 	FEEDBACK_API,
@@ -127,7 +126,7 @@ async function getPicksFeed(pickId, cursor) {
 }
 
 async function getHashtagFeed(hashtag, cursor) {
-	return await getFeed(`${HASHTAG_API}${hashtag}`, cursor);
+	return await getFeed(`${FEED_API}hashtags/${hashtag}`, cursor);
 }
 
 async function getActivity(cursor) {
@@ -146,8 +145,8 @@ async function getFeed(url, cursor) {
 	}
 }
 
-async function getCategoryFeed(categoryName, sort, cursor) {
-	let url = `${CATEGORY_API}${categoryName}/${sort}`;
+async function getCommunityFeed(communityName, sort, cursor) {
+	let url = `${FEED_API}community/id/${communityName}/${sort}`;
 	if (cursor) {
 		url = `${url}?cursor=${cursor}`;
 	}
@@ -165,7 +164,7 @@ async function getCategoryFeed(categoryName, sort, cursor) {
 
 async function getExploreCategories() {
 	try {
-		const { data } = await axios.get(`${EXPLORE_API}`);
+		const { data } = await axios.get(`${EXPLORE_API}/v3`);
 		return data;
 	} catch (err) {
 		return { data: { layout: [] } };
@@ -328,7 +327,7 @@ const Api = {
 	getMixFeed,
 	getPicksFeed,
 	getHashtagFeed,
-	getCategoryFeed,
+	getCommunityFeed,
 	getExploreCategories,
 	getMe,
 	getGoogleToken,
