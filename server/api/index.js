@@ -51,6 +51,16 @@ api.get('/api/searchUser', async function (req, res) {
 	res.send(data);
 });
 
+api.get('/api/searchHashtag', async function (req, res) {
+	const { query } = req.query;
+
+	const response = await ByteApi.searchHashtag(query);
+
+	const { data } = response;
+
+	res.send(data);
+});
+
 api.get('/api/getUserPosts', async function (req, res) {
 	const { username, cursor } = req.query;
 

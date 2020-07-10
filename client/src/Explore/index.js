@@ -6,7 +6,7 @@ import { Link, withRouter } from 'react-router-dom';
 
 import { Button, Icon, Input, Row, Col } from 'antd';
 
-import UserList from '../UserList';
+import SearchResultsList from './SearchResultsList';
 
 import AnalyticsUtil from '../utils/AnalyticsUtil';
 import Api from '../utils/Api';
@@ -14,7 +14,6 @@ import Api from '../utils/Api';
 class Explore extends React.Component {
 	state = {
 		searchQuery: '',
-		users: [],
 		categories: [],
 		whitelistedCategories: [
 			'byte://feed/popular/v2',
@@ -51,14 +50,6 @@ class Explore extends React.Component {
 		});
 
 		this.setState({ categories });
-	}
-
-	async searchUser(query) {
-		const response = await Api.searchUser(query);
-
-		const { accounts: users } = response;
-
-		this.setState({ users });
 	}
 
 	getCategoryLink = (uri) => {
@@ -123,6 +114,10 @@ class Explore extends React.Component {
 
 	onClose = () => {
 		const { onClose } = this.props;
+
+		// clear searchQuery so UI re-renders and removes SearchResultsList
+		this.setState({ searchQuery: '' });
+
 		if (onClose) {
 			onClose();
 		}
@@ -231,14 +226,6 @@ class Explore extends React.Component {
 
 				if (value.trim() !== '' && searchQuery !== value) {
 					this.setState({ searchQuery: value });
-					this.searchUser(value);
-					AnalyticsUtil.track(
-						'Search',
-						{
-							query: value
-						},
-						true
-					);
 				}
 			};
 
@@ -253,7 +240,7 @@ class Explore extends React.Component {
 						/>
 					)}
 					<Input
-						placeholder="username"
+						placeholder="Search"
 						prefix={<Icon type="search" style={{ color: 'rgba(0,0,0,.25)' }} />}
 						onPressEnter={onPressEnter}
 						onChange={onChange}
@@ -266,12 +253,17 @@ class Explore extends React.Component {
 		};
 
 		const ExploreList = () => {
-			const { searchQuery, users } = this.state;
+			const { searchQuery } = this.state;
 
 			if (searchQuery === '') {
 				return <CategoryList />;
 			} else {
-				return <UserList users={users} onUserClick={this.onClose} />;
+				return (
+					<SearchResultsList
+						query={searchQuery}
+						onResultClicked={this.onClose}
+					/>
+				);
 			}
 		};
 

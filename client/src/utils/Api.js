@@ -99,6 +99,11 @@ async function searchUser(query) {
 	return data;
 }
 
+async function searchHashtag(query) {
+	const { data } = await axios.get(`/api/searchHashtag?query=${query}`);
+	return data;
+}
+
 async function authenticate(code) {
 	const { data } = await axios({
 		url: `/api/authenticate`,
@@ -194,6 +199,7 @@ const Api = {
 	getPostComments,
 	getPostLikes,
 	searchUser,
+	searchHashtag,
 	authenticate,
 	register,
 	likePost,

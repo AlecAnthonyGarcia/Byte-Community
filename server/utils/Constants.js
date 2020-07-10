@@ -4,6 +4,7 @@ const ACCOUNT_API = `${BASE_API}account/`;
 const AUTHENTICATE_API = `${BASE_API}authenticate/google`;
 const CATEGORY_API = `${BASE_API}categories/`;
 const EXPLORE_API = `${BASE_API}explore`;
+const HASHTAGS_API = `${BASE_API}hashtags/`;
 const FEED_API = `${BASE_API}feed/`;
 const FEEDBACK_API = `${BASE_API}feedback/`;
 const POST_API = `${BASE_API}post/`;
@@ -19,6 +20,7 @@ const Constants = {
 	AUTHENTICATE_API,
 	CATEGORY_API,
 	EXPLORE_API,
+	HASHTAGS_API,
 	FEED_API,
 	FEEDBACK_API,
 	GOOGLE_AUTH_API,

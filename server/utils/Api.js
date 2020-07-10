@@ -11,6 +11,7 @@ const {
 	FEEDBACK_API,
 	GOOGLE_AUTH_API,
 	GOOGLE_CLIENT_ID,
+	HASHTAGS_API,
 	POST_API,
 	TIMELINE_API
 } = require('./Constants');
@@ -38,6 +39,23 @@ async function searchUser(query) {
 		}
 	} catch (err) {
 		return { data: { accounts: [] } };
+	}
+}
+
+async function searchHashtag(query) {
+	try {
+		const { data } = await axios.get(`${HASHTAGS_API}prefix/${query}`);
+		const { error } = data;
+
+		if (error) {
+			return {
+				data: { hashtags: [] }
+			};
+		} else {
+			return data;
+		}
+	} catch (err) {
+		return { data: { hashtags: [] } };
 	}
 }
 
@@ -109,7 +127,7 @@ async function getPicksFeed(pickId, cursor) {
 }
 
 async function getHashtagFeed(hashtag, cursor) {
-	return await getFeed(`${FEED_API}hashtags/${hashtag}`, cursor);
+	return await getFeed(`${HASHTAG_API}${hashtag}`, cursor);
 }
 
 async function getActivity(cursor) {
@@ -297,6 +315,7 @@ async function deleteComment(commentID) {
 const Api = {
 	getUser,
 	searchUser,
+	searchHashtag,
 	getUserPosts,
 	getUserRebytes,
 	getPost,

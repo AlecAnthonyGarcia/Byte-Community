@@ -21,6 +21,14 @@
 	}
 }
 
+.explore-search-results-container {
+	.ant-tabs-nav,
+	.ant-tabs-nav .ant-tabs-tab-active {
+		color: white;
+		font-weight: bold;
+	}
+}
+
 .explore-category-main {
 	width: 100%;
 	height: 140px;
